@@ -7,6 +7,7 @@ use App\Modules\Academic\Http\Controllers\Admin\LectureController;
 use App\Modules\Academic\Http\Controllers\Admin\LectureSectionController;
 use App\Modules\Academic\Http\Controllers\Admin\TrackController;
 use App\Modules\Commerce\Http\Controllers\Admin\BookController;
+use App\Modules\Commerce\Http\Controllers\Admin\OrderController;
 use App\Modules\Commerce\Http\Controllers\Admin\PackageController;
 use App\Modules\Identity\Http\Controllers\Admin\AdminController;
 use App\Modules\Identity\Http\Controllers\Admin\AuditLogController;
@@ -36,6 +37,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::resource('exams', ExamController::class)->except(['show']);
         Route::resource('packages', PackageController::class)->except(['show']);
         Route::resource('books', BookController::class)->except(['show']);
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::put('/orders/{order}/transition', [OrderController::class, 'transition'])->name('orders.transition');
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::resource('students', StudentController::class)->only(['index', 'edit', 'update']);
         Route::get('/mistakes', [MistakeController::class, 'index'])->name('mistakes.index');

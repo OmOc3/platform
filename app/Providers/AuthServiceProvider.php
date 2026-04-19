@@ -15,8 +15,12 @@ use App\Modules\Academic\Policies\LecturePolicy;
 use App\Modules\Academic\Policies\LectureSectionPolicy;
 use App\Modules\Academic\Policies\TrackPolicy;
 use App\Modules\Commerce\Models\Book;
+use App\Modules\Commerce\Models\Entitlement;
+use App\Modules\Commerce\Models\Order;
 use App\Modules\Commerce\Models\Package;
 use App\Modules\Commerce\Policies\BookPolicy;
+use App\Modules\Commerce\Policies\EntitlementPolicy;
+use App\Modules\Commerce\Policies\OrderPolicy;
 use App\Modules\Commerce\Policies\PackagePolicy;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
@@ -46,6 +50,8 @@ class AuthServiceProvider extends ServiceProvider
         Admin::class => AdminPolicy::class,
         AuditLog::class => AuditLogPolicy::class,
         Book::class => BookPolicy::class,
+        Entitlement::class => EntitlementPolicy::class,
+        Order::class => OrderPolicy::class,
         CurriculumSection::class => CurriculumSectionPolicy::class,
         Exam::class => ExamPolicy::class,
         ForumThread::class => ForumThreadPolicy::class,

@@ -23,6 +23,7 @@ use App\Modules\Support\Enums\ForumThreadStatus;
 use App\Modules\Support\Enums\ForumVisibility;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
+use App\Shared\Contracts\EntitlementGrantor;
 use App\Shared\Enums\AttendanceStatus;
 use App\Shared\Enums\EntitlementSource;
 use App\Shared\Enums\OrderKind;
@@ -119,13 +120,15 @@ class StudentPortalSeeder extends Seeder
         $reviewProduct = Product::query()->where('slug', 'electricity-review-essentials')->first();
         $lecture = Lecture::query()->where('slug', 'newton-laws-core')->first();
         $reviewLecture = Lecture::query()->where('slug', 'electricity-review-essentials')->first();
+        /** @var EntitlementGrantor $entitlementGrantor */
+        $entitlementGrantor = app(EntitlementGrantor::class);
 
-        $packageOrder = Order::query()->firstOrCreate(
+        $packageOrder = Order::query()->updateOrCreate(
             ['uuid' => 'digital-order-demo-package-100002'],
             [
                 'student_id' => $student->id,
                 'kind' => OrderKind::Digital,
-                'status' => OrderStatus::Paid,
+                'status' => OrderStatus::Fulfilled,
                 'subtotal_amount' => 399,
                 'total_amount' => 399,
                 'currency' => 'EGP',
@@ -148,32 +151,18 @@ class StudentPortalSeeder extends Seeder
             ],
         );
 
-        Entitlement::query()->updateOrCreate(
-            [
-                'student_id' => $student->id,
-                'product_id' => $packageProduct?->id,
-                'source' => EntitlementSource::DirectPurchase,
-            ],
-            [
-                'order_item_id' => $packageOrderItem->id,
-                'status' => 'active',
-                'item_name_snapshot' => $packageProduct?->name_ar ?? 'باقة الفيزياء الشهرية',
-                'price_amount' => 399,
-                'currency' => 'EGP',
-                'granted_by_admin_id' => null,
-                'granted_at' => now()->subDays(12),
-                'starts_at' => now()->subDays(12),
-                'ends_at' => now()->addDays(18),
-                'meta' => ['note' => 'اشتراك باقة مدفوع'],
-            ],
-        );
+        $entitlementGrantor->grant([
+            'order' => $packageOrder->fresh('items.product.package'),
+            'granted_at' => now()->subDays(12),
+            'audit' => false,
+        ]);
 
-        $lectureOrder = Order::query()->firstOrCreate(
+        $lectureOrder = Order::query()->updateOrCreate(
             ['uuid' => 'digital-order-demo-lecture-100002'],
             [
                 'student_id' => $student->id,
                 'kind' => OrderKind::Digital,
-                'status' => OrderStatus::Paid,
+                'status' => OrderStatus::Fulfilled,
                 'subtotal_amount' => 140,
                 'total_amount' => 140,
                 'currency' => 'EGP',
@@ -196,25 +185,11 @@ class StudentPortalSeeder extends Seeder
             ],
         );
 
-        Entitlement::query()->updateOrCreate(
-            [
-                'student_id' => $student->id,
-                'product_id' => $lectureProduct?->id,
-                'source' => EntitlementSource::DirectPurchase,
-            ],
-            [
-                'order_item_id' => $lectureOrderItem->id,
-                'status' => 'active',
-                'item_name_snapshot' => $lectureProduct?->name_ar ?? 'قوانين نيوتن الأساسية',
-                'price_amount' => 140,
-                'currency' => 'EGP',
-                'granted_by_admin_id' => null,
-                'granted_at' => now()->subDays(6),
-                'starts_at' => now()->subDays(6),
-                'ends_at' => null,
-                'meta' => ['note' => 'شراء مباشر لمحاضرة'],
-            ],
-        );
+        $entitlementGrantor->grant([
+            'order' => $lectureOrder->fresh('items.product.package'),
+            'granted_at' => now()->subDays(6),
+            'audit' => false,
+        ]);
 
         Entitlement::query()->updateOrCreate(
             [

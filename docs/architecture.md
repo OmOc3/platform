@@ -41,7 +41,7 @@
 ## Milestone 0 and 1 Scope
 - Scaffold docs, routes, Docker/Sail defaults, module skeleton, shared contracts, and RTL layouts.
 - Implement admin auth, roles/permissions seeding, settings, grades, tracks, admin management, audit logs, and dashboard widgets.
-- Provide a portable local verification path using workspace-local PHP/Composer with SQLite while preserving Sail as the documented target stack.
+- Adopt Sail with MySQL as the official local verification and development path.
 
 ## Extension Rules
 - New domains must live under `app/Modules/<Domain>` and expose policies, actions, and queries before adding controllers.

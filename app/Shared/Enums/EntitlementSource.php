@@ -9,4 +9,15 @@ enum EntitlementSource: string
     case AdminGrant = 'admin_grant';
     case CodeRedemption = 'code_redemption';
     case Free = 'free';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::DirectPurchase => 'شراء مباشر',
+            self::PackagePurchase => 'شراء باقة',
+            self::AdminGrant => 'منحة إدارية',
+            self::CodeRedemption => 'كود تفعيل',
+            self::Free => 'محتوى مجاني',
+        };
+    }
 }

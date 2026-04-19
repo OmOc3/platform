@@ -27,7 +27,7 @@
                                 <td>{{ optional($row->granted_at)->format('Y-m-d') ?: '—' }}</td>
                                 <td>{{ number_format($row->price_amount) }} {{ $row->currency }}</td>
                                 <td><x-admin.status-badge :label="$row->status" tone="success" /></td>
-                                <td>{{ $row->source->value }}</td>
+                                <td>{{ $row->source->label() }}</td>
                             </tr>
                         @endforeach
                     </tbody>

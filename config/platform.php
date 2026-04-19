@@ -221,6 +221,7 @@ return [
             'items' => [
                 ['label' => 'الباقات', 'route' => 'admin.packages.index', 'permission' => 'packages.view'],
                 ['label' => 'الكتب', 'route' => 'admin.books.index', 'permission' => 'books.view'],
+                ['label' => 'الطلبات', 'route' => 'admin.orders.index', 'permission' => 'orders.view'],
                 ['label' => 'ملتقى الأسئلة', 'route' => 'admin.forum-threads.index', 'permission' => 'forum.view'],
             ],
         ],

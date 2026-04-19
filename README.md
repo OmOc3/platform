@@ -6,7 +6,7 @@
 - بوابة طالب
 - لوحة إدارة وتشغيل
 - كتالوج محتوى أكاديمي
-- باقات وكتب وسلة تجهيز شراء
+- باقات وكتب وسلة شراء
 - ملتقى أسئلة
 - مركز أخطاء
 - تاريخ حضور السنتر
@@ -14,7 +14,7 @@
 
 ## الغرض الحالي
 
-هذا المستودع يمثل إعادة بناء تدريجية لمنصة تعليمية production-grade فوق Laravel 12 مع معمارية `Modular Monolith`. التنفيذ الحالي لا يعيد scaffold المشروع من الصفر، بل يمدّ نفس الهيكل القائم داخل:
+هذا المستودع يمثل إعادة بناء تدريجية لمنصة تعليمية production-grade فوق Laravel 12 مع معمارية `Modular Monolith`، مع الحفاظ على نفس الهيكل القائم داخل:
 
 - `app/Modules`
 - `app/Shared`
@@ -24,13 +24,12 @@
 - Laravel 12
 - Blade + Livewire
 - Tailwind CSS
-- MySQL 8 / Redis / Horizon كـ target stack
-- SQLite محليًا للتشغيل السريع والتحقق
+- MySQL 8 / Redis / Horizon
+- Laravel Sail كبيئة التطوير المحلية الرسمية
 - Roles / Permissions عبر Spatie Permission
-- Media-ready architecture للمرفقات
 - Arabic RTL-first UI
 
-تنظيم الكود يعتمد على الموديولات الدومينية:
+الموديولات الرئيسية الحالية:
 
 - `Identity`
 - `Academic`
@@ -41,18 +40,9 @@
 - `Operations`
 - `Shared`
 
-وكل موديول يمدد نفس النمط:
+## الحالة الحالية
 
-- `Models`
-- `Actions`
-- `Queries`
-- `Policies`
-- `Http/Controllers`
-- `Http/Requests`
-
-## الموديولات الحالية
-
-### جاهز الآن
+### مكتمل الآن
 
 - إدارة المشرفين والصلاحيات والإعدادات والـ audit logs
 - الصفوف والمسارات
@@ -61,77 +51,86 @@
 - ملف الطالب وسجلات المدفوعات والكتب والحضور والشكاوى
 - كتالوج المحاضرات والمراجعات والاختبارات
 - كتالوج الباقات والكتب
-- سلة شراء وتجهيز draft orders
+- السلة وتجهيز draft orders
+- إدارة الطلبات من لوحة الإدارة مع انتقالات حالة آمنة
+- تفعيل الطلبات الرقمية ومنح الاستحقاقات تلقائيًا للشراء المباشر والباقات
 - ملتقى الأسئلة
 - مركز الأخطاء
 - إدارة أقسام المنهج وأقسام المحاضرات والمحتوى والاختبارات
 - إدارة الباقات والكتب
 - أساس moderation للمنتدى
 
-### ما زال لاحقًا
+### لاحقًا
 
 - محاولات الاختبارات ونتائجها الكاملة
-- entitlement engine الأوسع تلقائيًا من المدفوعات
-- تدفق دفع فعلي
+- تدفق دفع فعلي وربط settlement/payment gateway
 - شحن وتنفيذ طلبات الكتب الكامل
 - LMS delivery متقدم
 - ticketing/support backend الكامل
 - payroll/operations الكامل
 
-## التشغيل المحلي
+## التشغيل المحلي الرسمي
 
-### المتطلبات
-
-يوجد runtime محلي داخل المشروع:
-
-- `.runtime/php/php.exe`
-- `.runtime/composer.phar`
+المسار المحلي الرسمي للمشروع هو Laravel Sail مع MySQL وRedis وMailpit. لا يُعتمد على `.runtime` كمسار تشغيل قاعدة بيانات محلي بعد الآن.
 
 ### أول تشغيل
 
 من جذر المشروع:
 
-```powershell
-Copy-Item .env.example .env -Force
-New-Item -ItemType File database\database.sqlite -Force | Out-Null
-& '.runtime\php\php.exe' '.runtime\composer.phar' install --no-interaction --prefer-dist --ignore-platform-req=ext-pcntl --ignore-platform-req=ext-posix
-& '.runtime\php\php.exe' artisan key:generate
-& '.runtime\php\php.exe' artisan migrate --seed
+```bash
+cp .env.example .env
+./vendor/bin/sail up -d
+./vendor/bin/sail composer install
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate --seed
+./vendor/bin/sail npm install
 ```
 
-### تشغيل التطوير
+### التطوير اليومي
 
-نافذة أولى:
+شغّل الخدمات:
 
-```powershell
-& '.runtime\php\php.exe' artisan serve
+```bash
+./vendor/bin/sail up -d
 ```
 
-نافذة ثانية:
+شغّل Vite:
 
-```powershell
-npm.cmd run dev
+```bash
+./vendor/bin/sail npm run dev
 ```
 
-ثم افتح:
+لو احتجت shell داخل الحاوية:
 
-`http://127.0.0.1:8000`
+```bash
+./vendor/bin/sail shell
+```
 
-### حسابات تجريبية
+### الاختبارات
+
+الاختبارات تعمل على MySQL أيضًا باستخدام قاعدة `testing` التي ينشئها Sail تلقائيًا:
+
+```bash
+./vendor/bin/sail artisan test
+```
+
+ولو أردت إعادة البناء الكامل لقاعدة البيانات محليًا:
+
+```bash
+./vendor/bin/sail artisan migrate:fresh --seed
+```
+
+## الحسابات التجريبية
 
 - إدارة: `owner@example.edu` / `password`
 - طالب مشترك: `student@example.edu` / `password`
 - طالب pending: `pending.student@example.edu` / `password`
 
-## التحقق
+## ملاحظات مهمة
 
-أوامر مفيدة:
-
-```powershell
-& '.runtime\php\php.exe' artisan migrate:fresh --seed
-& '.runtime\php\php.exe' artisan test
-npm.cmd run build
-```
+- التطبيق محليًا يعمل على قاعدة `platform`.
+- الاختبارات تعمل على قاعدة `testing`.
+- `.env.example` هو المصدر الرسمي للإعدادات المحلية.
 
 ## ملفات التوثيق
 

@@ -5,8 +5,7 @@
 - Modular folder structure under `app/Modules` and `app/Shared`
 - Project documentation
 - Arabic RTL-ready design tokens and reusable layouts
-- Portable local runtime path for PHP/Composer verification
-- Sail/MySQL/Redis/Horizon configuration retained as target stack
+- Sail / MySQL / Redis local development baseline
 
 Status: complete
 
@@ -41,9 +40,25 @@ Status: complete
 
 Status: complete
 
+## Milestone 4
+- Admin order management foundation
+- Safe order status transitions
+- Digital order fulfillment workflow
+- Entitlement propagation from fulfilled digital orders
+- Access unlock through direct lecture and package entitlements
+
+Status: complete
+
+## Runtime and Verification Baseline
+- المسار المحلي الرسمي للتشغيل والتحقق أصبح Sail + MySQL.
+- التطبيق يستخدم قاعدة `platform`.
+- الاختبارات تستخدم قاعدة `testing`.
+- لم يعد `.runtime + SQLite` هو المسار الرسمي للتحقق المحلي.
+
 ## Next Milestones
 - Full exam attempts and results engine
-- Entitlement propagation from more purchase sources
+- Payment gateway integration and settlement automation
+- Shipping execution and physical order operations
 - Lecture delivery / LMS completion flows
 - Center operations expansion
 - Ticketing and support backend completion

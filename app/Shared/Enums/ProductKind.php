@@ -8,4 +8,14 @@ enum ProductKind: string
     case Package = 'package';
     case Book = 'book';
     case Camp = 'camp';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Lecture => 'محاضرة',
+            self::Package => 'باقة',
+            self::Book => 'كتاب',
+            self::Camp => 'معسكر',
+        };
+    }
 }
