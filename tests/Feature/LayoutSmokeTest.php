@@ -12,7 +12,8 @@ class LayoutSmokeTest extends TestCase
     public function test_public_and_student_shell_pages_render(): void
     {
         $this->get(route('welcome'))->assertOk();
-        $this->get(route('student.preview'))->assertOk();
+        $this->get(route('student.register'))->assertOk();
+        $this->get(route('student.login'))->assertOk();
         $this->get(route('admin.login'))->assertOk();
     }
 }

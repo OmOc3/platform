@@ -19,6 +19,7 @@ use App\Shared\Services\DatabaseTicketAssignmentService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,5 +45,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useTailwind();
 
         View::share('platformBrand', config('platform.brand'));
+
+        Livewire::component('shared.support-widget', \App\Shared\Livewire\SupportWidget::class);
     }
 }

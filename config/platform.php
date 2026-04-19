@@ -3,10 +3,48 @@
 return [
     'brand' => [
         'name' => 'منصة الإتقان التعليمية',
-        'teacher_name' => 'أ. فيزياء',
-        'tagline' => 'منصة تشغيل تعليمية عربية لإدارة التعلم والحضور والمبيعات والدعم.',
+        'teacher_name' => 'أ. أحمد الفيزياء',
+        'tagline' => 'منصة تعليمية عربية لإدارة التعلم، الحضور، المشتريات، والدعم في تجربة واحدة متماسكة.',
         'support_phone' => '+20 100 000 0000',
         'support_whatsapp' => '+20 100 000 0000',
+    ],
+
+    'public' => [
+        'hero_badge' => 'منصة عربية أولًا لطلاب الثانوية',
+        'hero_title' => 'تعلم منظم، متابعة أوضح، وتجربة طالب عملية من أول محاضرة حتى آخر مراجعة.',
+        'hero_description' => 'منصة أستاذ واحد تجمع الشرح، الباقات، الكتب، المتابعة، وسجل الطالب داخل واجهة عربية واضحة ومباشرة.',
+        'video' => [
+            'title' => 'رسالة المعلم',
+            'description' => 'جولة سريعة في أسلوب الشرح، خطة المتابعة، وكيف يستفيد الطالب من المنصة.',
+            'embed_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        ],
+        'features' => [
+            ['title' => 'شرح ومراجعات', 'description' => 'تنظيم واضح للمحتوى والباقات بما يناسب رحلة الطالب الفعلية.'],
+            ['title' => 'حضور وسجل طالب', 'description' => 'ربط بين السنتر والبوابة وسجل الأداء والمتابعة المستقبلية.'],
+            ['title' => 'كتب وطلبات', 'description' => 'إبراز الكتب والطلبات وسجل الشراء في مكان واحد قابل للتوسع.'],
+            ['title' => 'دعم مباشر', 'description' => 'قناة واضحة للشكاوى والاقتراحات والتواصل الفني عند الحاجة.'],
+        ],
+        'achievers' => [
+            ['name' => 'سارة محمد', 'achievement' => 'تفوقت في الاختبارات الشهرية بعد انتظام 8 أسابيع.', 'score' => '98%'],
+            ['name' => 'يوسف خالد', 'achievement' => 'رفع مستواه في المسائل المعقدة عبر خطة مراجعة مركزة.', 'score' => '95%'],
+            ['name' => 'ملك أحمد', 'achievement' => 'استفادت من الدمج بين السنتر والبوابة وسجل الأخطاء.', 'score' => '99%'],
+        ],
+        'social_links' => [
+            ['label' => 'YouTube', 'url' => 'https://youtube.com'],
+            ['label' => 'Facebook', 'url' => 'https://facebook.com'],
+            ['label' => 'Telegram', 'url' => 'https://t.me'],
+        ],
+        'footer_links' => [
+            ['label' => 'الرئيسية', 'route' => 'welcome'],
+            ['label' => 'تسجيل الطالب', 'route' => 'student.register'],
+            ['label' => 'دخول الطالب', 'route' => 'student.login'],
+            ['label' => 'دخول الإدارة', 'route' => 'admin.login'],
+        ],
+        'support' => [
+            'title' => 'هل تحتاج مساعدة؟',
+            'description' => 'فريق المتابعة جاهز للرد على الاستفسارات التقنية والتنظيمية بسرعة.',
+            'cta_label' => 'تواصل مع الدعم',
+        ],
     ],
 
     'roles' => [
@@ -153,20 +191,21 @@ return [
             ],
         ],
         [
-            'label' => 'الأكاديمي',
+            'label' => 'الأكاديمي والطلاب',
             'items' => [
                 ['label' => 'الصفوف', 'route' => 'admin.grades.index', 'permission' => 'grades.view'],
                 ['label' => 'المسارات', 'route' => 'admin.tracks.index', 'permission' => 'tracks.view'],
+                ['label' => 'الطلاب', 'route' => 'admin.students.index', 'permission' => 'students.view'],
             ],
         ],
     ],
 
     'student_menu' => [
-        ['label' => 'الرئيسية', 'href' => '#'],
-        ['label' => 'المحاضرات', 'href' => '#'],
-        ['label' => 'الباقات', 'href' => '#'],
-        ['label' => 'كتب', 'href' => '#'],
-        ['label' => 'ملتقى الأسئلة', 'href' => '#'],
-        ['label' => 'أخطائي', 'href' => '#'],
+        ['label' => 'الرئيسية', 'route' => 'student.dashboard'],
+        ['label' => 'المحاضرات', 'route' => 'student.lectures.index'],
+        ['label' => 'الباقات', 'route' => 'student.packages.index'],
+        ['label' => 'كتب', 'route' => 'student.books.index'],
+        ['label' => 'ملتقى الأسئلة', 'route' => 'student.forum.index'],
+        ['label' => 'أخطائي', 'route' => 'student.mistakes.index'],
     ],
 ];

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Modules\Students\Enums\StudentSourceType;
 use App\Modules\Students\Models\Student;
 use App\Shared\Enums\StudentStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,8 +33,16 @@ class StudentFactory extends Factory
             'phone' => fake()->unique()->numerify('010########'),
             'parent_phone' => fake()->numerify('010########'),
             'governorate' => fake('ar_EG')->city(),
+            'owner_admin_id' => null,
+            'grade_id' => null,
+            'track_id' => null,
+            'center_id' => null,
+            'group_id' => null,
             'language' => 'ar',
             'status' => StudentStatus::Pending,
+            'source_type' => StudentSourceType::Online,
+            'is_azhar' => false,
+            'notes' => null,
             'last_login_at' => null,
             'password' => static::$password ??= Hash::make('password'),
         ];

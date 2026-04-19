@@ -5,39 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? 'بوابة الطالب').' - '.$platformBrand['name'] }}</title>
+    @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="surface-shell">
+    @php($student = auth('student')->user())
     @php($items = app(\App\Shared\Support\Navigation\StudentNavigation::class)->items())
 
     <div class="mx-auto max-w-7xl px-4 py-4 lg:px-6">
-        <header class="panel mb-6 px-5 py-4">
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <header class="panel mb-6 overflow-hidden px-5 py-5">
+            <div class="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
                 <div>
                     <p class="font-display text-2xl text-[var(--color-brand-700)]">{{ $platformBrand['name'] }}</p>
-                    <p class="mt-2 text-sm text-[var(--color-ink-700)]">نموذج واجهة الطالب العربية للمحاضرات والباقات والكتب والدعم.</p>
+                    <h1 class="mt-3 text-2xl font-bold">{{ $heading ?? 'بوابة الطالب' }}</h1>
+                    @isset($subheading)
+                        <p class="mt-3 max-w-2xl text-sm leading-8 text-[var(--color-ink-700)]">{{ $subheading }}</p>
+                    @endisset
                 </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <button class="btn-secondary">السلة</button>
-                    <button class="btn-secondary">الملف الشخصي</button>
-                    <button class="btn-primary">الدعم الفني</button>
+
+                <div class="rounded-[2rem] bg-[color-mix(in_oklch,var(--color-brand-50)_85%,white)] p-4">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">بيانات الحساب</p>
+                    <div class="mt-3 grid gap-3 sm:grid-cols-3">
+                        <div>
+                            <p class="text-xs text-[var(--color-ink-500)]">الطالب</p>
+                            <p class="mt-1 font-semibold">{{ $student?->name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-[var(--color-ink-500)]">الرقم</p>
+                            <p class="mt-1 font-semibold">{{ $student?->student_number }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-[var(--color-ink-500)]">الحالة</p>
+                            <p class="mt-1 font-semibold">{{ $student?->status?->value }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <nav class="mt-5 flex flex-wrap gap-2 border-t border-[color-mix(in_oklch,var(--color-brand-100)_80%,white)] pt-4">
-                @foreach ($items as $item)
-                    <a href="{{ $item['href'] }}" class="rounded-full bg-[var(--color-brand-50)] px-4 py-2 text-sm font-semibold text-[var(--color-ink-700)] hover:bg-[var(--color-brand-100)]">
-                        {{ $item['label'] }}
-                    </a>
-                @endforeach
-            </nav>
+            <div class="mt-5 flex flex-col gap-4 border-t border-[color-mix(in_oklch,var(--color-brand-100)_80%,white)] pt-4">
+                <nav class="flex flex-wrap gap-2">
+                    @foreach ($items as $item)
+                        <a href="{{ $item['href'] }}"
+                           @class([
+                               'rounded-full px-4 py-2 text-sm font-semibold transition',
+                               'bg-[var(--color-brand-700)] text-white' => $item['active'],
+                               'bg-[var(--color-brand-50)] text-[var(--color-ink-700)] hover:bg-[var(--color-brand-100)]' => ! $item['active'],
+                           ])>
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
+                </nav>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{{ route('student.cart.index') }}" class="btn-secondary">السلة</a>
+                    <a href="{{ route('student.profile.show') }}" class="btn-secondary">الملف الشخصي</a>
+                    <form method="POST" action="{{ route('student.logout') }}">
+                        @csrf
+                        <button type="submit" class="btn-primary">تسجيل الخروج</button>
+                    </form>
+                </div>
+            </div>
         </header>
 
-        {{ $slot }}
+        <x-flash />
 
-        <a href="#" class="fixed bottom-5 left-5 inline-flex items-center rounded-full bg-[var(--color-brand-700)] px-5 py-3 text-sm font-semibold text-white shadow-[0_20px_50px_rgba(71,58,29,0.2)]">
-            تواصل مع الدعم
-        </a>
+        {{ $slot }}
     </div>
+
+    @livewire('shared.support-widget')
+    @livewireScripts
 </body>
 </html>

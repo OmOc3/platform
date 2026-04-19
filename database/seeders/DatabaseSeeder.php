@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             AcademicSeeder::class,
             AdminSeeder::class,
+            CommerceSeeder::class,
+            CenterSeeder::class,
+            StudentPortalSeeder::class,
         ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Modules\Identity\Http\Controllers\Admin\AuditLogController;
 use App\Modules\Identity\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Modules\Identity\Http\Controllers\Admin\DashboardController;
 use App\Modules\Identity\Http\Controllers\Admin\SettingController;
+use App\Modules\Students\Http\Controllers\Admin\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
@@ -22,6 +23,7 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::resource('grades', GradeController::class)->except(['show']);
         Route::resource('tracks', TrackController::class)->except(['show']);
         Route::resource('admins', AdminController::class)->except(['show']);
+        Route::resource('students', StudentController::class)->only(['index', 'edit', 'update']);
         Route::get('/audit-logs', AuditLogController::class)->name('audit-logs.index');
     });
 });
