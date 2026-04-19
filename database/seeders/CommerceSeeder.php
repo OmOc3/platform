@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Commerce\Enums\BookAvailability;
 use App\Modules\Commerce\Models\Book;
 use App\Modules\Commerce\Models\Package;
 use App\Modules\Commerce\Models\Product;
@@ -21,7 +22,7 @@ class CommerceSeeder extends Seeder
                 'description' => 'باقة شهرية مركزة تجمع الشرح والمراجعة والتكليفات التدريبية.',
                 'price_amount' => 399,
                 'billing_cycle_label' => 'شهري',
-                'lecture_count' => 8,
+                'access_period_days' => 30,
             ],
             [
                 'slug' => 'quarter-physics-package',
@@ -30,7 +31,7 @@ class CommerceSeeder extends Seeder
                 'description' => 'محتوى ممتد للمذاكرة على ثلاثة أشهر مع مراجعات وتدريب متدرج.',
                 'price_amount' => 999,
                 'billing_cycle_label' => '3 شهور',
-                'lecture_count' => 22,
+                'access_period_days' => 90,
             ],
             [
                 'slug' => 'intensive-camp-package',
@@ -39,7 +40,7 @@ class CommerceSeeder extends Seeder
                 'description' => 'معسكر قصير عالي الكثافة لتثبيت الأفكار ومراجعة النقاط الأكثر تكرارًا.',
                 'price_amount' => 650,
                 'billing_cycle_label' => 'معسكر خاص',
-                'lecture_count' => 10,
+                'access_period_days' => 21,
             ],
         ] as $item) {
             $product = Product::query()->updateOrCreate(
@@ -64,8 +65,10 @@ class CommerceSeeder extends Seeder
                 ['product_id' => $product->id],
                 [
                     'billing_cycle_label' => $item['billing_cycle_label'],
-                    'lecture_count' => $item['lecture_count'],
+                    'lecture_count' => 0,
+                    'access_period_days' => $item['access_period_days'],
                     'is_featured' => true,
+                    'metadata' => ['overlap_rule' => 'block'],
                 ],
             );
         }
@@ -79,7 +82,9 @@ class CommerceSeeder extends Seeder
                 'price_amount' => 180,
                 'author_name' => 'أ. فيزياء',
                 'page_count' => 164,
+                'stock_quantity' => 25,
                 'cover_badge' => 'الأكثر طلبًا',
+                'availability_status' => BookAvailability::InStock,
             ],
             [
                 'slug' => 'revision-notes-book',
@@ -89,7 +94,9 @@ class CommerceSeeder extends Seeder
                 'price_amount' => 140,
                 'author_name' => 'أ. فيزياء',
                 'page_count' => 96,
+                'stock_quantity' => 12,
                 'cover_badge' => 'طبعة 2026',
+                'availability_status' => BookAvailability::PreOrder,
             ],
         ] as $item) {
             $product = Product::query()->updateOrCreate(
@@ -115,7 +122,10 @@ class CommerceSeeder extends Seeder
                 [
                     'author_name' => $item['author_name'],
                     'page_count' => $item['page_count'],
+                    'stock_quantity' => $item['stock_quantity'],
                     'cover_badge' => $item['cover_badge'],
+                    'availability_status' => $item['availability_status'],
+                    'metadata' => ['governorates' => ['القاهرة', 'الجيزة', 'الإسكندرية']],
                 ],
             );
         }

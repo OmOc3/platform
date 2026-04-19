@@ -23,7 +23,9 @@ class PackageFactory extends Factory
             ]),
             'billing_cycle_label' => fake()->randomElement(['شهري', '3 شهور', 'معسكر مكثف']),
             'lecture_count' => fake()->numberBetween(6, 24),
+            'access_period_days' => fake()->randomElement([30, 60, 90]),
             'is_featured' => true,
+            'metadata' => null,
         ];
     }
 }

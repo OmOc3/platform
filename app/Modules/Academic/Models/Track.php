@@ -6,6 +6,7 @@ use Database\Factories\TrackFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Track extends Model
@@ -41,5 +42,25 @@ class Track extends Model
     public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class);
+    }
+
+    public function curriculumSections(): HasMany
+    {
+        return $this->hasMany(CurriculumSection::class)->orderBy('sort_order');
+    }
+
+    public function lectureSections(): HasMany
+    {
+        return $this->hasMany(LectureSection::class)->orderBy('sort_order');
+    }
+
+    public function lectures(): HasMany
+    {
+        return $this->hasMany(Lecture::class)->orderBy('sort_order');
+    }
+
+    public function exams(): HasMany
+    {
+        return $this->hasMany(Exam::class)->orderBy('sort_order');
     }
 }

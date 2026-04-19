@@ -2,6 +2,7 @@
 
 namespace App\Modules\Commerce\Models;
 
+use App\Modules\Academic\Models\Lecture;
 use App\Shared\Enums\ProductKind;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -60,6 +61,11 @@ class Product extends Model
         return $this->hasOne(Book::class);
     }
 
+    public function lecture(): HasOne
+    {
+        return $this->hasOne(Lecture::class);
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -68,5 +74,10 @@ class Product extends Model
     public function entitlements(): HasMany
     {
         return $this->hasMany(Entitlement::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
     }
 }

@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AcademicSeeder::class,
             AdminSeeder::class,
             CommerceSeeder::class,
+            AcademicContentSeeder::class,
             CenterSeeder::class,
             StudentPortalSeeder::class,
         ]);

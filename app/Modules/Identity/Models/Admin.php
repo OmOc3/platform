@@ -62,4 +62,10 @@ class Admin extends Authenticatable
         return $this->hasMany(AuditLog::class, 'actor_id')
             ->where('actor_type', $this->getMorphClass());
     }
+
+    public function forumMessages(): HasMany
+    {
+        return $this->hasMany(\App\Modules\Support\Models\ForumMessage::class, 'author_id')
+            ->where('author_type', $this->getMorphClass());
+    }
 }

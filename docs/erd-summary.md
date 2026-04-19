@@ -1,26 +1,41 @@
 # ERD Summary
 
 ## Identity
-- `admins` own many `audit_logs` and receive many `roles`/`permissions`.
-- `settings` are key/value records grouped by domain.
+- `admins` authenticate through the `admin` guard and receive roles/permissions.
+- `settings` store grouped platform configuration.
+- `audit_logs` store actor, subject, before/after payloads, and request metadata.
 
-## Students and CRM
-- `students` own profile-like fields plus many `student_status_histories`, `student_assignments`, `orders`, `entitlements`, `exam_attempts`, `forum_threads`, `complaints`, `suggestions`, and `attendance_records`.
+## Students
+- `students` hold profile, segmentation, ownership, and center hooks.
+- `student_status_histories` capture immutable status transitions over time.
 
-## Academic
+## Academic Catalog
 - `grades` have many `tracks`.
-- Future curriculum hierarchy continues through `curriculum_sections`, `lecture_sections`, `lectures`, `reviews`, and `summaries`.
+- `curriculum_sections` belong to `grades` and optionally `tracks`.
+- `lecture_sections` belong to `grades`, optionally `tracks`, and optionally `curriculum_sections`.
+- `lectures` belong to `grades`, optionally `tracks`, and may belong to curriculum/lecture sections.
+- `lectures.product_id` links sellable digital content to the commerce root.
+- `exams` belong to `grades`, optionally `tracks`, and may link to a `lecture`.
 
 ## Commerce
-- `products` wrap sellable content.
-- `orders` have many `order_items`; successful fulfillment creates `entitlements`.
-- Physical book orders later create `shipping_requests` and `financial_transactions`.
+- `products` remain the sellable root entity.
+- `packages` and `books` extend `products`.
+- `package_items` link packages to digital items, currently lectures.
+- `orders` and `order_items` store payment-ready order drafts and fulfilled history.
+- `entitlements` store digital access grants and their sources.
+- `carts` and `cart_items` store the current student cart before checkout preparation.
 
-## Support and Community
-- `forum_threads` have many `forum_messages` and `forum_attachments`.
-- `tickets` belong to `ticket_types`, teams, and assignees.
+## Center History
+- `educational_centers` and `educational_groups` model the offline center structure.
+- `attendance_sessions` represent publishable center lessons or exams.
+- `attendance_records` represent per-student attendance and score history.
 
-## Centers and Operations
-- `educational_centers` contain `educational_groups` and `center_publish_days`.
-- `attendance_sessions` have many `attendance_records`.
-- `shift_weeks` contain `shift_registrations`; `salary_cycles` contain `salary_lines`.
+## Support and Forum
+- `complaints` unify complaint/suggestion intake using a typed field.
+- `forum_threads` store the student-owned topic envelope.
+- `forum_messages` store the actual posts and replies with morph authors (`students` or `admins`).
+- `forum_attachments` store image/audio metadata per message.
+
+## Mistakes Center
+- `mistake_items` belong to a `student` and usually a `lecture`, with optional `exam` linkage.
+- Each mistake stores question snapshot text, model/correct answer snapshots, explanation, score loss, and metadata.

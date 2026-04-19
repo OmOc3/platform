@@ -41,4 +41,24 @@ class Grade extends Model
     {
         return $this->hasMany(Track::class);
     }
+
+    public function curriculumSections(): HasMany
+    {
+        return $this->hasMany(CurriculumSection::class)->orderBy('sort_order');
+    }
+
+    public function lectureSections(): HasMany
+    {
+        return $this->hasMany(LectureSection::class)->orderBy('sort_order');
+    }
+
+    public function lectures(): HasMany
+    {
+        return $this->hasMany(Lecture::class)->orderBy('sort_order');
+    }
+
+    public function exams(): HasMany
+    {
+        return $this->hasMany(Exam::class)->orderBy('sort_order');
+    }
 }

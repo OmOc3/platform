@@ -1,31 +1,37 @@
 # Assumptions
 
-## Confirmed Decisions
-- Product scope is a single academy brand, not a multi-tenant SaaS.
-- Default language is Arabic; English stays optional and secondary.
-- Local development baseline is Docker Sail.
-- Admin UI uses Laravel Blade-first pages with a path open for Livewire-heavy expansion as dependencies are installed.
-- v1 commerce uses separate checkout flows for digital access and shipped books.
-- Milestone 0/1 local acceptance uses a portable workspace-local PHP/Composer toolchain with SQLite because host PHP/Docker are not available on `PATH`.
+## Confirmed Product Defaults
+- المنصة تخص أكاديمية مدرس واحد الآن وليست multi-tenant.
+- اللغة الأساسية هي العربية، والإنجليزية تظل ثانوية ويمكن توسيعها لاحقًا.
+- بوابة الطالب ولوحة الإدارة تبنيان على Blade-first UI مع إبقاء Livewire جاهزًا للعناصر التفاعلية التي تستحقه.
+- الطلاب من حالة `pending` يمكنهم دخول البوابة، لكن الوصول للمحتوى المدفوع يظل معتمدًا على الاستحقاقات الفعلية فقط.
 
-## Uncertain Areas Implemented Flexibly
-- Payment gateway is not finalized; checkout services must remain adapter-based.
-- Shipping provider and checkout detail flow are not finalized; shipping requests are modeled independently from payment capture.
-- Ticket lifecycle defaults to `open`, `assigned`, `waiting_customer`, `waiting_internal`, `resolved`, `closed`.
-- “Blocked attempts” will be implemented later as configurable exam rules rather than hardcoded logic.
-- Offers, FAQ/help list, and SMS integrations are placeholders until product rules are confirmed.
+## Commerce and Access Assumptions
+- المحتوى الأكاديمي القابل للبيع يربط عبر `products` و`entitlements`.
+- `reviews` تم نمذجتها كنوع داخل `lectures` باستخدام `ContentKind` بدل إنشاء موديل منفصل.
+- الوصول للمحاضرات يمكن أن يأتي من:
+  - شراء مباشر للمحاضرة
+  - entitlement ناتج عن باقة تتضمن هذه المحاضرة
+  - منحة إدارية
+  - محتوى مجاني
+- فحص تعارض شراء الباقة مبني حاليًا على تداخل المحاضرات المملوكة فعليًا أو المتاحة عبر باقات مفعلة، ويمكن توسيع القاعدة لاحقًا من `metadata`.
+- الدفع الفعلي غير مفعل بعد؛ المرحلة الحالية تنشئ draft orders فقط.
+- الكتب تظل منفصلة منطقيًا عن التدفق الرقمي حتى داخل السلة نفسها.
 
-## Seed and Access Defaults
-- Local seed data creates one super admin from environment variables:
-  - `PLATFORM_SUPER_ADMIN_EMAIL`
-  - `PLATFORM_SUPER_ADMIN_PASSWORD`
-- Demo academic seed data includes baseline grades and tracks for secondary education flows.
+## Forum and Mistakes Assumptions
+- المنتدى أقرب إلى Q&A/forum module وليس contact form.
+- مرفقات المنتدى تحفظ في جداول مستقلة (`forum_attachments`) مع ملفات على disk `public`.
+- moderation الحالية أساس فقط: حالة الموضوع، مستوى الظهور، ورد إداري.
+- مركز الأخطاء يعتمد حاليًا على `mistake_items` المجمعة حسب المحاضرة، وليس على `mistake_groups` مستقل.
+- بيانات الأخطاء الحالية seeded/demo، لكن الـ schema مصمم ليستقبل ingestion تلقائيًا من exam attempts لاحقًا.
 
-## Technical Constraints in This Workspace
-- The repository started empty and required a fresh Laravel 12 skeleton import.
-- The host currently lacks system PHP, Composer, Docker, and MySQL binaries on `PATH`; source scaffolding proceeds regardless, and runtime execution depends on later environment provisioning.
+## Technical and Runtime Assumptions
+- Sail / MySQL / Redis / Horizon تظل target stack الرسمي.
+- التحقق المحلي السريع يستخدم `.runtime` + SQLite.
+- بعض المرفقات seeded كمسارات demo فقط لأغراض العرض البنيوي، بينما المرفقات الجديدة المرفوعة من النماذج تحفظ فعليًا.
 
-## Near-Term Follow-Up
-- Install Composer dependencies and publish package assets/config once PHP is available.
-- Run migrations, seeders, and the feature test suite after the PHP runtime is provisioned.
-- Keep Sail/MySQL/Redis documentation and config in sync even when local verification uses SQLite first.
+## Deferred Decisions
+- payment gateway النهائي لم يُحسم بعد.
+- shipping fulfillment التفصيلي لم يُحسم بعد.
+- blocked attempts ومنطق المحاولات الكاملة للاختبارات مؤجلان لمرحلة exams engine.
+- ticketing/support backend الكامل وpayroll والعمليات الداخلية الأوسع لم تُنفذ بعد.

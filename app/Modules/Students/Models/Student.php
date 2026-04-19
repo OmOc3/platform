@@ -7,10 +7,13 @@ use App\Modules\Academic\Models\Track;
 use App\Modules\Centers\Models\AttendanceRecord;
 use App\Modules\Centers\Models\EducationalCenter;
 use App\Modules\Centers\Models\EducationalGroup;
+use App\Modules\Commerce\Models\Cart;
 use App\Modules\Commerce\Models\Entitlement;
 use App\Modules\Commerce\Models\Order;
 use App\Modules\Identity\Models\Admin;
 use App\Modules\Students\Enums\StudentSourceType;
+use App\Modules\Support\Models\ForumMessage;
+use App\Modules\Support\Models\ForumThread;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Students\Notifications\StudentResetPasswordNotification;
 use App\Shared\Enums\StudentStatus;
@@ -18,6 +21,7 @@ use Database\Factories\StudentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -131,5 +135,26 @@ class Student extends Authenticatable
     public function complaints(): HasMany
     {
         return $this->hasMany(Complaint::class)->latest('created_at');
+    }
+
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function forumThreads(): HasMany
+    {
+        return $this->hasMany(ForumThread::class)->latest('last_activity_at');
+    }
+
+    public function forumMessages(): HasMany
+    {
+        return $this->hasMany(ForumMessage::class, 'author_id')
+            ->where('author_type', $this->getMorphClass());
+    }
+
+    public function mistakeItems(): HasMany
+    {
+        return $this->hasMany(MistakeItem::class)->latest('created_at');
     }
 }

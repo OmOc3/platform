@@ -2,6 +2,7 @@
 
 namespace App\Modules\Commerce\Models;
 
+use App\Modules\Commerce\Enums\BookAvailability;
 use Database\Factories\BookFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,8 +20,19 @@ class Book extends Model
         'product_id',
         'author_name',
         'page_count',
+        'stock_quantity',
         'cover_badge',
+        'availability_status',
+        'metadata',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'availability_status' => BookAvailability::class,
+            'metadata' => 'array',
+        ];
+    }
 
     protected static function newFactory(): BookFactory
     {

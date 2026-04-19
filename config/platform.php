@@ -76,6 +76,9 @@ return [
             'exams.manage',
             'packages.view',
             'packages.manage',
+            'books.view',
+            'books.manage',
+            'mistakes.view',
         ],
         'Content Editor' => [
             'dashboard.view',
@@ -83,6 +86,7 @@ return [
             'content.manage',
             'questions.view',
             'questions.manage',
+            'mistakes.view',
         ],
         'Student Affairs' => [
             'dashboard.view',
@@ -93,6 +97,8 @@ return [
             'forum.manage',
             'complaints.view',
             'complaints.manage',
+            'mistakes.view',
+            'mistakes.manage',
         ],
         'Finance Officer' => [
             'dashboard.view',
@@ -105,6 +111,7 @@ return [
             'entitlements.view',
             'entitlements.manage',
             'exports.run',
+            'books.view',
         ],
         'Support Agent' => [
             'dashboard.view',
@@ -112,6 +119,8 @@ return [
             'tickets.manage',
             'complaints.view',
             'complaints.manage',
+            'forum.view',
+            'forum.manage',
             'forum.reply',
         ],
         'Center Supervisor' => [
@@ -150,6 +159,8 @@ return [
         'exams.manage',
         'packages.view',
         'packages.manage',
+        'books.view',
+        'books.manage',
         'orders.view',
         'orders.manage',
         'transactions.view',
@@ -173,6 +184,8 @@ return [
         'exports.run',
         'payroll.view',
         'payroll.manage',
+        'mistakes.view',
+        'mistakes.manage',
     ],
 
     'admin_menu' => [
@@ -195,7 +208,20 @@ return [
             'items' => [
                 ['label' => 'الصفوف', 'route' => 'admin.grades.index', 'permission' => 'grades.view'],
                 ['label' => 'المسارات', 'route' => 'admin.tracks.index', 'permission' => 'tracks.view'],
+                ['label' => 'أقسام المنهج', 'route' => 'admin.curriculum-sections.index', 'permission' => 'content.view'],
+                ['label' => 'أقسام المحاضرات', 'route' => 'admin.lecture-sections.index', 'permission' => 'content.view'],
+                ['label' => 'المحتوى الأكاديمي', 'route' => 'admin.lectures.index', 'permission' => 'content.view'],
+                ['label' => 'الاختبارات', 'route' => 'admin.exams.index', 'permission' => 'exams.view'],
                 ['label' => 'الطلاب', 'route' => 'admin.students.index', 'permission' => 'students.view'],
+                ['label' => 'مركز الأخطاء', 'route' => 'admin.mistakes.index', 'permission' => 'mistakes.view'],
+            ],
+        ],
+        [
+            'label' => 'التجارة والدعم',
+            'items' => [
+                ['label' => 'الباقات', 'route' => 'admin.packages.index', 'permission' => 'packages.view'],
+                ['label' => 'الكتب', 'route' => 'admin.books.index', 'permission' => 'books.view'],
+                ['label' => 'ملتقى الأسئلة', 'route' => 'admin.forum-threads.index', 'permission' => 'forum.view'],
             ],
         ],
     ],
