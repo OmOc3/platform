@@ -212,6 +212,7 @@ return [
                 ['label' => 'أقسام المحاضرات', 'route' => 'admin.lecture-sections.index', 'permission' => 'content.view'],
                 ['label' => 'المحتوى الأكاديمي', 'route' => 'admin.lectures.index', 'permission' => 'content.view'],
                 ['label' => 'الاختبارات', 'route' => 'admin.exams.index', 'permission' => 'exams.view'],
+                ['label' => 'محاولات الاختبارات', 'route' => 'admin.exam-attempts.index', 'permission' => 'exams.view'],
                 ['label' => 'الطلاب', 'route' => 'admin.students.index', 'permission' => 'students.view'],
                 ['label' => 'مركز الأخطاء', 'route' => 'admin.mistakes.index', 'permission' => 'mistakes.view'],
             ],

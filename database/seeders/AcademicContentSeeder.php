@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Academic\Actions\Exams\SyncExamQuestionsAction;
 use App\Modules\Academic\Models\CurriculumSection;
 use App\Modules\Academic\Models\Exam;
 use App\Modules\Academic\Models\Grade;
@@ -144,7 +145,7 @@ class AcademicContentSeeder extends Seeder
             'sort_order' => 4,
         ]);
 
-        $this->upsertExam([
+        $openExam = $this->upsertExam([
             'slug' => 'kinematics-quiz-open',
             'title' => 'اختبار تمهيدي مفتوح',
             'short_description' => 'اختبار قصير مجاني لقياس فهم أساسيات الحركة.',
@@ -160,7 +161,7 @@ class AcademicContentSeeder extends Seeder
             'sort_order' => 1,
         ]);
 
-        $this->upsertExam([
+        $newtonExam = $this->upsertExam([
             'slug' => 'newton-laws-weekly-quiz',
             'title' => 'اختبار قوانين نيوتن الأسبوعي',
             'short_description' => 'اختبار مرتبط بمحاضرة قوانين نيوتن لتثبيت الأفكار الأساسية.',
@@ -176,7 +177,7 @@ class AcademicContentSeeder extends Seeder
             'sort_order' => 2,
         ]);
 
-        $this->upsertExam([
+        $reviewExam = $this->upsertExam([
             'slug' => 'electricity-review-quiz',
             'title' => 'اختبار مراجعة الكهرباء',
             'short_description' => 'اختبار مراجعة قصير بعد وحدة الكهرباء.',
@@ -190,6 +191,114 @@ class AcademicContentSeeder extends Seeder
             'is_featured' => false,
             'is_free' => false,
             'sort_order' => 3,
+        ]);
+
+        $this->syncExamQuestions($openExam, [
+            [
+                'prompt' => 'أي كمية تعبّر عن مقدار تغيّر موضع الجسم بين نقطتين؟',
+                'explanation' => 'الإزاحة هي التغيّر المباشر في موضع الجسم، بينما المسافة هي طول المسار المقطوع.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'الإزاحة', 'is_correct' => true],
+                    ['content' => 'المسافة', 'is_correct' => false],
+                    ['content' => 'العجلة', 'is_correct' => false],
+                    ['content' => 'الكتلة', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'عند ثبات الزمن، زيادة المسافة المقطوعة تعني أن السرعة المتوسطة قد...',
+                'explanation' => 'السرعة المتوسطة تساوي المسافة على الزمن، فإذا ثبت الزمن وزادت المسافة زادت السرعة.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'زادت', 'is_correct' => true],
+                    ['content' => 'قلت', 'is_correct' => false],
+                    ['content' => 'لم تتغير دائمًا', 'is_correct' => false],
+                    ['content' => 'تساوي صفرًا', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'أي رسم بياني يساعدك مباشرة على استنتاج السرعة من الميل؟',
+                'explanation' => 'ميل منحنى الإزاحة-الزمن يعبّر عن السرعة.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'الإزاحة مع الزمن', 'is_correct' => true],
+                    ['content' => 'الكتلة مع الحجم', 'is_correct' => false],
+                    ['content' => 'القوة مع الكتلة', 'is_correct' => false],
+                    ['content' => 'الشحنة مع الجهد', 'is_correct' => false],
+                ],
+            ],
+        ]);
+
+        $this->syncExamQuestions($newtonExam, [
+            [
+                'prompt' => 'ينص القانون الثاني لنيوتن على أن القوة المحصلة تساوي...',
+                'explanation' => 'القانون الثاني يربط القوة المحصلة بكتلة الجسم وعجلته.',
+                'max_score' => 2,
+                'choices' => [
+                    ['content' => 'الكتلة × العجلة', 'is_correct' => true],
+                    ['content' => 'الكتلة ÷ العجلة', 'is_correct' => false],
+                    ['content' => 'الوزن × السرعة', 'is_correct' => false],
+                    ['content' => 'المسافة × الزمن', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'إذا كانت القوة المحصلة المؤثرة على جسم تساوي صفرًا، فإن الجسم...',
+                'explanation' => 'القوة المحصلة الصفرية تعني عدم وجود عجلة، فيبقى الجسم ساكنًا أو يتحرك بسرعة منتظمة.',
+                'max_score' => 2,
+                'choices' => [
+                    ['content' => 'يبقى على حالته من السكون أو الحركة المنتظمة', 'is_correct' => true],
+                    ['content' => 'يتحرك بعجلة كبيرة', 'is_correct' => false],
+                    ['content' => 'تتضاعف كتلته', 'is_correct' => false],
+                    ['content' => 'يتوقف فورًا دائمًا', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'عند ثبوت الكتلة، ماذا يحدث للعجلة إذا تضاعفت القوة المحصلة؟',
+                'explanation' => 'من العلاقة F = m a، إذا ثبتت الكتلة وتضاعفت القوة تتضاعف العجلة.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'تتضاعف العجلة', 'is_correct' => true],
+                    ['content' => 'تنخفض إلى النصف', 'is_correct' => false],
+                    ['content' => 'لا تتغير', 'is_correct' => false],
+                    ['content' => 'تنعدم', 'is_correct' => false],
+                ],
+            ],
+        ]);
+
+        $this->syncExamQuestions($reviewExam, [
+            [
+                'prompt' => 'طبقًا لقانون أوم، شدة التيار الكهربائي تساوي...',
+                'explanation' => 'قانون أوم يربط شدة التيار بالجهد والمقاومة: I = V / R.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'الجهد ÷ المقاومة', 'is_correct' => true],
+                    ['content' => 'الجهد × المقاومة', 'is_correct' => false],
+                    ['content' => 'المقاومة ÷ الجهد', 'is_correct' => false],
+                    ['content' => 'القدرة × الزمن', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'عند ثبات المقاومة، زيادة فرق الجهد تؤدي إلى...',
+                'explanation' => 'بثبات المقاومة، شدة التيار تتناسب طرديًا مع فرق الجهد.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'زيادة شدة التيار', 'is_correct' => true],
+                    ['content' => 'نقص شدة التيار', 'is_correct' => false],
+                    ['content' => 'انعدام التيار', 'is_correct' => false],
+                    ['content' => 'ثبات القدرة دائمًا', 'is_correct' => false],
+                ],
+            ],
+            [
+                'prompt' => 'أي مكوّن يُستخدم عادةً للتحكم في شدة التيار داخل الدائرة؟',
+                'explanation' => 'المقاومة المتغيرة تساعد على ضبط شدة التيار بزيادة أو تقليل المقاومة.',
+                'max_score' => 1,
+                'choices' => [
+                    ['content' => 'المقاومة المتغيرة', 'is_correct' => true],
+                    ['content' => 'المفتاح فقط', 'is_correct' => false],
+                    ['content' => 'السلك الفائق', 'is_correct' => false],
+                    ['content' => 'العدسة الزجاجية', 'is_correct' => false],
+                ],
+            ],
         ]);
 
         $monthlyPackage = Package::query()->whereHas('product', fn ($query) => $query->where('slug', 'monthly-physics-package'))->first();
@@ -300,5 +409,40 @@ class AcademicContentSeeder extends Seeder
             'access_period_days' => $accessPeriodDays,
             'metadata' => ['overlap_rule' => $overlapRule],
         ]);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $questions
+     */
+    private function syncExamQuestions(Exam $exam, array $questions): void
+    {
+        $exam->loadMissing('examQuestions.question.choices');
+
+        $payload = collect($questions)
+            ->values()
+            ->map(function (array $question, int $questionIndex) use ($exam): array {
+                $existingExamQuestion = $exam->examQuestions->values()->get($questionIndex);
+                $existingChoices = $existingExamQuestion?->question?->choices?->sortBy('sort_order')->values();
+
+                return [
+                    'question_id' => $existingExamQuestion?->question_id,
+                    'prompt' => $question['prompt'],
+                    'explanation' => $question['explanation'] ?? null,
+                    'max_score' => $question['max_score'] ?? 1,
+                    'choices' => collect($question['choices'])
+                        ->values()
+                        ->map(function (array $choice, int $choiceIndex) use ($existingChoices): array {
+                            return [
+                                'choice_id' => $existingChoices?->get($choiceIndex)?->id,
+                                'content' => $choice['content'],
+                                'is_correct' => (bool) ($choice['is_correct'] ?? false),
+                            ];
+                        })
+                        ->all(),
+                ];
+            })
+            ->all();
+
+        app(SyncExamQuestionsAction::class)->execute($exam, $payload);
     }
 }

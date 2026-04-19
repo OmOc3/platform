@@ -5,11 +5,13 @@ namespace App\Providers;
 use App\Modules\Academic\Models\Grade;
 use App\Modules\Academic\Models\CurriculumSection;
 use App\Modules\Academic\Models\Exam;
+use App\Modules\Academic\Models\ExamAttempt;
 use App\Modules\Academic\Models\Lecture;
 use App\Modules\Academic\Models\LectureSection;
 use App\Modules\Academic\Models\Track;
 use App\Modules\Academic\Policies\CurriculumSectionPolicy;
 use App\Modules\Academic\Policies\ExamPolicy;
+use App\Modules\Academic\Policies\ExamAttemptPolicy;
 use App\Modules\Academic\Policies\GradePolicy;
 use App\Modules\Academic\Policies\LecturePolicy;
 use App\Modules\Academic\Policies\LectureSectionPolicy;
@@ -54,6 +56,7 @@ class AuthServiceProvider extends ServiceProvider
         Order::class => OrderPolicy::class,
         CurriculumSection::class => CurriculumSectionPolicy::class,
         Exam::class => ExamPolicy::class,
+        ExamAttempt::class => ExamAttemptPolicy::class,
         ForumThread::class => ForumThreadPolicy::class,
         Grade::class => GradePolicy::class,
         Lecture::class => LecturePolicy::class,

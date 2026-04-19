@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Academic\Http\Controllers\Student\LectureCatalogController;
+use App\Modules\Academic\Http\Controllers\Student\ExamAttemptController;
 use App\Modules\Commerce\Http\Controllers\Student\BookCatalogController;
 use App\Modules\Commerce\Http\Controllers\Student\CartController;
 use App\Modules\Commerce\Http\Controllers\Student\CheckoutController;
@@ -48,6 +49,11 @@ Route::prefix('student')->name('student.')->group(function (): void {
         Route::get('/lectures', [LectureCatalogController::class, 'index'])->name('lectures.index');
         Route::get('/lectures/content/{lecture:slug}', [LectureCatalogController::class, 'showLecture'])->name('lectures.show');
         Route::get('/exams/{exam:slug}', [LectureCatalogController::class, 'showExam'])->name('lectures.exams.show');
+        Route::post('/exams/{exam:slug}/attempts', [ExamAttemptController::class, 'start'])->name('exam-attempts.start');
+        Route::get('/exam-attempts/{examAttempt}', [ExamAttemptController::class, 'show'])->name('exam-attempts.show');
+        Route::post('/exam-attempts/{examAttempt}/save', [ExamAttemptController::class, 'save'])->name('exam-attempts.save');
+        Route::post('/exam-attempts/{examAttempt}/submit', [ExamAttemptController::class, 'submit'])->name('exam-attempts.submit');
+        Route::get('/exam-attempts/{examAttempt}/result', [ExamAttemptController::class, 'result'])->name('exam-attempts.result');
 
         Route::get('/packages', [PackageCatalogController::class, 'index'])->name('packages.index');
         Route::get('/packages/{package}', [PackageCatalogController::class, 'show'])->name('packages.show');

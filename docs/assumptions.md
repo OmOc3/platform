@@ -8,35 +8,42 @@
 
 ## Commerce and Access Assumptions
 - المحتوى الأكاديمي القابل للبيع يربط عبر `products` و`entitlements`.
-- `reviews` تم نمذجتها كنوع داخل `lectures` باستخدام `ContentKind` بدل إنشاء موديل منفصل.
-- الوصول للمحاضرات يمكن أن يأتي من:
-  - شراء مباشر للمحاضرة
-  - entitlement ناتج عن باقة تتضمن هذه المحاضرة
-  - منحة إدارية
+- `reviews` ممثلة كنوع داخل `lectures` باستخدام `ContentKind` بدل موديل منفصل.
+- الوصول للمحاضرات والاختبارات يأتي من:
   - محتوى مجاني
-- فحص تعارض شراء الباقة مبني حاليًا على تداخل المحاضرات المملوكة فعليًا أو المتاحة عبر باقات مفعلة، ويمكن توسيع القاعدة لاحقًا من `metadata`.
-- الدفع الفعلي غير مفعل بعد؛ المرحلة الحالية تدعم تجهيز draft orders ثم انتقالات إدارية آمنة حتى `fulfilled`.
-- تفعيل الطلب الرقمي يمنح entitlement واحدًا لكل `order_item_id` مع الحفاظ على idempotency عند إعادة تنفيذ نفس التفعيل.
-- شراء الباقة يمنح entitlement للباقة نفسها، بينما فتح المحاضرات المندرجة تحتها يعتمد على `AccessResolver` الحالي وليس على entitlement منفصل لكل محاضرة.
+  - entitlement مباشر
+  - entitlement ناتج عن باقة
+  - منحة إدارية
+- شراء الباقة يمنح entitlement للباقة نفسها، بينما فتح المحاضرات المدرجة تحتها يعتمد على `AccessResolver`.
 - الكتب تظل منفصلة منطقيًا عن التدفق الرقمي حتى داخل السلة نفسها.
+- الدفع الفعلي غير مفعل بعد؛ الموجود حاليًا هو draft checkout ثم انتقالات إدارية آمنة حتى `fulfilled`.
+
+## Exam Engine Assumptions
+- v1 يدعم فقط objective multiple-choice questions.
+- النتيجة تظهر مباشرة بعد الإرسال؛ delayed/manual result release مؤجل.
+- الحد الافتراضي للمحاولات هو محاولة واحدة، ويمكن تعديله من `exams.metadata.max_attempts`.
+- `exams.question_count` حقل denormalized تتم مزامنته من `exam_questions` ولم يعد يدويًا authoritative.
+- عند التصحيح، يتم حفظ snapshot كافٍ داخل `exam_attempt_answers.answer_meta` حتى لا تعتمد شاشة النتيجة بالكامل على التغييرات اللاحقة في بنك الأسئلة.
+- إعادة إرسال نفس المحاولة بعد التصحيح تعامل كـ safe no-op.
 
 ## Forum and Mistakes Assumptions
 - المنتدى أقرب إلى Q&A/forum module وليس contact form.
-- مرفقات المنتدى تحفظ في جداول مستقلة (`forum_attachments`) مع ملفات على disk `public`.
+- مرفقات المنتدى تحفظ في `forum_attachments` مع ملفات على disk `public`.
 - moderation الحالية أساس فقط: حالة الموضوع، مستوى الظهور، ورد إداري.
-- مركز الأخطاء يعتمد حاليًا على `mistake_items` المجمعة حسب المحاضرة، وليس على `mistake_groups` مستقل.
-- بيانات الأخطاء الحالية seeded/demo، لكن الـ schema مصمم ليستقبل ingestion تلقائيًا من exam attempts لاحقًا.
+- مركز الأخطاء لا يُستبدل؛ بل يستقبل الآن أخطاء حقيقية من نتائج الامتحانات عبر `mistake_items`.
+- مزامنة الأخطاء من الامتحانات idempotent على مستوى `student + exam + question_reference`.
 
 ## Technical and Runtime Assumptions
 - Sail / MySQL / Redis / Horizon هي بيئة التطوير المحلية والرسمية للمشروع.
 - التطبيق محليًا يعمل على قاعدة `platform`.
-- الاختبارات تعمل على MySQL أيضًا باستخدام قاعدة `testing`.
+- الاختبارات تعمل على MySQL باستخدام قاعدة `testing`.
 - لا يُعتمد على `.runtime` كمسار تشغيل قاعدة بيانات محلي بعد الآن.
-- بعض المرفقات seeded كمسارات demo فقط لأغراض العرض البنيوي، بينما المرفقات الجديدة المرفوعة من النماذج تحفظ فعليًا.
-- بيانات العرض التجريبي للطلبات الرقمية تُنشأ الآن عبر fulfillment حقيقي داخل الـ seeder بدل تكرار إنشاء entitlements يدويًا.
+- البيانات التجريبية للامتحانات تتضمن أسئلة واختيارات فعلية حتى يمكن الدخول إلى تجربة الامتحان مباشرة بعد `migrate:fresh --seed`.
 
 ## Deferred Decisions
 - payment gateway النهائي لم يُحسم بعد.
-- shipping fulfillment التفصيلي لم يُحسم بعد.
-- blocked attempts ومنطق المحاولات الكاملة للاختبارات مؤجلان لمرحلة exams engine.
-- ticketing/support backend الكامل وpayroll والعمليات الداخلية الأوسع لم تُنفذ بعد.
+- shipping fulfillment التفصيلي لطلبات الكتب لم يُنفذ بعد.
+- advanced proctoring مؤجل.
+- essay/manual review workflows مؤجلة.
+- advanced exam analytics مؤجلة.
+- ticketing/support backend الكامل وpayroll والعمليات الأوسع لم تُنفذ بعد.

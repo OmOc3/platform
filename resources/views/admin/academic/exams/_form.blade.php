@@ -3,6 +3,41 @@
     @method('PUT')
 @endif
 
+@php
+    $questionDrafts = old('questions', $exam->exists
+        ? $exam->examQuestions->map(function ($examQuestion) {
+            return [
+                'question_id' => $examQuestion->question_id,
+                'prompt' => $examQuestion->question?->prompt,
+                'explanation' => $examQuestion->question?->explanation,
+                'max_score' => $examQuestion->max_score,
+                'choices' => $examQuestion->question?->choices
+                    ->sortBy('sort_order')
+                    ->values()
+                    ->map(fn ($choice) => [
+                        'choice_id' => $choice->id,
+                        'content' => $choice->content,
+                        'is_correct' => $choice->is_correct,
+                    ])
+                    ->all() ?? [],
+            ];
+        })->all()
+        : []);
+
+    if ($questionDrafts === []) {
+        $questionDrafts = [[
+            'question_id' => null,
+            'prompt' => '',
+            'explanation' => '',
+            'max_score' => 1,
+            'choices' => [
+                ['choice_id' => null, 'content' => '', 'is_correct' => true],
+                ['choice_id' => null, 'content' => '', 'is_correct' => false],
+            ],
+        ]];
+    }
+@endphp
+
 <div class="grid gap-5 md:grid-cols-2">
     <div>
         <label class="field-label" for="title">العنوان</label>
@@ -52,8 +87,8 @@
         <input id="duration_minutes" type="number" min="1" name="duration_minutes" value="{{ old('duration_minutes', $exam->duration_minutes) }}" class="form-input">
     </div>
     <div>
-        <label class="field-label" for="question_count">عدد الأسئلة</label>
-        <input id="question_count" type="number" min="0" name="question_count" value="{{ old('question_count', $exam->question_count) }}" class="form-input">
+        <label class="field-label" for="max_attempts">الحد الأقصى للمحاولات</label>
+        <input id="max_attempts" type="number" min="1" max="10" name="max_attempts" value="{{ old('max_attempts', data_get($exam->metadata, 'max_attempts', 1)) }}" class="form-input">
     </div>
     <div>
         <label class="field-label" for="currency">العملة</label>
@@ -77,6 +112,86 @@
     </div>
 </div>
 
+<section class="mt-8 rounded-[2rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] bg-[var(--color-brand-50)]/70 p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h2 class="text-lg font-semibold">أسئلة الاختبار</h2>
+            <p class="mt-1 text-sm text-[var(--color-ink-500)]">يدعم هذا الإصدار أسئلة الاختيار من متعدد مع تصحيح فوري بعد الإرسال.</p>
+        </div>
+        <button type="button" class="btn-secondary" data-add-question>إضافة سؤال</button>
+    </div>
+
+    @error('questions')
+        <p class="mt-3 text-sm font-medium text-[var(--color-danger)]">{{ $message }}</p>
+    @enderror
+
+    <div class="mt-5 space-y-5" data-question-list>
+        @foreach ($questionDrafts as $questionIndex => $questionDraft)
+            <article class="rounded-[1.8rem] bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]" data-question-card>
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">سؤال <span data-question-number>{{ $loop->iteration }}</span></p>
+                    <button type="button" class="btn-danger !px-4 !py-2" data-remove-question>حذف السؤال</button>
+                </div>
+
+                <input type="hidden" name="questions[{{ $questionIndex }}][question_id]" value="{{ $questionDraft['question_id'] }}">
+
+                <div class="mt-4 grid gap-4 md:grid-cols-[1fr_180px]">
+                    <div>
+                        <label class="field-label">نص السؤال</label>
+                        <textarea name="questions[{{ $questionIndex }}][prompt]" class="form-textarea" rows="3" required>{{ $questionDraft['prompt'] }}</textarea>
+                        @error("questions.$questionIndex.prompt")
+                            <p class="mt-2 text-sm font-medium text-[var(--color-danger)]">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="field-label">درجة السؤال</label>
+                        <input type="number" min="1" max="100" name="questions[{{ $questionIndex }}][max_score]" value="{{ $questionDraft['max_score'] ?? 1 }}" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label class="field-label">التفسير بعد التصحيح</label>
+                    <textarea name="questions[{{ $questionIndex }}][explanation]" class="form-textarea" rows="2">{{ $questionDraft['explanation'] ?? '' }}</textarea>
+                </div>
+
+                <div class="mt-5 rounded-[1.6rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <p class="text-sm font-semibold">الاختيارات</p>
+                        <button type="button" class="btn-secondary !px-4 !py-2" data-add-choice>إضافة اختيار</button>
+                    </div>
+
+                    @error("questions.$questionIndex.choices")
+                        <p class="mt-2 text-sm font-medium text-[var(--color-danger)]">{{ $message }}</p>
+                    @enderror
+
+                    <div class="mt-4 space-y-3" data-choice-list>
+                        @foreach ($questionDraft['choices'] as $choiceIndex => $choiceDraft)
+                            <div class="grid gap-3 rounded-[1.4rem] bg-[var(--color-brand-50)] p-3 md:grid-cols-[auto_1fr_auto] md:items-center" data-choice-row>
+                                <div class="flex items-center gap-2">
+                                    <input type="radio"
+                                           name="questions[{{ $questionIndex }}][correct_choice]"
+                                           value="{{ $choiceIndex }}"
+                                           class="h-4 w-4"
+                                           @checked($choiceDraft['is_correct'] ?? false)>
+                                    <span class="text-xs font-semibold text-[var(--color-ink-500)]">إجابة صحيحة</span>
+                                </div>
+                                <div>
+                                    <input type="hidden" name="questions[{{ $questionIndex }}][choices][{{ $choiceIndex }}][choice_id]" value="{{ $choiceDraft['choice_id'] ?? '' }}">
+                                    <input type="text" name="questions[{{ $questionIndex }}][choices][{{ $choiceIndex }}][content]" value="{{ $choiceDraft['content'] ?? '' }}" class="form-input" placeholder="نص الاختيار" required>
+                                    @error("questions.$questionIndex.choices.$choiceIndex.content")
+                                        <p class="mt-2 text-sm font-medium text-[var(--color-danger)]">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <button type="button" class="btn-secondary !px-4 !py-2" data-remove-choice>حذف</button>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </article>
+        @endforeach
+    </div>
+</section>
+
 <div class="mt-5 grid gap-3 md:grid-cols-3">
     <label class="flex items-center gap-3 text-sm font-medium text-[var(--color-ink-700)]">
         <input type="checkbox" name="is_active" value="1" class="h-4 w-4 rounded" @checked(old('is_active', $exam->is_active ?? true))>
@@ -96,3 +211,136 @@
     <button type="submit" class="btn-primary">حفظ</button>
     <a href="{{ route('admin.exams.index') }}" class="btn-secondary">إلغاء</a>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questionList = document.querySelector('[data-question-list]');
+
+            if (! questionList) {
+                return;
+            }
+
+            let nextQuestionIndex = {{ collect(array_keys($questionDrafts))->max() ?? -1 }} + 1;
+
+            const renumberQuestions = () => {
+                questionList.querySelectorAll('[data-question-card]').forEach((card, index) => {
+                    const number = card.querySelector('[data-question-number]');
+
+                    if (number) {
+                        number.textContent = index + 1;
+                    }
+                });
+            };
+
+            const buildChoiceRow = (questionIndex, choiceIndex) => `
+                <div class="grid gap-3 rounded-[1.4rem] bg-[var(--color-brand-50)] p-3 md:grid-cols-[auto_1fr_auto] md:items-center" data-choice-row>
+                    <div class="flex items-center gap-2">
+                        <input type="radio" name="questions[${questionIndex}][correct_choice]" value="${choiceIndex}" class="h-4 w-4" ${choiceIndex === 0 ? 'checked' : ''}>
+                        <span class="text-xs font-semibold text-[var(--color-ink-500)]">إجابة صحيحة</span>
+                    </div>
+                    <div>
+                        <input type="hidden" name="questions[${questionIndex}][choices][${choiceIndex}][choice_id]" value="">
+                        <input type="text" name="questions[${questionIndex}][choices][${choiceIndex}][content]" class="form-input" placeholder="نص الاختيار" required>
+                    </div>
+                    <button type="button" class="btn-secondary !px-4 !py-2" data-remove-choice>حذف</button>
+                </div>
+            `;
+
+            const buildQuestionCard = (questionIndex) => `
+                <article class="rounded-[1.8rem] bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]" data-question-card>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">سؤال <span data-question-number></span></p>
+                        <button type="button" class="btn-danger !px-4 !py-2" data-remove-question>حذف السؤال</button>
+                    </div>
+                    <input type="hidden" name="questions[${questionIndex}][question_id]" value="">
+                    <div class="mt-4 grid gap-4 md:grid-cols-[1fr_180px]">
+                        <div>
+                            <label class="field-label">نص السؤال</label>
+                            <textarea name="questions[${questionIndex}][prompt]" class="form-textarea" rows="3" required></textarea>
+                        </div>
+                        <div>
+                            <label class="field-label">درجة السؤال</label>
+                            <input type="number" min="1" max="100" name="questions[${questionIndex}][max_score]" value="1" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="field-label">التفسير بعد التصحيح</label>
+                        <textarea name="questions[${questionIndex}][explanation]" class="form-textarea" rows="2"></textarea>
+                    </div>
+                    <div class="mt-5 rounded-[1.6rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <p class="text-sm font-semibold">الاختيارات</p>
+                            <button type="button" class="btn-secondary !px-4 !py-2" data-add-choice>إضافة اختيار</button>
+                        </div>
+                        <div class="mt-4 space-y-3" data-choice-list>
+                            ${buildChoiceRow(questionIndex, 0)}
+                            ${buildChoiceRow(questionIndex, 1)}
+                        </div>
+                    </div>
+                </article>
+            `;
+
+            document.querySelector('[data-add-question]')?.addEventListener('click', () => {
+                questionList.insertAdjacentHTML('beforeend', buildQuestionCard(nextQuestionIndex));
+                nextQuestionIndex += 1;
+                renumberQuestions();
+            });
+
+            document.addEventListener('click', (event) => {
+                const addChoiceButton = event.target.closest('[data-add-choice]');
+
+                if (addChoiceButton) {
+                    const card = addChoiceButton.closest('[data-question-card]');
+                    const choiceList = card?.querySelector('[data-choice-list]');
+
+                    if (! card || ! choiceList) {
+                        return;
+                    }
+
+                    const promptInput = card.querySelector('textarea[name*="[prompt]"]');
+                    const match = promptInput?.getAttribute('name')?.match(/questions\[(\d+)]\[prompt]/);
+
+                    if (! match) {
+                        return;
+                    }
+
+                    const questionIndex = Number(match[1]);
+                    const choiceIndex = Math.max(
+                        ...Array.from(choiceList.querySelectorAll('input[name*="[content]"]'))
+                            .map((input) => {
+                                const inputMatch = input.getAttribute('name')?.match(/\[choices]\[(\d+)]\[content]/);
+
+                                return inputMatch ? Number(inputMatch[1]) : -1;
+                            }),
+                        -1,
+                    ) + 1;
+
+                    choiceList.insertAdjacentHTML('beforeend', buildChoiceRow(questionIndex, choiceIndex));
+                    return;
+                }
+
+                const removeChoiceButton = event.target.closest('[data-remove-choice]');
+
+                if (removeChoiceButton) {
+                    const choiceList = removeChoiceButton.closest('[data-choice-list]');
+
+                    if (choiceList && choiceList.querySelectorAll('[data-choice-row]').length > 2) {
+                        removeChoiceButton.closest('[data-choice-row]')?.remove();
+                    }
+
+                    return;
+                }
+
+                const removeQuestionButton = event.target.closest('[data-remove-question]');
+
+                if (removeQuestionButton && questionList.querySelectorAll('[data-question-card]').length > 1) {
+                    removeQuestionButton.closest('[data-question-card]')?.remove();
+                    renumberQuestions();
+                }
+            });
+
+            renumberQuestions();
+        });
+    </script>
+@endpush

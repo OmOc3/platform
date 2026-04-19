@@ -77,7 +77,7 @@ class ExamController extends Controller
         $this->authorize('update', $exam);
 
         return view('admin.academic.exams.edit', [
-            'exam' => $exam,
+            'exam' => $exam->load(['examQuestions.question.choices']),
             ...$this->formData(),
         ]);
     }

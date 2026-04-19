@@ -2,6 +2,7 @@
 
 namespace App\Modules\Students\Models;
 
+use App\Modules\Academic\Models\ExamAttempt;
 use App\Modules\Academic\Models\Grade;
 use App\Modules\Academic\Models\Track;
 use App\Modules\Centers\Models\AttendanceRecord;
@@ -156,5 +157,10 @@ class Student extends Authenticatable
     public function mistakeItems(): HasMany
     {
         return $this->hasMany(MistakeItem::class)->latest('created_at');
+    }
+
+    public function examAttempts(): HasMany
+    {
+        return $this->hasMany(ExamAttempt::class)->latest('started_at');
     }
 }

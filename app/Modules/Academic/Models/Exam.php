@@ -7,6 +7,7 @@ use Database\Factories\ExamFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -79,5 +80,24 @@ class Exam extends Model
     public function mistakeItems(): HasMany
     {
         return $this->hasMany(MistakeItem::class);
+    }
+
+    public function examQuestions(): HasMany
+    {
+        return $this->hasMany(ExamQuestion::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(Question::class, 'exam_questions')
+            ->withPivot(['sort_order', 'max_score'])
+            ->withTimestamps()
+            ->orderByPivot('sort_order')
+            ->orderBy('questions.id');
+    }
+
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(ExamAttempt::class)->latest('started_at');
     }
 }

@@ -17,6 +17,13 @@
 - `lectures.product_id` links sellable digital content to the commerce root.
 - `exams` belong to `grades`, optionally `tracks`, and may link to a `lecture`.
 
+## Exam Engine
+- `questions` store normalized question prompts, explanations, types, and metadata.
+- `question_choices` belong to `questions` and store the available objective answers with one correct choice in v1.
+- `exam_questions` connect `exams` to `questions` with ordering and per-question score.
+- `exam_attempts` belong to `exams` and `students`, and store lifecycle timestamps, attempt number, score summary, and result metadata.
+- `exam_attempt_answers` belong to `exam_attempts` and `questions`, and store the selected answer plus grading snapshots.
+
 ## Commerce
 - `products` remain the sellable root entity.
 - `packages` and `books` extend `products`.
@@ -39,3 +46,4 @@
 ## Mistakes Center
 - `mistake_items` belong to a `student` and usually a `lecture`, with optional `exam` linkage.
 - Each mistake stores question snapshot text, model/correct answer snapshots, explanation, score loss, and metadata.
+- Wrong answers from graded exam attempts now sync into `mistake_items` and update existing rows idempotently instead of creating duplicate spam.

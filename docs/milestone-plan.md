@@ -49,16 +49,28 @@ Status: complete
 
 Status: complete
 
+## Milestone 5
+- Exam questions and exam composition inside admin exam CRUD
+- Exam attempts engine
+- Student exam-taking flow
+- Objective auto-grading
+- Immediate results pages
+- Automatic mistakes propagation from wrong answers
+- Admin visibility into attempts and results
+
+Status: complete
+
 ## Runtime and Verification Baseline
-- المسار المحلي الرسمي للتشغيل والتحقق أصبح Sail + MySQL.
+- المسار المحلي الرسمي للتشغيل والتحقق هو Sail + MySQL.
 - التطبيق يستخدم قاعدة `platform`.
 - الاختبارات تستخدم قاعدة `testing`.
 - لم يعد `.runtime + SQLite` هو المسار الرسمي للتحقق المحلي.
 
 ## Next Milestones
-- Full exam attempts and results engine
 - Payment gateway integration and settlement automation
 - Shipping execution and physical order operations
+- Essay/manual review and delayed result release
+- Advanced exam analytics and richer student performance reporting
 - Lecture delivery / LMS completion flows
 - Center operations expansion
 - Ticketing and support backend completion

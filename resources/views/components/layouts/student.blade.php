@@ -74,5 +74,6 @@
 
     @livewire('shared.support-widget')
     @livewireScripts
+    @stack('scripts')
 </body>
 </html>

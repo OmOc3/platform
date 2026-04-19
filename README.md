@@ -1,20 +1,20 @@
 # منصة الإتقان التعليمية
 
-منصة تعليمية عربية أولًا مبنية لأكاديمية مدرس واحد، وتجمع بين:
+منصة تعليمية عربية أولًا لأكاديمية مدرس واحد، تجمع بين:
 
 - موقع عام للتسويق والتعريف بالخدمة
 - بوابة طالب
 - لوحة إدارة وتشغيل
-- كتالوج محتوى أكاديمي
+- كتالوج محاضرات ومراجعات واختبارات
 - باقات وكتب وسلة شراء
 - ملتقى أسئلة
 - مركز أخطاء
-- تاريخ حضور السنتر
+- حضور ومتابعة سنتر
 - شكاوى واقتراحات
 
 ## الغرض الحالي
 
-هذا المستودع يمثل إعادة بناء تدريجية لمنصة تعليمية production-grade فوق Laravel 12 مع معمارية `Modular Monolith`، مع الحفاظ على نفس الهيكل القائم داخل:
+هذا المستودع يمثل إعادة بناء production-grade فوق Laravel 12 مع معمارية `Modular Monolith`، مع الحفاظ على نفس الهيكل داخل:
 
 - `app/Modules`
 - `app/Shared`
@@ -22,14 +22,14 @@
 ## المعمارية
 
 - Laravel 12
-- Blade + Livewire
+- Blade + Livewire 3
 - Tailwind CSS
 - MySQL 8 / Redis / Horizon
 - Laravel Sail كبيئة التطوير المحلية الرسمية
-- Roles / Permissions عبر Spatie Permission
-- Arabic RTL-first UI
+- Spatie Permission للأدوار والصلاحيات
+- واجهة Arabic RTL-first
 
-الموديولات الرئيسية الحالية:
+الموديولات الحالية:
 
 - `Identity`
 - `Academic`
@@ -44,7 +44,7 @@
 
 ### مكتمل الآن
 
-- إدارة المشرفين والصلاحيات والإعدادات والـ audit logs
+- إدارة المشرفين والصلاحيات والإعدادات وسجل المراجعة
 - الصفوف والمسارات
 - الموقع العام والهوية العامة
 - تسجيل ودخول الطالب واسترجاع كلمة المرور
@@ -59,19 +59,28 @@
 - إدارة أقسام المنهج وأقسام المحاضرات والمحتوى والاختبارات
 - إدارة الباقات والكتب
 - أساس moderation للمنتدى
+- محرك محاولات الاختبارات v1:
+  - أسئلة اختيار من متعدد
+  - بدء المحاولة واستكمالها وحفظ التقدم
+  - إرسال المحاولة والتصحيح التلقائي
+  - صفحة نتيجة فورية
+  - مزامنة الأخطاء تلقائيًا مع مركز الأخطاء
+  - شاشة قراءة لمحاولات الاختبارات داخل الإدارة
 
-### لاحقًا
+### مؤجل لاحقًا
 
-- محاولات الاختبارات ونتائجها الكاملة
-- تدفق دفع فعلي وربط settlement/payment gateway
-- شحن وتنفيذ طلبات الكتب الكامل
-- LMS delivery متقدم
-- ticketing/support backend الكامل
-- payroll/operations الكامل
+- advanced proctoring
+- essay/manual-review workflows
+- delayed/manual result release
+- advanced exam analytics
+- payment gateway integration
+- shipping execution
+- ticketing/support backend completion
+- payroll/operations completion
 
 ## التشغيل المحلي الرسمي
 
-المسار المحلي الرسمي للمشروع هو Laravel Sail مع MySQL وRedis وMailpit. لا يُعتمد على `.runtime` كمسار تشغيل قاعدة بيانات محلي بعد الآن.
+المسار المحلي الرسمي للمشروع هو Laravel Sail مع MySQL وRedis وMailpit.
 
 ### أول تشغيل
 
@@ -108,13 +117,11 @@ cp .env.example .env
 
 ### الاختبارات
 
-الاختبارات تعمل على MySQL أيضًا باستخدام قاعدة `testing` التي ينشئها Sail تلقائيًا:
-
 ```bash
 ./vendor/bin/sail artisan test
 ```
 
-ولو أردت إعادة البناء الكامل لقاعدة البيانات محليًا:
+ولو أردت إعادة بناء قاعدة البيانات محليًا:
 
 ```bash
 ./vendor/bin/sail artisan migrate:fresh --seed
