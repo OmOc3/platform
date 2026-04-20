@@ -11,6 +11,7 @@ use App\Modules\Students\Models\Student;
 use App\Shared\Enums\StudentStatus;
 use Database\Seeders\AcademicSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\Support\InteractsWithAdminAuth;
 use Tests\TestCase;
 
@@ -73,5 +74,77 @@ class StudentManagementTest extends TestCase
             'previous_status' => StudentStatus::Pending->value,
             'new_status' => StudentStatus::Subscribed->value,
         ]);
+    }
+
+    public function test_admin_can_reset_student_password_from_edit_form(): void
+    {
+        $this->seed(AcademicSeeder::class);
+
+        $student = Student::factory()->create([
+            'password' => 'old-password123',
+        ]);
+
+        $this->signInAdmin(['students.view', 'students.manage']);
+
+        $this->put(route('admin.students.update', $student), [
+            'name' => $student->name,
+            'email' => $student->email,
+            'phone' => $student->phone,
+            'parent_phone' => $student->parent_phone,
+            'governorate' => $student->governorate,
+            'status' => $student->status->value,
+            'source_type' => $student->source_type?->value ?? 'online',
+            'is_azhar' => $student->is_azhar,
+            'grade_id' => $student->grade_id,
+            'track_id' => $student->track_id,
+            'center_id' => $student->center_id,
+            'group_id' => $student->group_id,
+            'owner_admin_id' => $student->owner_admin_id,
+            'notes' => $student->notes,
+            'password' => 'new-password123',
+            'password_confirmation' => 'new-password123',
+        ])->assertRedirect(route('admin.students.edit', $student));
+
+        $student->refresh();
+
+        $this->assertTrue(Hash::check('new-password123', $student->password));
+        $this->assertFalse(Hash::check('old-password123', $student->password));
+    }
+
+    public function test_admin_update_does_not_change_password_when_left_blank(): void
+    {
+        $this->seed(AcademicSeeder::class);
+
+        $student = Student::factory()->create([
+            'password' => 'old-password123',
+        ]);
+
+        $originalHash = $student->password;
+
+        $this->signInAdmin(['students.view', 'students.manage']);
+
+        $this->put(route('admin.students.update', $student), [
+            'name' => 'طالب بدون تغيير كلمة المرور',
+            'email' => $student->email,
+            'phone' => $student->phone,
+            'parent_phone' => $student->parent_phone,
+            'governorate' => $student->governorate,
+            'status' => $student->status->value,
+            'source_type' => $student->source_type?->value ?? 'online',
+            'is_azhar' => $student->is_azhar,
+            'grade_id' => $student->grade_id,
+            'track_id' => $student->track_id,
+            'center_id' => $student->center_id,
+            'group_id' => $student->group_id,
+            'owner_admin_id' => $student->owner_admin_id,
+            'notes' => $student->notes,
+            'password' => '',
+            'password_confirmation' => '',
+        ])->assertRedirect(route('admin.students.edit', $student));
+
+        $student->refresh();
+
+        $this->assertSame($originalHash, $student->password);
+        $this->assertTrue(Hash::check('old-password123', $student->password));
     }
 }

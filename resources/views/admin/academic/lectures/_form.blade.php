@@ -70,7 +70,7 @@
         <label class="field-label" for="type">النوع</label>
         <select id="type" name="type" class="form-select" required>
             @foreach ($types as $type)
-                <option value="{{ $type->value }}" @selected(old('type', $lecture->type?->value ?? $lecture->type) === $type->value)>{{ $type->value }}</option>
+                <option value="{{ $type->value }}" @selected(old('type', $lecture->type?->value ?? $lecture->type) === $type->value)>{{ $type->label() }}</option>
             @endforeach
         </select>
     </div>

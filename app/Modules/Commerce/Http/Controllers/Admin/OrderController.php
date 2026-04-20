@@ -36,7 +36,7 @@ class OrderController extends Controller
                     $order->uuid,
                     $order->student?->name ?? '-',
                     $order->kind->label(),
-                    $order->status->label(),
+                    $order->status->labelFor($order->kind),
                     (string) $order->total_amount,
                 ])
                 ->all());
@@ -46,6 +46,12 @@ class OrderController extends Controller
             'orders' => $query->paginate(15)->withQueryString(),
             'statuses' => OrderStatus::cases(),
             'kinds' => OrderKind::cases(),
+            'overview' => [
+                'total' => Order::query()->count(),
+                'book' => Order::query()->where('kind', OrderKind::Book->value)->count(),
+                'digital' => Order::query()->where('kind', OrderKind::Digital->value)->count(),
+                'actionable' => Order::query()->whereIn('status', [OrderStatus::PendingPayment->value, OrderStatus::Paid->value])->count(),
+            ],
         ]);
     }
 
@@ -54,7 +60,8 @@ class OrderController extends Controller
         $this->authorize('view', $order);
 
         $order->load([
-            'student',
+            'student.center',
+            'student.group',
             'items.product.package.items.item',
             'items.entitlement.product',
             'items.entitlement.grantedByAdmin',

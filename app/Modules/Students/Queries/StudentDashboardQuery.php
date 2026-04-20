@@ -299,7 +299,7 @@ class StudentDashboardQuery
             ->count();
 
         $reviewCount = $this->lectureBaseQuery($student)
-            ->where('type', ContentKind::Review->value)
+            ->whereIn('type', [ContentKind::Review->value, ContentKind::Summary->value])
             ->where('is_active', true)
             ->count();
 

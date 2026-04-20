@@ -23,6 +23,7 @@ class UpdateStudentRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('students', 'email')->ignore($student?->id)],
             'phone' => ['required', 'string', 'max:30', Rule::unique('students', 'phone')->ignore($student?->id)],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'parent_phone' => ['nullable', 'string', 'max:30'],
             'governorate' => ['nullable', 'string', 'max:255'],
             'status' => ['required', Rule::enum(StudentStatus::class)],

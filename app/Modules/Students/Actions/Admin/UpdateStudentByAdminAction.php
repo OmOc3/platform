@@ -17,6 +17,10 @@ class UpdateStudentByAdminAction
     public function execute(Student $student, array $data, mixed $actor): Student
     {
         return DB::transaction(function () use ($student, $data, $actor): Student {
+            if (blank($data['password'] ?? null)) {
+                unset($data['password']);
+            }
+
             $oldValues = $student->toArray();
             $oldStatus = $student->status;
 

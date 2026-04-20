@@ -18,6 +18,16 @@
         @error('phone') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
     </div>
     <div>
+        <label class="field-label" for="password">كلمة المرور الجديدة</label>
+        <input id="password" type="password" name="password" class="form-input" autocomplete="new-password" placeholder="اتركها فارغة إذا لا تريد تغييرها">
+        <p class="field-help">يستطيع الأدمن تعيين كلمة مرور جديدة للطالب من هنا عند الحاجة.</p>
+        @error('password') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
+    </div>
+    <div>
+        <label class="field-label" for="password_confirmation">تأكيد كلمة المرور</label>
+        <input id="password_confirmation" type="password" name="password_confirmation" class="form-input" autocomplete="new-password">
+    </div>
+    <div>
         <label class="field-label" for="parent_phone">هاتف ولي الأمر</label>
         <input id="parent_phone" name="parent_phone" value="{{ old('parent_phone', $student->parent_phone) }}" class="form-input">
         @error('parent_phone') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
@@ -31,27 +41,27 @@
         <label class="field-label" for="status">الحالة</label>
         <select id="status" name="status" class="form-select" required>
             @foreach ($statuses as $status)
-                <option value="{{ $status->value }}" @selected(old('status', $student->status->value) === $status->value)>{{ $status->value }}</option>
+                <option value="{{ $status->value }}" @selected(old('status', $student->status->value) === $status->value)>{{ $status->label() }}</option>
             @endforeach
         </select>
         @error('status') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
     </div>
     <div>
         <label class="field-label" for="status_reason">سبب تغيير الحالة</label>
-        <input id="status_reason" name="status_reason" value="{{ old('status_reason') }}" class="form-input">
+        <input id="status_reason" name="status_reason" value="{{ old('status_reason') }}" class="form-input" placeholder="ملاحظة قصيرة تحفظ في سجل الحالة">
         @error('status_reason') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
     </div>
     <div>
         <label class="field-label" for="source_type">المصدر</label>
         <select id="source_type" name="source_type" class="form-select" required>
             @foreach ($sourceTypes as $sourceType)
-                <option value="{{ $sourceType->value }}" @selected(old('source_type', $student->source_type?->value) === $sourceType->value)>{{ $sourceType->value }}</option>
+                <option value="{{ $sourceType->value }}" @selected(old('source_type', $student->source_type?->value) === $sourceType->value)>{{ $sourceType->label() }}</option>
             @endforeach
         </select>
         @error('source_type') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
     </div>
     <div>
-        <label class="field-label" for="owner_admin_id">المالك الإداري</label>
+        <label class="field-label" for="owner_admin_id">المتابع الإداري</label>
         <select id="owner_admin_id" name="owner_admin_id" class="form-select">
             <option value="">بدون تعيين</option>
             @foreach ($owners as $owner)
@@ -105,7 +115,7 @@
         <label for="is_azhar" class="text-sm text-[var(--color-ink-700)]">طالب أزهري</label>
     </div>
     <div class="md:col-span-2">
-        <label class="field-label" for="notes">ملاحظات</label>
+        <label class="field-label" for="notes">ملاحظات المتابعة</label>
         <textarea id="notes" name="notes" class="form-textarea">{{ old('notes', $student->notes) }}</textarea>
         @error('notes') <p class="field-help text-[var(--color-danger)]">{{ $message }}</p> @enderror
     </div>

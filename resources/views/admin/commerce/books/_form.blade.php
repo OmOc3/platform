@@ -36,7 +36,7 @@
         <label class="field-label" for="availability_status">الحالة</label>
         <select id="availability_status" name="availability_status" class="form-select" required>
             @foreach ($availabilities as $availability)
-                <option value="{{ $availability->value }}" @selected(old('availability_status', $book->availability_status?->value ?? $book->availability_status) === $availability->value)>{{ $availability->value }}</option>
+                <option value="{{ $availability->value }}" @selected(old('availability_status', $book->availability_status?->value ?? $book->availability_status) === $availability->value)>{{ $availability->label() }}</option>
             @endforeach
         </select>
     </div>

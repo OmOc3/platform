@@ -78,6 +78,12 @@ class StudentAuthenticationTest extends TestCase
         $this->assertGuest('student');
     }
 
+    public function test_guest_is_redirected_to_student_login_when_opening_student_dashboard(): void
+    {
+        $this->get(route('student.dashboard'))
+            ->assertRedirect(route('student.login'));
+    }
+
     public function test_student_can_request_and_complete_password_reset(): void
     {
         Notification::fake();

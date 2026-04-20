@@ -82,7 +82,7 @@
                             </a>
 
                             <details class="relative">
-                                <summary class="portal-nav-utility list-none cursor-pointer">المزيد</summary>
+                                <summary class="portal-nav-utility list-none cursor-pointer" aria-label="روابط الطالب الإضافية">المزيد</summary>
                                 <div class="portal-menu-panel absolute right-0 top-full z-30 mt-3 w-72">
                                     <div class="grid gap-2">
                                         @foreach ($moreLinks as $link)
@@ -92,7 +92,10 @@
                                 </div>
                             </details>
 
-                            <span class="portal-nav-utility portal-nav-utility--muted" title="واجهة إنجليزية قريبًا">EN</span>
+                            <span class="portal-nav-utility portal-nav-utility--muted" title="الواجهة الإنجليزية قريبًا">
+                                <span aria-hidden="true">EN</span>
+                                <span class="sr-only">الواجهة الإنجليزية قريبًا</span>
+                            </span>
 
                             <form method="POST" action="{{ route('student.logout') }}">
                                 @csrf
@@ -101,7 +104,7 @@
                         </div>
                     </div>
 
-                    <nav class="grid gap-2 sm:grid-cols-2 xl:grid-cols-6">
+                    <nav class="grid gap-2 sm:grid-cols-2 xl:grid-cols-6" aria-label="التنقل الرئيسي للطالب">
                         @foreach ($items as $item)
                             <a href="{{ $item['href'] }}" @class([
                                 'portal-nav-link',
@@ -118,7 +121,9 @@
 
         <x-flash />
 
-        {{ $slot }}
+        <main id="student-main" class="space-y-6" aria-label="محتوى الصفحة">
+            {{ $slot }}
+        </main>
     </div>
 
     @livewire('shared.support-widget')

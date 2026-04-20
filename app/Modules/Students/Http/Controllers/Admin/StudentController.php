@@ -39,8 +39,8 @@ class StudentController extends Controller
                 ->map(fn (Student $student): array => [
                     $student->name,
                     $student->student_number,
-                    $student->status->value,
-                    $student->source_type?->value,
+                    $student->status->label(),
+                    $student->source_type?->label(),
                     $student->grade?->name_ar ?? '-',
                     $student->track?->name_ar ?? '-',
                 ])
@@ -52,8 +52,16 @@ class StudentController extends Controller
             'owners' => Admin::query()->orderBy('name')->get(),
             'grades' => Grade::query()->orderBy('sort_order')->get(),
             'tracks' => Track::query()->orderBy('grade_id')->orderBy('sort_order')->get(),
+            'centers' => EducationalCenter::query()->orderBy('name_ar')->get(),
+            'groups' => EducationalGroup::query()->orderBy('name_ar')->get(),
             'statuses' => StudentStatus::cases(),
             'sourceTypes' => StudentSourceType::cases(),
+            'overview' => [
+                'total' => Student::query()->count(),
+                'subscribed' => Student::query()->where('status', StudentStatus::Subscribed->value)->count(),
+                'pending' => Student::query()->where('status', StudentStatus::Pending->value)->count(),
+                'assigned' => Student::query()->whereNotNull('owner_admin_id')->count(),
+            ],
         ]);
     }
 
@@ -70,6 +78,15 @@ class StudentController extends Controller
             'groups' => EducationalGroup::query()->orderBy('name_ar')->get(),
             'statuses' => StudentStatus::cases(),
             'sourceTypes' => StudentSourceType::cases(),
+            'attendancePreview' => $student->attendanceRecords()
+                ->with('session.group.center')
+                ->latest('recorded_at')
+                ->limit(4)
+                ->get(),
+            'complaintsPreview' => $student->complaints()
+                ->latest('created_at')
+                ->limit(4)
+                ->get(),
         ]);
     }
 

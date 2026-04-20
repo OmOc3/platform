@@ -36,4 +36,10 @@ class AdminAuthenticationTest extends TestCase
         $response->assertRedirect(route('admin.dashboard'));
         $this->assertAuthenticatedAs($admin, 'admin');
     }
+
+    public function test_guest_is_redirected_to_admin_login_when_opening_admin_dashboard(): void
+    {
+        $this->get(route('admin.dashboard'))
+            ->assertRedirect(route('admin.login'));
+    }
 }

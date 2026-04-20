@@ -12,9 +12,10 @@
 <body class="surface-shell">
     @php($admin = auth('admin')->user())
     @php($menuSections = app(\App\Shared\Support\Navigation\AdminNavigation::class)->sections($admin))
+    @php($isActiveRoute = fn (string $route) => request()->routeIs($route) || str_starts_with((string) optional(request()->route())->getName(), $route.'.'))
 
     <div class="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6">
-        <aside class="panel hidden h-[calc(100vh-2rem)] overflow-y-auto p-5 lg:block">
+        <aside class="panel hidden h-[calc(100vh-2rem)] overflow-y-auto p-5 lg:block" aria-label="التنقل الإداري الرئيسي">
             <div class="space-y-2 border-b border-[var(--color-border-soft)] pb-5">
                 <p class="font-display text-2xl text-[var(--color-brand-700)]">{{ $platformBrand['name'] }}</p>
                 <p class="text-sm leading-7 text-[var(--color-ink-700)]">{{ $platformBrand['tagline'] }}</p>
@@ -29,7 +30,7 @@
                                 <a href="{{ route($item['route']) }}"
                                    @class([
                                        'sidebar-link',
-                                       'sidebar-link-active' => request()->routeIs($item['route']) || str_starts_with((string) optional(request()->route())->getName(), $item['route'].'.'),
+                                       'sidebar-link-active' => $isActiveRoute($item['route']),
                                    ])>
                                     <span>{{ $item['label'] }}</span>
                                 </a>
@@ -63,6 +64,33 @@
                     </form>
                 </div>
             </header>
+
+            <details class="admin-mobile-nav lg:hidden">
+                <summary class="admin-mobile-nav__trigger">
+                    <span class="admin-mobile-nav__eyebrow">التنقل الإداري</span>
+                    <span class="admin-mobile-nav__title">أقسام الإدارة</span>
+                    <span class="admin-mobile-nav__hint">افتح القائمة السريعة للصفحات الأساسية</span>
+                </summary>
+
+                <div class="admin-mobile-nav__panel">
+                    @foreach ($menuSections as $section)
+                        <section class="admin-mobile-nav__section">
+                            <p class="admin-mobile-nav__section-label">{{ $section['label'] }}</p>
+                            <div class="grid gap-2">
+                                @foreach ($section['items'] as $item)
+                                    <a href="{{ route($item['route']) }}"
+                                       @class([
+                                           'admin-mobile-nav__link',
+                                           'admin-mobile-nav__link--active' => $isActiveRoute($item['route']),
+                                       ])>
+                                        <span>{{ $item['label'] }}</span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endforeach
+                </div>
+            </details>
 
             <x-flash />
 

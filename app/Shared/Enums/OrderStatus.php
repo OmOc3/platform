@@ -23,6 +23,22 @@ enum OrderStatus: string
         };
     }
 
+    public function labelFor(?OrderKind $kind = null): string
+    {
+        if ($kind !== OrderKind::Book) {
+            return $this->label();
+        }
+
+        return match ($this) {
+            self::Draft => 'مسودة الطلب',
+            self::PendingPayment => 'بحاجة لتأكيد',
+            self::Paid => 'تم تأكيدها',
+            self::Fulfilled => 'تم توصيلها',
+            self::Cancelled => 'تم إلغاؤها',
+            self::Refunded => 'مرتجع / ملغي',
+        };
+    }
+
     public function tone(): string
     {
         return match ($this) {

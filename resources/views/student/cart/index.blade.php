@@ -49,7 +49,7 @@
                                                 <form method="POST" action="{{ route('student.cart.destroy', $item) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn-danger">حذف</button>
+                                                    <button class="btn-danger">إزالة من السلة</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -83,11 +83,13 @@
                                             </div>
 
                                             <div class="flex flex-col gap-3 lg:items-end">
+                                                @php($quantityInputId = 'cart_quantity_'.$item->id)
                                                 <form method="POST" action="{{ route('student.cart.update', $item) }}" class="flex flex-wrap items-center gap-2">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="number" min="1" max="10" name="quantity" value="{{ $item->quantity }}" class="form-input max-w-24">
-                                                    <button class="btn-secondary !px-4 !py-2">تحديث</button>
+                                                    <label for="{{ $quantityInputId }}" class="sr-only">كمية {{ $item->product?->name_ar }}</label>
+                                                    <input id="{{ $quantityInputId }}" type="number" min="1" max="10" name="quantity" value="{{ $item->quantity }}" class="form-input max-w-24" aria-label="كمية {{ $item->product?->name_ar }}">
+                                                    <button class="btn-secondary !px-4 !py-2">تحديث الكمية</button>
                                                 </form>
 
                                                 <div class="flex items-center gap-3">
@@ -95,7 +97,7 @@
                                                     <form method="POST" action="{{ route('student.cart.destroy', $item) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn-danger">حذف</button>
+                                                        <button class="btn-danger">إزالة من السلة</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -155,8 +157,8 @@
                             </div>
                         </div>
 
-                        <details class="mt-5">
-                            <summary class="portal-nav-utility w-full cursor-pointer justify-center">إضافة / تعديل بيانات الاستلام</summary>
+                        <details class="checkout-address-editor mt-5">
+                            <summary class="portal-nav-utility w-full cursor-pointer justify-center">تعديل بيانات الاستلام المحفوظة</summary>
                             <form method="POST" action="{{ route('student.profile.update') }}" class="mt-4 space-y-4">
                                 @csrf
                                 @method('PUT')

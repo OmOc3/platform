@@ -26,32 +26,38 @@
 
             <form method="GET" class="mt-6 grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto_auto]">
                 <input type="hidden" name="tab" value="{{ $tab }}">
-                <select name="curriculum_section" class="form-select">
-                    <option value="">كل أقسام المنهج</option>
-                    @foreach ($curriculumSections as $section)
-                        <option value="{{ $section->id }}" @selected((string) request('curriculum_section') === (string) $section->id)>{{ $section->name_ar }}</option>
-                    @endforeach
-                </select>
-                <select name="lecture_section" class="form-select">
-                    <option value="">كل أقسام المحاضرات</option>
-                    @foreach ($lectureSections as $section)
-                        <option value="{{ $section->id }}" @selected((string) request('lecture_section') === (string) $section->id)>{{ $section->name_ar }}</option>
-                    @endforeach
-                </select>
+                <div>
+                    <label class="field-label" for="lecture_curriculum_section">قسم المنهج</label>
+                    <select id="lecture_curriculum_section" name="curriculum_section" class="form-select">
+                        <option value="">كل أقسام المنهج</option>
+                        @foreach ($curriculumSections as $section)
+                            <option value="{{ $section->id }}" @selected((string) request('curriculum_section') === (string) $section->id)>{{ $section->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="field-label" for="lecture_section_id">قسم المحاضرات</label>
+                    <select id="lecture_section_id" name="lecture_section" class="form-select">
+                        <option value="">كل أقسام المحاضرات</option>
+                        @foreach ($lectureSections as $section)
+                            <option value="{{ $section->id }}" @selected((string) request('lecture_section') === (string) $section->id)>{{ $section->name_ar }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
                 @if ($tab !== 'exam')
-                    <label class="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)]">
+                    <label class="surface-inset flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)] lg:self-end">
                         <input type="checkbox" name="scope" value="free" @checked($scope === 'free') class="h-4 w-4 rounded">
-                        المجاني فقط
+                        اعرض المجاني فقط
                     </label>
                 @endif
 
-                <label class="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)]">
+                <label class="surface-inset flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)] lg:self-end">
                     <input type="checkbox" name="featured" value="1" @checked(request()->boolean('featured')) class="h-4 w-4 rounded">
-                    العناصر المميزة
+                    اعرض العناصر المميزة فقط
                 </label>
 
-                <button class="btn-secondary">تطبيق</button>
+                <button class="btn-secondary lg:self-end">تطبيق الفلاتر</button>
             </form>
         </section>
 

@@ -17,6 +17,7 @@ class LecturesIndexQuery
 
         return Lecture::query()
             ->with(['grade', 'track', 'curriculumSection', 'lectureSection', 'product'])
+            ->withCount(['assets', 'checkpoints'])
             ->when($search !== '', function (Builder $query) use ($search): void {
                 $query->where(function (Builder $builder) use ($search): void {
                     $builder->where('title', 'like', "%{$search}%")

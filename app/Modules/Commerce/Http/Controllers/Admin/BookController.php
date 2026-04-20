@@ -37,13 +37,19 @@ class BookController extends Controller
                     $book->product?->name_ar ?? '-',
                     $book->author_name ?? '-',
                     (string) $book->stock_quantity,
-                    $book->availability_status->value,
+                    $book->availability_status->label(),
                 ])
                 ->all());
         }
 
         return view('admin.commerce.books.index', [
             'books' => $query->paginate(15)->withQueryString(),
+            'overview' => [
+                'total' => Book::query()->count(),
+                'available' => Book::query()->where('availability_status', BookAvailability::InStock->value)->count(),
+                'featured' => Book::query()->whereHas('product', fn ($builder) => $builder->where('is_featured', true))->count(),
+                'stock' => (int) Book::query()->sum('stock_quantity'),
+            ],
         ]);
     }
 

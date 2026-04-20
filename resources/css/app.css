@@ -22,7 +22,9 @@
     --color-surface: oklch(0.985 0.006 70);
     --color-surface-strong: oklch(0.96 0.01 67);
     --color-violet-100: oklch(0.9 0.06 315);
+    --color-violet-300: oklch(0.79 0.09 316);
     --color-violet-500: oklch(0.63 0.14 318);
+    --color-violet-600: oklch(0.54 0.13 317);
     --color-violet-700: oklch(0.43 0.1 314);
     --color-success: oklch(0.68 0.14 145);
     --color-warning: oklch(0.76 0.15 78);
@@ -132,7 +134,8 @@
     }
 
     .btn-danger {
-        @apply inline-flex items-center justify-center rounded-full bg-[var(--color-danger)] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90;
+        @apply inline-flex items-center justify-center rounded-full bg-[var(--color-danger)] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] focus:ring-offset-2;
+        --tw-ring-offset-color: var(--color-surface);
     }
 
     .form-input,
@@ -174,6 +177,118 @@
         content: '';
         @apply absolute left-6 top-6 h-12 w-12 rounded-full;
         background-color: color-mix(in oklch, var(--color-brand-100) 75%, var(--color-panel-strong));
+    }
+
+    .admin-metric-grid {
+        @apply grid gap-4 md:grid-cols-2 xl:grid-cols-4;
+    }
+
+    .admin-metric-card {
+        @apply rounded-[1.9rem] p-5 lg:p-6;
+        border: 1px solid var(--color-border-soft);
+        background:
+            radial-gradient(circle at top right, color-mix(in oklch, var(--color-brand-100) 55%, transparent), transparent 52%),
+            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 92%, white), color-mix(in oklch, var(--color-panel-muted) 88%, white));
+        box-shadow: var(--shadow-soft);
+    }
+
+    .admin-metric-card__eyebrow {
+        @apply text-xs font-semibold uppercase tracking-[0.18em];
+        color: var(--color-ink-500);
+    }
+
+    .admin-metric-card__value {
+        @apply mt-4 block text-3xl font-bold;
+        color: var(--color-brand-700);
+    }
+
+    .admin-metric-card__description {
+        @apply mt-3 text-sm leading-7;
+        color: var(--color-ink-700);
+    }
+
+    .admin-mini-list {
+        @apply space-y-3;
+    }
+
+    .admin-mini-list__item {
+        @apply rounded-[1.5rem] px-4 py-4;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+    }
+
+    .admin-mini-list__meta {
+        @apply mt-2 text-xs;
+        color: var(--color-ink-500);
+    }
+
+    .admin-workflow-card {
+        @apply rounded-[1.8rem] p-4;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-muted);
+    }
+
+    .admin-mobile-nav {
+        @apply overflow-hidden rounded-[2rem];
+        border: 1px solid var(--color-border-soft);
+        background-color: color-mix(in oklch, var(--color-panel-bg) 92%, transparent);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .admin-mobile-nav__trigger {
+        @apply flex w-full cursor-pointer flex-col gap-2 px-5 py-4 text-right;
+        list-style: none;
+    }
+
+    .admin-mobile-nav__trigger::-webkit-details-marker {
+        display: none;
+    }
+
+    .admin-mobile-nav__eyebrow {
+        @apply text-[0.7rem] font-semibold uppercase tracking-[0.18em];
+        color: var(--color-ink-500);
+    }
+
+    .admin-mobile-nav__title {
+        @apply text-base font-bold;
+        color: var(--color-brand-700);
+    }
+
+    .admin-mobile-nav__hint {
+        @apply text-sm leading-6;
+        color: var(--color-ink-700);
+    }
+
+    .admin-mobile-nav__panel {
+        @apply grid gap-4 border-t px-4 py-4;
+        border-color: var(--color-border-soft);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 84%, transparent);
+    }
+
+    .admin-mobile-nav__section {
+        @apply rounded-[1.6rem] p-3;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+    }
+
+    .admin-mobile-nav__section-label {
+        @apply px-1 text-xs font-semibold uppercase tracking-[0.18em];
+        color: var(--color-ink-500);
+    }
+
+    .admin-mobile-nav__link {
+        @apply flex items-center justify-between rounded-[1.2rem] px-4 py-3 text-sm font-semibold;
+        color: var(--color-ink-700);
+    }
+
+    .admin-mobile-nav__link:hover {
+        background-color: var(--color-panel-muted);
+        color: var(--color-ink-900);
+    }
+
+    .admin-mobile-nav__link--active {
+        background-color: color-mix(in oklch, var(--color-brand-50) 74%, white);
+        color: var(--color-brand-700);
     }
 
     .status-pill {
@@ -293,6 +408,10 @@
     }
 
     .portal-nav-utility:hover {
+        background-color: var(--color-panel-muted);
+    }
+
+    details[open] > .portal-nav-utility {
         background-color: var(--color-panel-muted);
     }
 
@@ -486,6 +605,14 @@
         @apply backdrop-blur-sm;
     }
 
+    .support-widget__panel {
+        transform-origin: bottom left;
+    }
+
+    .support-widget__toggle {
+        box-shadow: var(--shadow-elevated);
+    }
+
     .account-nav {
         @apply flex flex-wrap gap-2;
     }
@@ -579,6 +706,62 @@
     .exam-choice--selected {
         background-color: color-mix(in oklch, var(--color-warning) 10%, white);
         border-color: color-mix(in oklch, var(--color-warning) 34%, var(--color-border-soft));
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .btn-primary,
+        .btn-secondary,
+        .btn-danger,
+        .portal-nav-utility,
+        .portal-nav-link,
+        .sidebar-link,
+        .admin-mobile-nav__trigger,
+        .admin-mobile-nav__link {
+            transition:
+                transform 180ms cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 180ms cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 160ms ease,
+                color 160ms ease;
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-danger:hover,
+        .portal-nav-utility:hover,
+        .portal-nav-link:hover,
+        .sidebar-link:hover,
+        .admin-mobile-nav__trigger:hover,
+        .admin-mobile-nav__link:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active,
+        .btn-secondary:active,
+        .btn-danger:active,
+        .portal-nav-utility:active,
+        .portal-nav-link:active,
+        .admin-mobile-nav__trigger:active,
+        .admin-mobile-nav__link:active {
+            transform: translateY(1px);
+        }
+
+        .support-widget__panel,
+        .admin-mobile-nav__panel,
+        .checkout-address-editor[open] > form {
+            animation: surface-enter 220ms cubic-bezier(0.25, 1, 0.5, 1);
+        }
+    }
+
+    @keyframes surface-enter {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 

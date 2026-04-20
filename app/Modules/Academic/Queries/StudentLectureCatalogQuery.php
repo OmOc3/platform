@@ -76,8 +76,6 @@ class StudentLectureCatalogQuery
                     'latest_attempt' => $exam->attempts->first(fn ($attempt) => $attempt->status->value === 'graded'),
                 ]);
         } else {
-            $type = $tab === 'review' ? ContentKind::Review : ContentKind::Lecture;
-
             $items = $this->lectureBaseQuery($student)
                 ->with([
                     'grade',
@@ -89,7 +87,8 @@ class StudentLectureCatalogQuery
                         ->where('student_id', $student->id)
                         ->with('lastCheckpoint'),
                 ])
-                ->where('type', $type->value)
+                ->when($tab === 'review', fn ($query) => $query->whereIn('type', [ContentKind::Review->value, ContentKind::Summary->value]))
+                ->when($tab !== 'review', fn ($query) => $query->where('type', ContentKind::Lecture->value))
                 ->when($curriculumSection > 0, fn ($query) => $query->where('curriculum_section_id', $curriculumSection))
                 ->when($lectureSection > 0, fn ($query) => $query->where('lecture_section_id', $lectureSection))
                 ->where('is_active', true)
@@ -119,7 +118,7 @@ class StudentLectureCatalogQuery
                     ->where('is_active', true)
                     ->count(),
                 'reviews' => $this->lectureBaseQuery($student)
-                    ->where('type', ContentKind::Review->value)
+                    ->whereIn('type', [ContentKind::Review->value, ContentKind::Summary->value])
                     ->where('is_active', true)
                     ->count(),
                 'exams' => $this->examBaseQuery($student)

@@ -8,6 +8,7 @@ use App\Modules\Commerce\Actions\Packages\SavePackageAction;
 use App\Modules\Commerce\Http\Requests\Admin\Packages\StorePackageRequest;
 use App\Modules\Commerce\Http\Requests\Admin\Packages\UpdatePackageRequest;
 use App\Modules\Commerce\Models\Package;
+use App\Modules\Commerce\Models\PackageItem;
 use App\Modules\Commerce\Queries\PackagesIndexQuery;
 use App\Shared\Contracts\AuditLogger;
 use App\Shared\Support\Exports\CsvExporter;
@@ -44,6 +45,12 @@ class PackageController extends Controller
 
         return view('admin.commerce.packages.index', [
             'packages' => $query->paginate(15)->withQueryString(),
+            'overview' => [
+                'total' => Package::query()->count(),
+                'featured' => Package::query()->where('is_featured', true)->count(),
+                'monthly' => Package::query()->where('billing_cycle_label', 'like', '%شهر%')->count(),
+                'items' => PackageItem::query()->count(),
+            ],
         ]);
     }
 

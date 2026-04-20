@@ -8,6 +8,8 @@ use App\Modules\Academic\Http\Controllers\Admin\LectureController;
 use App\Modules\Academic\Http\Controllers\Admin\LectureProgressController;
 use App\Modules\Academic\Http\Controllers\Admin\LectureSectionController;
 use App\Modules\Academic\Http\Controllers\Admin\TrackController;
+use App\Modules\Centers\Http\Controllers\Admin\AttendanceReportController;
+use App\Modules\Centers\Http\Controllers\Admin\CenterController;
 use App\Modules\Commerce\Http\Controllers\Admin\BookController;
 use App\Modules\Commerce\Http\Controllers\Admin\OrderController;
 use App\Modules\Commerce\Http\Controllers\Admin\PackageController;
@@ -18,6 +20,7 @@ use App\Modules\Identity\Http\Controllers\Admin\DashboardController;
 use App\Modules\Identity\Http\Controllers\Admin\SettingController;
 use App\Modules\Students\Http\Controllers\Admin\MistakeController;
 use App\Modules\Students\Http\Controllers\Admin\StudentController;
+use App\Modules\Support\Http\Controllers\Admin\ComplaintController;
 use App\Modules\Support\Http\Controllers\Admin\ForumThreadController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +48,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::put('/orders/{order}/transition', [OrderController::class, 'transition'])->name('orders.transition');
+        Route::get('/centers', [CenterController::class, 'index'])->name('centers.index');
+        Route::get('/centers/{center}', [CenterController::class, 'show'])->name('centers.show');
+        Route::get('/attendance', [AttendanceReportController::class, 'index'])->name('attendance.index');
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::resource('students', StudentController::class)->only(['index', 'edit', 'update']);
         Route::get('/mistakes', [MistakeController::class, 'index'])->name('mistakes.index');
@@ -53,6 +59,9 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/forum-threads/{forumThread}', [ForumThreadController::class, 'show'])->name('forum-threads.show');
         Route::put('/forum-threads/{forumThread}', [ForumThreadController::class, 'update'])->name('forum-threads.update');
         Route::post('/forum-threads/{forumThread}/reply', [ForumThreadController::class, 'reply'])->name('forum-threads.reply');
+        Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+        Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
+        Route::put('/complaints/{complaint}', [ComplaintController::class, 'update'])->name('complaints.update');
         Route::get('/audit-logs', AuditLogController::class)->name('audit-logs.index');
     });
 });

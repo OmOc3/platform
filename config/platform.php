@@ -4,14 +4,14 @@ return [
     'brand' => [
         'name' => 'منصة الإتقان التعليمية',
         'teacher_name' => 'أ. أحمد الفيزياء',
-        'tagline' => 'منصة تعليمية عربية لإدارة التعلم، الحضور، المشتريات، والدعم في تجربة واحدة متماسكة.',
+        'tagline' => 'منصة تعليمية عربية لإدارة التعلّم، الحضور، المشتريات، والدعم في تجربة واحدة متماسكة.',
         'support_phone' => '+20 100 000 0000',
         'support_whatsapp' => '+20 100 000 0000',
     ],
 
     'public' => [
         'hero_badge' => 'منصة عربية أولًا لطلاب الثانوية',
-        'hero_title' => 'تعلم منظم، متابعة أوضح، وتجربة طالب عملية من أول محاضرة حتى آخر مراجعة.',
+        'hero_title' => 'تعلّم منظم، متابعة أوضح، وتجربة طالب عملية من أول محاضرة حتى آخر مراجعة.',
         'hero_description' => 'منصة أستاذ واحد تجمع الشرح، الباقات، الكتب، المتابعة، وسجل الطالب داخل واجهة عربية واضحة ومباشرة.',
         'video' => [
             'title' => 'رسالة المعلم',
@@ -197,7 +197,7 @@ return [
             ],
         ],
         [
-            'label' => 'الإدارة والحوكمة',
+            'label' => 'الإدارة والحَوْكمة',
             'items' => [
                 ['label' => 'المشرفون', 'route' => 'admin.admins.index', 'permission' => 'admins.view'],
                 ['label' => 'الإعدادات', 'route' => 'admin.settings.index', 'permission' => 'settings.view'],
@@ -215,6 +215,14 @@ return [
                 ['label' => 'محاولات الاختبارات', 'route' => 'admin.exam-attempts.index', 'permission' => 'exams.view'],
                 ['label' => 'الطلاب', 'route' => 'admin.students.index', 'permission' => 'students.view'],
                 ['label' => 'مركز الأخطاء', 'route' => 'admin.mistakes.index', 'permission' => 'mistakes.view'],
+            ],
+        ],
+        [
+            'label' => 'التشغيل والمتابعة',
+            'items' => [
+                ['label' => 'السناتر', 'route' => 'admin.centers.index', 'permission' => 'centers.view'],
+                ['label' => 'تقارير الحضور', 'route' => 'admin.attendance.index', 'permission' => 'attendance.view'],
+                ['label' => 'الشكاوى والاقتراحات', 'route' => 'admin.complaints.index', 'permission' => 'complaints.view'],
             ],
         ],
         [

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Centers\Models;
 
+use App\Modules\Students\Models\Student;
 use Database\Factories\EducationalGroupFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,5 +47,10 @@ class EducationalGroup extends Model
     public function sessions(): HasMany
     {
         return $this->hasMany(AttendanceSession::class, 'group_id');
+    }
+
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class, 'group_id');
     }
 }

@@ -34,7 +34,9 @@ class StudentCatalogAndCommerceTest extends TestCase
 
         $this->get(route('student.lectures.index', ['tab' => 'lecture']))
             ->assertOk()
-            ->assertSeeText('قوانين نيوتن الأساسية');
+            ->assertSeeText('قوانين نيوتن الأساسية')
+            ->assertSeeText('اعرض العناصر المميزة فقط')
+            ->assertSeeText('تطبيق الفلاتر');
 
         $this->get(route('student.lectures.index', ['tab' => 'review']))
             ->assertOk()
@@ -90,6 +92,11 @@ class StudentCatalogAndCommerceTest extends TestCase
         $digitalProduct = Product::query()->findOrFail($digitalItem->product_id);
 
         $this->actingAs($student, 'student');
+
+        $this->get(route('student.cart.index'))
+            ->assertOk()
+            ->assertSeeText('تعديل بيانات الاستلام المحفوظة')
+            ->assertSeeText('إزالة من السلة');
 
         $this->put(route('student.cart.update', $bookItem), [
             'quantity' => 3,

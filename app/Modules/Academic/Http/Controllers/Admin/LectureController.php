@@ -40,7 +40,7 @@ class LectureController extends Controller
             return CsvExporter::download('lectures.csv', ['العنوان', 'النوع', 'الصف', 'السعر', 'الحالة'], $query->get()
                 ->map(fn (Lecture $lecture): array => [
                     $lecture->title,
-                    $lecture->type->value,
+                    $lecture->type->label(),
                     $lecture->grade?->name_ar ?? '-',
                     (string) $lecture->price_amount,
                     $lecture->is_active ? 'نشط' : 'متوقف',
@@ -51,7 +51,13 @@ class LectureController extends Controller
         return view('admin.academic.lectures.index', [
             'lectures' => $query->paginate(15)->withQueryString(),
             'grades' => Grade::query()->orderBy('sort_order')->get(),
-            'types' => [ContentKind::Lecture, ContentKind::Review],
+            'types' => [ContentKind::Lecture, ContentKind::Review, ContentKind::Summary],
+            'overview' => [
+                'total' => Lecture::query()->count(),
+                'active' => Lecture::query()->where('is_active', true)->count(),
+                'free' => Lecture::query()->where('is_free', true)->count(),
+                'summaries' => Lecture::query()->where('type', ContentKind::Summary->value)->count(),
+            ],
         ]);
     }
 
@@ -136,7 +142,7 @@ class LectureController extends Controller
             'tracks' => Track::query()->orderBy('grade_id')->orderBy('sort_order')->get(),
             'curriculumSections' => CurriculumSection::query()->orderBy('sort_order')->get(),
             'lectureSections' => LectureSection::query()->orderBy('sort_order')->get(),
-            'types' => [ContentKind::Lecture, ContentKind::Review],
+            'types' => [ContentKind::Lecture, ContentKind::Review, ContentKind::Summary],
             'assetKinds' => LectureAssetKind::cases(),
         ];
     }
