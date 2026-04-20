@@ -16,10 +16,14 @@
     --color-brand-500: oklch(0.58 0.12 55);
     --color-brand-700: oklch(0.34 0.07 43);
     --color-ink-900: oklch(0.24 0.015 60);
+    --color-ink-600: oklch(0.5 0.013 60);
     --color-ink-700: oklch(0.44 0.015 60);
     --color-ink-500: oklch(0.59 0.012 60);
     --color-surface: oklch(0.985 0.006 70);
     --color-surface-strong: oklch(0.96 0.01 67);
+    --color-violet-100: oklch(0.9 0.06 315);
+    --color-violet-500: oklch(0.63 0.14 318);
+    --color-violet-700: oklch(0.43 0.1 314);
     --color-success: oklch(0.68 0.14 145);
     --color-warning: oklch(0.76 0.15 78);
     --color-danger: oklch(0.62 0.19 24);
@@ -50,6 +54,7 @@
 
     html[data-theme='dark'] {
         --color-ink-900: oklch(0.94 0.01 80);
+        --color-ink-600: oklch(0.74 0.012 80);
         --color-ink-700: oklch(0.8 0.012 80);
         --color-ink-500: oklch(0.67 0.012 80);
         --color-surface: oklch(0.19 0.01 70);
@@ -233,6 +238,157 @@
     .surface-inset {
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-muted);
+    }
+
+    .portal-avatar {
+        @apply flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-[1.8rem] text-xl font-bold;
+        background: linear-gradient(160deg, color-mix(in oklch, var(--color-brand-100) 76%, white), color-mix(in oklch, var(--color-violet-100) 44%, white));
+        color: var(--color-brand-700);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .portal-shell-meta {
+        @apply rounded-[1.4rem] px-4 py-4;
+        border: 1px solid var(--color-border-soft);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 78%, transparent);
+    }
+
+    .portal-shell-meta__label {
+        @apply block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-500)];
+    }
+
+    .portal-shell-meta__value {
+        @apply mt-2 block text-sm font-semibold text-[var(--color-ink-900)];
+    }
+
+    .portal-nav-link {
+        @apply flex items-center justify-between gap-3 rounded-[1.6rem] px-4 py-4 text-sm font-semibold transition;
+        border: 1px solid var(--color-border-soft);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 82%, transparent);
+        color: var(--color-ink-700);
+    }
+
+    .portal-nav-link:hover {
+        background-color: var(--color-panel-strong);
+        color: var(--color-ink-900);
+    }
+
+    .portal-nav-link--active {
+        background-color: color-mix(in oklch, var(--color-brand-50) 72%, white);
+        color: var(--color-brand-700);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .portal-nav-link__icon {
+        @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-sm;
+        background-color: color-mix(in oklch, var(--color-brand-100) 68%, white);
+    }
+
+    .portal-nav-utility {
+        @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition;
+        border: 1px solid var(--color-border-strong);
+        background-color: var(--color-panel-strong);
+        color: var(--color-ink-900);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .portal-nav-utility:hover {
+        background-color: var(--color-panel-muted);
+    }
+
+    .portal-nav-utility--muted {
+        background-color: color-mix(in oklch, var(--color-panel-muted) 78%, transparent);
+        color: var(--color-ink-700);
+    }
+
+    summary.portal-nav-utility::-webkit-details-marker {
+        display: none;
+    }
+
+    .portal-menu-panel {
+        @apply rounded-[1.8rem] p-3;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+        box-shadow: var(--shadow-elevated);
+    }
+
+    .portal-menu-link {
+        @apply flex items-center justify-between rounded-[1.2rem] px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)] transition;
+    }
+
+    .portal-menu-link:hover {
+        background-color: var(--color-panel-muted);
+        color: var(--color-ink-900);
+    }
+
+    .portal-summary-card {
+        @apply rounded-[1.8rem] p-5 lg:p-6;
+        border: 1px solid var(--color-border-soft);
+        background: linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 88%, white), color-mix(in oklch, var(--color-brand-50) 46%, white));
+        box-shadow: var(--shadow-soft);
+    }
+
+    .portal-hero-slide {
+        @apply rounded-[2.2rem] p-6 lg:p-7;
+        background:
+            radial-gradient(circle at top left, color-mix(in oklch, var(--color-violet-500) 32%, transparent), transparent 42%),
+            linear-gradient(145deg, color-mix(in oklch, var(--color-brand-700) 86%, black), color-mix(in oklch, var(--color-violet-700) 44%, var(--color-brand-700)));
+        box-shadow: 0 26px 60px rgba(42, 20, 38, 0.2);
+    }
+
+    .catalog-thumb {
+        @apply relative overflow-hidden rounded-[1.8rem];
+        border: 1px solid color-mix(in oklch, var(--color-border-soft) 70%, transparent);
+        background:
+            radial-gradient(circle at top, color-mix(in oklch, var(--color-brand-100) 68%, white), transparent 56%),
+            linear-gradient(180deg, color-mix(in oklch, var(--color-brand-50) 82%, white), color-mix(in oklch, var(--color-panel-muted) 88%, white));
+        min-height: 12rem;
+    }
+
+    .catalog-thumb img {
+        @apply h-full w-full object-cover;
+    }
+
+    .catalog-thumb__fallback {
+        @apply flex h-full min-h-[12rem] flex-col justify-between p-5;
+        color: var(--color-brand-700);
+    }
+
+    .catalog-thumb__fallback span {
+        @apply text-xs font-semibold uppercase tracking-[0.18em];
+        color: var(--color-ink-500);
+    }
+
+    .catalog-thumb__fallback strong {
+        @apply text-2xl font-bold leading-tight;
+    }
+
+    .catalog-thumb--book {
+        background:
+            radial-gradient(circle at top right, color-mix(in oklch, var(--color-violet-100) 48%, transparent), transparent 45%),
+            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 88%, white), color-mix(in oklch, var(--color-brand-100) 42%, white));
+    }
+
+    .portal-section-card {
+        @apply flex h-full flex-col justify-between rounded-[1.9rem] p-5 transition;
+        border: 1px solid var(--color-border-soft);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .portal-section-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .portal-footer-card {
+        @apply rounded-[2.3rem] px-6 py-6 lg:px-8 lg:py-8;
+        background:
+            radial-gradient(circle at top left, color-mix(in oklch, var(--color-violet-500) 26%, transparent), transparent 40%),
+            linear-gradient(160deg, color-mix(in oklch, var(--color-ink-900) 92%, black), color-mix(in oklch, var(--color-brand-700) 82%, black));
+        box-shadow: 0 26px 70px rgba(28, 16, 14, 0.28);
+    }
+
+    .portal-footer-link {
+        @apply text-sm text-white/78 transition hover:text-white;
     }
 
     .lecture-progress-track {

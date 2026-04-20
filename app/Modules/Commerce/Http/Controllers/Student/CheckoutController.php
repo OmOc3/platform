@@ -24,6 +24,7 @@ class CheckoutController extends Controller
         $student = auth('student')->user();
 
         return view('student.cart.checkout', [
+            'student' => $student,
             ...$this->cartSummaryQuery->dataFor($student),
             'digitalOrder' => Order::query()
                 ->with('items.product')
@@ -49,7 +50,7 @@ class CheckoutController extends Controller
         return redirect()
             ->route('student.checkout.show')
             ->with([
-                'status' => 'تم تجهيز مسودة الطلبات.',
+                'status' => 'تم تجهيز مسودة الطلبات الحالية.',
                 'checkout_orders' => [
                     'digital' => $orders['digitalOrder']?->id,
                     'book' => $orders['bookOrder']?->id,

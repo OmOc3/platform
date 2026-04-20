@@ -28,10 +28,15 @@ class ProfileController extends Controller
     public function update(UpdateOwnProfileRequest $request): RedirectResponse
     {
         $student = auth('student')->user();
+        $redirectTo = $request->string('redirect_to')->toString();
 
         $this->authorize('updateProfile', $student);
 
         $this->updateStudentProfileAction->execute($student, $request->validated());
+
+        if ($redirectTo !== '' && str_starts_with($redirectTo, url('/'))) {
+            return redirect($redirectTo)->with('status', 'تم تحديث بياناتك بنجاح.');
+        }
 
         return redirect()
             ->route('student.profile.show')

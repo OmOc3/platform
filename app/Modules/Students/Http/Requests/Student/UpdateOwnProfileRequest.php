@@ -22,6 +22,7 @@ class UpdateOwnProfileRequest extends FormRequest
             'phone' => ['required', 'string', 'max:30', Rule::unique('students', 'phone')->ignore($student?->id)],
             'parent_phone' => ['nullable', 'string', 'max:30'],
             'governorate' => ['nullable', 'string', 'max:255'],
+            'notes' => ['nullable', 'string', 'max:1000'],
         ];
     }
 }

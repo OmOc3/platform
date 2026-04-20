@@ -3,14 +3,21 @@
 namespace App\Modules\Commerce\Queries;
 
 use App\Modules\Commerce\Models\Book;
+use App\Modules\Commerce\Models\CartItem;
+use App\Modules\Students\Models\Student;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class BookCatalogQuery
 {
-    public function paginate(Request $request): LengthAwarePaginator
+    public function paginateFor(Student $student, Request $request): LengthAwarePaginator
     {
         $search = $request->string('search')->toString();
+        $cartProductIds = CartItem::query()
+            ->whereHas('cart', fn ($query) => $query->where('student_id', $student->id))
+            ->pluck('product_id')
+            ->map(fn ($productId) => (int) $productId)
+            ->all();
 
         return Book::query()
             ->select('books.*')
@@ -28,6 +35,10 @@ class BookCatalogQuery
             ->orderByDesc('products.is_featured')
             ->orderByDesc('products.published_at')
             ->paginate(12)
-            ->withQueryString();
+            ->withQueryString()
+            ->through(fn (Book $book): array => [
+                'book' => $book,
+                'in_cart' => in_array((int) $book->product_id, $cartProductIds, true),
+            ]);
     }
 }

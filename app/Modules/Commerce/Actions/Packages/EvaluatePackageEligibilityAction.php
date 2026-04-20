@@ -17,6 +17,27 @@ class EvaluatePackageEligibilityAction
         $package->loadMissing(['items.item', 'product']);
 
         $rule = $package->metadata['overlap_rule'] ?? 'block';
+        $alreadyPurchased = Entitlement::query()
+            ->where('student_id', $student->id)
+            ->where('product_id', $package->product_id)
+            ->where('status', 'active')
+            ->where(function ($query): void {
+                $query->whereNull('starts_at')->orWhere('starts_at', '<=', now());
+            })
+            ->where(function ($query): void {
+                $query->whereNull('ends_at')->orWhere('ends_at', '>=', now());
+            })
+            ->exists();
+
+        if ($alreadyPurchased) {
+            return [
+                'eligible' => false,
+                'state' => 'already_owned',
+                'message' => 'تم شراء العرض بالفعل على هذا الحساب.',
+                'overlaps' => [],
+            ];
+        }
+
         $lectureIds = $package->items
             ->where('item_type', Lecture::class)
             ->pluck('item_id')
@@ -28,7 +49,7 @@ class EvaluatePackageEligibilityAction
             return [
                 'eligible' => true,
                 'state' => 'eligible',
-                'message' => 'يمكن شراء هذه الباقة مباشرة.',
+                'message' => 'يمكنك شراء هذه الباقة مباشرة.',
                 'overlaps' => [],
             ];
         }
@@ -69,7 +90,7 @@ class EvaluatePackageEligibilityAction
             return [
                 'eligible' => false,
                 'state' => 'blocked',
-                'message' => 'لا يمكن شراء هذه الباقة لأن لديك بالفعل وصولًا لبعض عناصرها.',
+                'message' => 'لا يمكنك شراء الباقة لأنك قمت بشراء بعض المحاضرات الموجودة بها بالفعل.',
                 'overlaps' => $overlaps,
             ];
         }
@@ -77,7 +98,9 @@ class EvaluatePackageEligibilityAction
         return [
             'eligible' => true,
             'state' => 'eligible',
-            'message' => $overlaps === [] ? 'يمكن شراء هذه الباقة مباشرة.' : 'يمكن شراء الباقة، لكن لديك بالفعل وصولًا لبعض عناصرها.',
+            'message' => $overlaps === []
+                ? 'يمكنك شراء هذه الباقة مباشرة.'
+                : 'يمكنك شراء الباقة، مع الاحتفاظ بالعناصر المفعلة لديك بالفعل.',
             'overlaps' => $overlaps,
         ];
     }

@@ -19,6 +19,7 @@ class UpdateStudentProfileAction
             'phone',
             'parent_phone',
             'governorate',
+            'notes',
         ]);
 
         $student->fill($data);

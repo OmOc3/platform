@@ -1,23 +1,30 @@
-<x-layouts.student title="المحاضرات" heading="المحاضرات والمراجعات والاختبارات" subheading="استعرض المحتوى المخصص لصفك وحدد ما هو مفتوح لك الآن وما يحتاج شراء أو تفعيل من باقة.">
+<x-layouts.student title="المحاضرات" heading="المحاضرات والمراجعات والاختبارات" subheading="كتالوج الطالب يعرض المحاضرات، المراجعات، والاختبارات مع السعر والمدة وحالة الوصول الحقيقية قبل الفتح أو الشراء.">
     <section class="space-y-6">
         <section class="panel-tight">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">كتالوج المحتوى الأكاديمي</p>
-                    <h2 class="mt-2 text-2xl font-bold">رحلة التعلّم في مكان واحد</h2>
+                    <h2 class="mt-2 text-2xl font-bold lg:text-3xl">المحاضرات / الامتحانات / المراجعات</h2>
                     <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">
-                        بدّل بين المحاضرات والمراجعات والاختبارات، ثم راجع حالة الوصول لكل عنصر قبل الفتح أو الشراء.
+                        بدّل بين أنواع المحتوى المختلفة، ثم صفّ النتائج حسب القسم أو اختر المحاضرات المجانية فقط عند الحاجة.
                     </p>
                 </div>
 
                 <nav class="flex flex-wrap gap-2">
                     <a href="{{ route('student.lectures.index', ['tab' => 'lecture']) }}" @class(['btn-primary' => $tab === 'lecture', 'btn-secondary' => $tab !== 'lecture'])>المحاضرات</a>
+                    <a href="{{ route('student.lectures.index', ['tab' => 'exam']) }}" @class(['btn-primary' => $tab === 'exam', 'btn-secondary' => $tab !== 'exam'])>الامتحانات</a>
                     <a href="{{ route('student.lectures.index', ['tab' => 'review']) }}" @class(['btn-primary' => $tab === 'review', 'btn-secondary' => $tab !== 'review'])>المراجعات</a>
-                    <a href="{{ route('student.lectures.index', ['tab' => 'exam']) }}" @class(['btn-primary' => $tab === 'exam', 'btn-secondary' => $tab !== 'exam'])>الاختبارات</a>
                 </nav>
             </div>
 
-            <form method="GET" class="mt-6 grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto]">
+            <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <x-student.summary-card label="المحاضرات" :value="$overview['lectures']" description="محاضرات شرح ومتابعة" />
+                <x-student.summary-card label="المراجعات" :value="$overview['reviews']" description="وحدات ملخصة ومركزة" />
+                <x-student.summary-card label="الاختبارات" :value="$overview['exams']" description="اختبارات مرتبطة بالمحتوى" />
+                <x-student.summary-card label="المجاني" :value="$overview['free_lectures']" description="محاضرات مفتوحة بدون شراء" />
+            </div>
+
+            <form method="GET" class="mt-6 grid gap-3 lg:grid-cols-[1fr_1fr_auto_auto_auto]">
                 <input type="hidden" name="tab" value="{{ $tab }}">
                 <select name="curriculum_section" class="form-select">
                     <option value="">كل أقسام المنهج</option>
@@ -31,10 +38,19 @@
                         <option value="{{ $section->id }}" @selected((string) request('lecture_section') === (string) $section->id)>{{ $section->name_ar }}</option>
                     @endforeach
                 </select>
-                <label class="flex items-center gap-3 rounded-2xl border border-[color-mix(in_oklch,var(--color-brand-200)_70%,white)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)]">
+
+                @if ($tab !== 'exam')
+                    <label class="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)]">
+                        <input type="checkbox" name="scope" value="free" @checked($scope === 'free') class="h-4 w-4 rounded">
+                        المجاني فقط
+                    </label>
+                @endif
+
+                <label class="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] bg-white px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)]">
                     <input type="checkbox" name="featured" value="1" @checked(request()->boolean('featured')) class="h-4 w-4 rounded">
-                    العناصر المميزة فقط
+                    العناصر المميزة
                 </label>
+
                 <button class="btn-secondary">تطبيق</button>
             </form>
         </section>
@@ -49,11 +65,19 @@
                     @php($progress = $item['progress'] ?? null)
                     @php($isExam = $resource instanceof \App\Modules\Academic\Models\Exam)
                     @php($isOpen = in_array($access['state']->value, ['open', 'free', 'owned_via_entitlement'], true))
+                    @php($resourceTypeLabel = $isExam ? 'اختبار' : ($resource->type->value === 'review' ? 'مراجعة' : 'محاضرة'))
 
-                    <article class="panel-tight flex h-full flex-col justify-between">
+                    <article class="surface-card rounded-[2rem] p-5">
                         <div class="flex flex-col gap-5 lg:flex-row">
-                            <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-[1.8rem] bg-[var(--color-brand-50)] text-center text-xs font-semibold text-[var(--color-brand-700)]">
-                                {{ $isExam ? 'اختبار' : ($resource->type->value === 'review' ? 'مراجعة' : 'محاضرة') }}
+                            <div class="catalog-thumb max-w-[11rem] shrink-0 lg:w-[11rem]">
+                                @if ($resource->thumbnail_url)
+                                    <img src="{{ $resource->thumbnail_url }}" alt="{{ $resource->title }}">
+                                @else
+                                    <div class="catalog-thumb__fallback">
+                                        <span>{{ $resourceTypeLabel }}</span>
+                                        <strong>{{ $resource->duration_minutes ? $resource->duration_minutes.' دقيقة' : 'بدون مدة' }}</strong>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="min-w-0 flex-1">
@@ -65,28 +89,34 @@
                                     @if (! $isExam && $progress)
                                         <x-admin.status-badge
                                             :label="$progress['label']"
-                                            :tone="$progress['status'] === 'completed' ? 'success' : ($progress['status'] === 'not_started' ? 'warning' : 'info')"
+                                            :tone="$progress['status'] === 'completed' ? 'success' : ($progress['status'] === 'not_started' ? 'warning' : 'neutral')"
                                         />
                                     @endif
                                 </div>
 
-                                <h3 class="mt-4 text-lg font-bold">{{ $resource->title }}</h3>
+                                <h3 class="mt-4 text-xl font-bold">{{ $resource->title }}</h3>
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $resource->short_description }}</p>
 
-                                <dl class="mt-4 grid gap-3 text-sm text-[var(--color-ink-700)] sm:grid-cols-3">
-                                    <div>
-                                        <dt class="text-xs text-[var(--color-ink-500)]">السعر</dt>
-                                        <dd class="mt-1 font-semibold">{{ number_format($resource->price_amount) }} {{ $resource->currency }}</dd>
+                                <div class="mt-5 grid gap-3 text-sm sm:grid-cols-3">
+                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                        <p class="text-xs text-[var(--color-ink-500)]">السعر</p>
+                                        <p class="mt-2 font-semibold">
+                                            @if (($resource->is_free ?? false) || (int) $resource->price_amount === 0)
+                                                مجاني
+                                            @else
+                                                {{ number_format($resource->price_amount) }} {{ $resource->currency }}
+                                            @endif
+                                        </p>
                                     </div>
-                                    <div>
-                                        <dt class="text-xs text-[var(--color-ink-500)]">المدة</dt>
-                                        <dd class="mt-1 font-semibold">{{ $resource->duration_minutes ? $resource->duration_minutes.' دقيقة' : 'غير محدد' }}</dd>
+                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                        <p class="text-xs text-[var(--color-ink-500)]">المدة</p>
+                                        <p class="mt-2 font-semibold">{{ $resource->duration_minutes ? $resource->duration_minutes.' دقيقة' : 'غير محدد' }}</p>
                                     </div>
-                                    <div>
-                                        <dt class="text-xs text-[var(--color-ink-500)]">القسم</dt>
-                                        <dd class="mt-1 font-semibold">{{ $isExam ? ($resource->lecture?->title ?? 'اختبار مستقل') : ($resource->lectureSection?->name_ar ?? 'عام') }}</dd>
+                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                        <p class="text-xs text-[var(--color-ink-500)]">القسم</p>
+                                        <p class="mt-2 font-semibold">{{ $isExam ? ($resource->lecture?->title ?? 'اختبار مستقل') : ($resource->lectureSection?->name_ar ?? 'عام') }}</p>
                                     </div>
-                                </dl>
+                                </div>
 
                                 @if ($access['reason'])
                                     <p class="mt-4 text-sm leading-7 text-[var(--color-ink-500)]">{{ $access['reason'] }}</p>
@@ -108,7 +138,9 @@
 
                         <div class="mt-6 flex flex-wrap gap-3">
                             @if ($isOpen)
-                                <a href="{{ $isExam ? route('student.lectures.exams.show', $resource) : route('student.lectures.show', $resource) }}" class="btn-primary">افتح التفاصيل</a>
+                                <a href="{{ $isExam ? route('student.lectures.exams.show', $resource) : route('student.lectures.show', $resource) }}" class="btn-primary">
+                                    {{ $isExam ? 'افتح الاختبار' : 'فتح المحاضرة' }}
+                                </a>
                             @elseif ($access['state']->value === 'buy' && ! $isExam && $resource->product)
                                 <form method="POST" action="{{ route('student.cart.store') }}">
                                     @csrf

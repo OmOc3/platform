@@ -58,7 +58,7 @@ class StudentCatalogAndCommerceTest extends TestCase
 
         $this->get(route('student.packages.show', $blockedPackage))
             ->assertOk()
-            ->assertSeeText('الشراء غير متاح حاليًا')
+            ->assertSeeText('تم شراء العرض بالفعل')
             ->assertSeeText('قوانين نيوتن الأساسية');
 
         $this->get(route('student.packages.show', $allowedPackage))
@@ -71,7 +71,7 @@ class StudentCatalogAndCommerceTest extends TestCase
 
         $this->get(route('student.books.show', $book))
             ->assertOk()
-            ->assertSeeText('أضف الكتاب إلى السلة');
+            ->assertSeeText('الكتاب موجود في السلة');
     }
 
     public function test_student_can_manage_cart_and_prepare_separate_draft_orders(): void
@@ -85,7 +85,7 @@ class StudentCatalogAndCommerceTest extends TestCase
             ->firstOrFail();
         $digitalItem = CartItem::query()
             ->whereHas('cart', fn ($query) => $query->where('student_id', $student->id))
-            ->whereHas('product', fn ($query) => $query->where('kind', 'package'))
+            ->whereHas('product', fn ($query) => $query->where('kind', '!=', 'book'))
             ->firstOrFail();
         $digitalProduct = Product::query()->findOrFail($digitalItem->product_id);
 

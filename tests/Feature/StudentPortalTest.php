@@ -22,7 +22,7 @@ class StudentPortalTest extends TestCase
 
         $this->get(route('student.dashboard'))
             ->assertOk()
-            ->assertSee('أحدث محتوى متاح لك');
+            ->assertSee('آخر العناصر المفعلة');
 
         $this->get(route('student.payments.index'))
             ->assertOk()

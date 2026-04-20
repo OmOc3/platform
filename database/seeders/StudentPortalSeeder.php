@@ -118,6 +118,7 @@ class StudentPortalSeeder extends Seeder
         $packageProduct = Product::query()->where('slug', 'monthly-physics-package')->first();
         $bookProduct = Product::query()->where('slug', 'smart-solutions-book')->first();
         $lectureProduct = Product::query()->where('slug', 'newton-laws-core')->first();
+        $problemSolvingProduct = Product::query()->where('slug', 'accelerated-motion-problem-solving')->first();
         $reviewProduct = Product::query()->where('slug', 'electricity-review-essentials')->first();
         $freeLecture = Lecture::query()->where('slug', 'foundation-kinematics-free')->with('checkpoints')->first();
         $lecture = Lecture::query()->where('slug', 'newton-laws-core')->first();
@@ -264,16 +265,23 @@ class StudentPortalSeeder extends Seeder
         }
 
         if ($packageProduct) {
+            CartItem::query()
+                ->where('cart_id', $cart->id)
+                ->where('product_id', $packageProduct->id)
+                ->delete();
+        }
+
+        if ($problemSolvingProduct) {
             CartItem::query()->updateOrCreate(
                 [
                     'cart_id' => $cart->id,
-                    'product_id' => $packageProduct->id,
+                    'product_id' => $problemSolvingProduct->id,
                 ],
                 [
                     'quantity' => 1,
-                    'unit_price_amount' => $packageProduct->price_amount,
-                    'total_price_amount' => $packageProduct->price_amount,
-                    'meta' => ['product_kind' => $packageProduct->kind->value],
+                    'unit_price_amount' => $problemSolvingProduct->price_amount,
+                    'total_price_amount' => $problemSolvingProduct->price_amount,
+                    'meta' => ['product_kind' => $problemSolvingProduct->kind->value],
                 ],
             );
         }

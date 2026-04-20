@@ -40,7 +40,7 @@ class StudentLectureDeliveryTest extends TestCase
         $this->get(route('student.lectures.show', $lecture))
             ->assertOk()
             ->assertDontSeeText('الفيديو الرئيسي لقوانين نيوتن')
-            ->assertSeeText('أضف إلى السلة');
+            ->assertSeeText('استعرض الباقات المرتبطة');
     }
 
     public function test_opening_accessible_lecture_creates_progress_row(): void
@@ -130,6 +130,6 @@ class StudentLectureDeliveryTest extends TestCase
             ->assertSeeText('مدخل مجاني إلى الحركة')
             ->assertSeeText('مكتمل')
             ->assertSeeText('قوانين نيوتن الأساسية')
-            ->assertSeeText('بدأت');
+            ->assertSeeText('43% مكتمل');
     }
 }
