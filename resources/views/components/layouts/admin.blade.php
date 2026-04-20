@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? 'لوحة الإدارة').' - '.$platformBrand['name'] }}</title>
+    <x-theme.init-script />
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -14,7 +15,7 @@
 
     <div class="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6">
         <aside class="panel hidden h-[calc(100vh-2rem)] overflow-y-auto p-5 lg:block">
-            <div class="space-y-2 border-b border-[color-mix(in_oklch,var(--color-brand-100)_85%,white)] pb-5">
+            <div class="space-y-2 border-b border-[var(--color-border-soft)] pb-5">
                 <p class="font-display text-2xl text-[var(--color-brand-700)]">{{ $platformBrand['name'] }}</p>
                 <p class="text-sm leading-7 text-[var(--color-ink-700)]">{{ $platformBrand['tagline'] }}</p>
             </div>
@@ -23,7 +24,7 @@
                 @foreach ($menuSections as $section)
                     <div class="space-y-2">
                         <p class="px-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">{{ $section['label'] }}</p>
-                        <div class="space-y-1 rounded-3xl bg-[var(--color-brand-50)] p-2">
+                        <div class="surface-inset space-y-1 rounded-3xl p-2">
                             @foreach ($section['items'] as $item)
                                 <a href="{{ route($item['route']) }}"
                                    @class([
@@ -48,10 +49,14 @@
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">{{ $subheading }}</p>
                     @endisset
                 </div>
+
                 <div class="flex flex-wrap items-center gap-3">
-                    <div class="rounded-full bg-[var(--color-brand-50)] px-4 py-2 text-sm text-[var(--color-ink-700)]">
+                    <x-theme.toggle />
+
+                    <div class="surface-inset rounded-full px-4 py-2 text-sm text-[var(--color-ink-700)]">
                         {{ $admin?->name }}
                     </div>
+
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="btn-secondary">تسجيل الخروج</button>
@@ -64,6 +69,7 @@
             {{ $slot }}
         </main>
     </div>
+
     @livewireScripts
     @stack('scripts')
 </body>

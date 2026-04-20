@@ -4,7 +4,7 @@
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">كتالوج المحتوى الأكاديمي</p>
-                    <h2 class="mt-2 text-2xl font-bold">رحلة التعلم في مكان واحد</h2>
+                    <h2 class="mt-2 text-2xl font-bold">رحلة التعلّم في مكان واحد</h2>
                     <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">
                         بدّل بين المحاضرات والمراجعات والاختبارات، ثم راجع حالة الوصول لكل عنصر قبل الفتح أو الشراء.
                     </p>
@@ -46,8 +46,10 @@
                 @foreach ($items as $item)
                     @php($resource = $item['resource'])
                     @php($access = $item['access'])
+                    @php($progress = $item['progress'] ?? null)
                     @php($isExam = $resource instanceof \App\Modules\Academic\Models\Exam)
                     @php($isOpen = in_array($access['state']->value, ['open', 'free', 'owned_via_entitlement'], true))
+
                     <article class="panel-tight flex h-full flex-col justify-between">
                         <div class="flex flex-col gap-5 lg:flex-row">
                             <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-[1.8rem] bg-[var(--color-brand-50)] text-center text-xs font-semibold text-[var(--color-brand-700)]">
@@ -59,6 +61,12 @@
                                     <x-student.access-state :access="$access" />
                                     @if ($resource->is_featured)
                                         <x-admin.status-badge label="مميز" />
+                                    @endif
+                                    @if (! $isExam && $progress)
+                                        <x-admin.status-badge
+                                            :label="$progress['label']"
+                                            :tone="$progress['status'] === 'completed' ? 'success' : ($progress['status'] === 'not_started' ? 'warning' : 'info')"
+                                        />
                                     @endif
                                 </div>
 
@@ -82,6 +90,18 @@
 
                                 @if ($access['reason'])
                                     <p class="mt-4 text-sm leading-7 text-[var(--color-ink-500)]">{{ $access['reason'] }}</p>
+                                @endif
+
+                                @if (! $isExam && $progress)
+                                    <div class="mt-4 space-y-2">
+                                        <div class="flex items-center justify-between text-xs font-semibold text-[var(--color-ink-500)]">
+                                            <span>حالة المتابعة</span>
+                                            <span>{{ $progress['label'] }}</span>
+                                        </div>
+                                        <div class="lecture-progress-track">
+                                            <span class="lecture-progress-fill" style="width: {{ $progress['percent'] }}%"></span>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
                         </div>

@@ -24,6 +24,7 @@ use App\Modules\Support\Enums\ForumVisibility;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
 use App\Shared\Contracts\EntitlementGrantor;
+use App\Shared\Contracts\LectureProgressService;
 use App\Shared\Enums\AttendanceStatus;
 use App\Shared\Enums\EntitlementSource;
 use App\Shared\Enums\OrderKind;
@@ -118,10 +119,13 @@ class StudentPortalSeeder extends Seeder
         $bookProduct = Product::query()->where('slug', 'smart-solutions-book')->first();
         $lectureProduct = Product::query()->where('slug', 'newton-laws-core')->first();
         $reviewProduct = Product::query()->where('slug', 'electricity-review-essentials')->first();
+        $freeLecture = Lecture::query()->where('slug', 'foundation-kinematics-free')->with('checkpoints')->first();
         $lecture = Lecture::query()->where('slug', 'newton-laws-core')->first();
         $reviewLecture = Lecture::query()->where('slug', 'electricity-review-essentials')->first();
         /** @var EntitlementGrantor $entitlementGrantor */
         $entitlementGrantor = app(EntitlementGrantor::class);
+        /** @var LectureProgressService $lectureProgressService */
+        $lectureProgressService = app(LectureProgressService::class);
 
         $packageOrder = Order::query()->updateOrCreate(
             ['uuid' => 'digital-order-demo-package-100002'],
@@ -423,6 +427,25 @@ class StudentPortalSeeder extends Seeder
                     'meta' => ['from' => 'manual_review'],
                 ],
             );
+        }
+
+        if ($lecture) {
+            $lectureProgressService->touchOpen($student, $lecture);
+            $lectureProgressService->updateProgress($student, $lecture->loadMissing('checkpoints'), [
+                'position_seconds' => 1500,
+                'consumed_seconds' => 1500,
+            ]);
+
+            $checkpoint = $lecture->checkpoints()->orderBy('sort_order')->first();
+
+            if ($checkpoint) {
+                $lectureProgressService->reachCheckpoint($student, $lecture, $checkpoint);
+            }
+        }
+
+        if ($freeLecture) {
+            $lectureProgressService->touchOpen($student, $freeLecture);
+            $lectureProgressService->markCompleted($student, $freeLecture);
         }
     }
 }

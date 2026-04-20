@@ -14,6 +14,7 @@ use App\Modules\Academic\Models\Track;
 use App\Modules\Academic\Queries\LecturesIndexQuery;
 use App\Shared\Contracts\AuditLogger;
 use App\Shared\Enums\ContentKind;
+use App\Shared\Enums\LectureAssetKind;
 use App\Shared\Support\Exports\CsvExporter;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -58,8 +59,18 @@ class LectureController extends Controller
     {
         $this->authorize('create', Lecture::class);
 
+        $lecture = new Lecture([
+            'is_active' => true,
+            'is_featured' => false,
+            'is_free' => false,
+            'currency' => 'EGP',
+            'type' => ContentKind::Lecture,
+        ]);
+        $lecture->setRelation('assets', collect());
+        $lecture->setRelation('checkpoints', collect());
+
         return view('admin.academic.lectures.create', [
-            'lecture' => new Lecture(['is_active' => true, 'is_featured' => false, 'is_free' => false, 'currency' => 'EGP', 'type' => ContentKind::Lecture]),
+            'lecture' => $lecture,
             ...$this->formData(),
         ]);
     }
@@ -80,7 +91,7 @@ class LectureController extends Controller
         $this->authorize('update', $lecture);
 
         return view('admin.academic.lectures.edit', [
-            'lecture' => $lecture,
+            'lecture' => $lecture->load(['assets', 'checkpoints']),
             ...$this->formData(),
         ]);
     }
@@ -126,6 +137,7 @@ class LectureController extends Controller
             'curriculumSections' => CurriculumSection::query()->orderBy('sort_order')->get(),
             'lectureSections' => LectureSection::query()->orderBy('sort_order')->get(),
             'types' => [ContentKind::Lecture, ContentKind::Review],
+            'assetKinds' => LectureAssetKind::cases(),
         ];
     }
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? 'بوابة الطالب').' - '.$platformBrand['name'] }}</title>
+    <x-theme.init-script />
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -23,7 +24,7 @@
                     @endisset
                 </div>
 
-                <div class="rounded-[2rem] bg-[color-mix(in_oklch,var(--color-brand-50)_85%,white)] p-4">
+                <div class="surface-inset rounded-[2rem] p-4">
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">بيانات الحساب</p>
                     <div class="mt-3 grid gap-3 sm:grid-cols-3">
                         <div>
@@ -42,14 +43,14 @@
                 </div>
             </div>
 
-            <div class="mt-5 flex flex-col gap-4 border-t border-[color-mix(in_oklch,var(--color-brand-100)_80%,white)] pt-4">
+            <div class="mt-5 flex flex-col gap-4 border-t border-[var(--color-border-soft)] pt-4">
                 <nav class="flex flex-wrap gap-2">
                     @foreach ($items as $item)
                         <a href="{{ $item['href'] }}"
                            @class([
                                'rounded-full px-4 py-2 text-sm font-semibold transition',
-                               'bg-[var(--color-brand-700)] text-white' => $item['active'],
-                               'bg-[var(--color-brand-50)] text-[var(--color-ink-700)] hover:bg-[var(--color-brand-100)]' => ! $item['active'],
+                               'bg-[var(--color-primary-bg)] text-[var(--color-primary-foreground)] shadow-sm' => $item['active'],
+                               'surface-inset text-[var(--color-ink-700)] hover:bg-[var(--color-panel-strong)]' => ! $item['active'],
                            ])>
                             {{ $item['label'] }}
                         </a>
@@ -57,6 +58,7 @@
                 </nav>
 
                 <div class="flex flex-wrap items-center gap-3">
+                    <x-theme.toggle />
                     <a href="{{ route('student.cart.index') }}" class="btn-secondary">السلة</a>
                     <a href="{{ route('student.profile.show') }}" class="btn-secondary">الملف الشخصي</a>
                     <form method="POST" action="{{ route('student.logout') }}">

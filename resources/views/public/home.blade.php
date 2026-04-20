@@ -20,15 +20,15 @@
                         <p class="text-sm font-semibold text-white/80">أسلوب العمل</p>
                         <p class="mt-4 text-2xl font-bold leading-snug">منصة واحدة تربط الباقات، الكتب، المتابعة، والسنتر بدون تشتيت.</p>
                     </article>
-                    <article class="rounded-[2.2rem] bg-[color-mix(in_oklch,var(--color-brand-100)_75%,white)] p-6">
+                    <article class="surface-card-soft rounded-[2.2rem] p-6">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">تجربة الطالب</p>
                         <p class="mt-4 text-xl font-bold">تسجيل، متابعة، وسجل واضح للمدفوعات والحضور والشكاوى.</p>
                     </article>
-                    <article class="rounded-[2.2rem] bg-white p-6 ring-1 ring-[color-mix(in_oklch,var(--color-brand-100)_85%,white)]">
+                    <article class="surface-card rounded-[2.2rem] p-6">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">قيمة حقيقية</p>
                         <p class="mt-4 text-sm leading-8 text-[var(--color-ink-700)]">تصميم عربي أولًا يركز على وضوح المسار التعليمي بدل تكديس الصفحات والوظائف بدون ترابط.</p>
                     </article>
-                    <article class="rounded-[2.2rem] bg-white p-6 ring-1 ring-[color-mix(in_oklch,var(--color-brand-100)_85%,white)]">
+                    <article class="surface-card rounded-[2.2rem] p-6">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">متابعة منظمة</p>
                         <p class="mt-4 text-sm leading-8 text-[var(--color-ink-700)]">البداية هنا هي الأساس العام، مع قابلية مباشرة للتوسع إلى الامتحانات، المنتدى، وتتبع الأخطاء.</p>
                     </article>
@@ -52,7 +52,7 @@
 
             <div class="grid gap-4 md:grid-cols-3">
                 @foreach ($publicContent['achievers'] as $achiever)
-                    <article class="rounded-[2rem] bg-white p-5 shadow-[0_18px_40px_rgba(71,58,29,0.08)] ring-1 ring-[color-mix(in_oklch,var(--color-brand-100)_85%,white)]">
+                    <article class="surface-card rounded-[2rem] p-5">
                         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">نتيجة</p>
                         <p class="mt-3 text-3xl font-bold text-[var(--color-brand-700)]">{{ $achiever['score'] }}</p>
                         <p class="mt-5 text-sm font-semibold">{{ $achiever['name'] }}</p>

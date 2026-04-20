@@ -2,6 +2,7 @@
 
 use App\Modules\Academic\Http\Controllers\Student\LectureCatalogController;
 use App\Modules\Academic\Http\Controllers\Student\ExamAttemptController;
+use App\Modules\Academic\Http\Controllers\Student\LectureProgressController;
 use App\Modules\Commerce\Http\Controllers\Student\BookCatalogController;
 use App\Modules\Commerce\Http\Controllers\Student\CartController;
 use App\Modules\Commerce\Http\Controllers\Student\CheckoutController;
@@ -48,6 +49,10 @@ Route::prefix('student')->name('student.')->group(function (): void {
 
         Route::get('/lectures', [LectureCatalogController::class, 'index'])->name('lectures.index');
         Route::get('/lectures/content/{lecture:slug}', [LectureCatalogController::class, 'showLecture'])->name('lectures.show');
+        Route::post('/lectures/content/{lecture:slug}/progress/touch', [LectureProgressController::class, 'touch'])->name('lectures.progress.touch');
+        Route::post('/lectures/content/{lecture:slug}/progress', [LectureProgressController::class, 'update'])->name('lectures.progress.update');
+        Route::post('/lectures/content/{lecture:slug}/progress/complete', [LectureProgressController::class, 'complete'])->name('lectures.progress.complete');
+        Route::post('/lectures/content/{lecture:slug}/checkpoints/{lectureCheckpoint}/reach', [LectureProgressController::class, 'reachCheckpoint'])->name('lectures.checkpoints.reach');
         Route::get('/exams/{exam:slug}', [LectureCatalogController::class, 'showExam'])->name('lectures.exams.show');
         Route::post('/exams/{exam:slug}/attempts', [ExamAttemptController::class, 'start'])->name('exam-attempts.start');
         Route::get('/exam-attempts/{examAttempt}', [ExamAttemptController::class, 'show'])->name('exam-attempts.show');

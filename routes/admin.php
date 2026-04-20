@@ -5,6 +5,7 @@ use App\Modules\Academic\Http\Controllers\Admin\ExamController;
 use App\Modules\Academic\Http\Controllers\Admin\ExamAttemptController;
 use App\Modules\Academic\Http\Controllers\Admin\GradeController;
 use App\Modules\Academic\Http\Controllers\Admin\LectureController;
+use App\Modules\Academic\Http\Controllers\Admin\LectureProgressController;
 use App\Modules\Academic\Http\Controllers\Admin\LectureSectionController;
 use App\Modules\Academic\Http\Controllers\Admin\TrackController;
 use App\Modules\Commerce\Http\Controllers\Admin\BookController;
@@ -35,6 +36,7 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::resource('curriculum-sections', CurriculumSectionController::class)->except(['show']);
         Route::resource('lecture-sections', LectureSectionController::class)->except(['show']);
         Route::resource('lectures', LectureController::class)->except(['show']);
+        Route::get('/lectures/{lecture}/progress', [LectureProgressController::class, 'index'])->name('lectures.progress.index');
         Route::resource('exams', ExamController::class)->except(['show']);
         Route::get('/exam-attempts', [ExamAttemptController::class, 'index'])->name('exam-attempts.index');
         Route::get('/exam-attempts/{examAttempt}', [ExamAttemptController::class, 'show'])->name('exam-attempts.show');

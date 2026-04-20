@@ -4,6 +4,7 @@ namespace App\Modules\Students\Models;
 
 use App\Modules\Academic\Models\ExamAttempt;
 use App\Modules\Academic\Models\Grade;
+use App\Modules\Academic\Models\LectureProgress;
 use App\Modules\Academic\Models\Track;
 use App\Modules\Centers\Models\AttendanceRecord;
 use App\Modules\Centers\Models\EducationalCenter;
@@ -162,5 +163,10 @@ class Student extends Authenticatable
     public function examAttempts(): HasMany
     {
         return $this->hasMany(ExamAttempt::class)->latest('started_at');
+    }
+
+    public function lectureProgress(): HasMany
+    {
+        return $this->hasMany(LectureProgress::class)->latest('last_opened_at');
     }
 }

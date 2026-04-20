@@ -5,6 +5,7 @@ namespace App\Modules\Academic\Queries;
 use App\Modules\Academic\Models\CurriculumSection;
 use App\Modules\Academic\Models\Exam;
 use App\Modules\Academic\Models\Lecture;
+use App\Modules\Academic\Models\LectureProgress;
 use App\Modules\Students\Models\Student;
 use App\Shared\Contracts\AccessResolver;
 use App\Shared\Enums\ContentKind;
@@ -69,7 +70,16 @@ class StudentLectureCatalogQuery
             $type = $tab === 'review' ? ContentKind::Review : ContentKind::Lecture;
 
             $items = Lecture::query()
-                ->with(['grade', 'track', 'curriculumSection', 'lectureSection', 'product'])
+                ->with([
+                    'grade',
+                    'track',
+                    'curriculumSection',
+                    'lectureSection',
+                    'product',
+                    'progressRecords' => fn ($query) => $query
+                        ->where('student_id', $student->id)
+                        ->with('lastCheckpoint'),
+                ])
                 ->where('grade_id', $student->grade_id)
                 ->when($student->track_id, fn ($query) => $query->where(function ($builder) use ($student): void {
                     $builder->whereNull('track_id')->orWhere('track_id', $student->track_id);
@@ -87,6 +97,7 @@ class StudentLectureCatalogQuery
                 ->through(fn (Lecture $lecture): array => [
                     'resource' => $lecture,
                     'access' => $this->accessResolver->resolveState($student, $lecture),
+                    'progress' => $this->progressSummary($lecture->progressRecords->first()),
                 ]);
         }
 
@@ -95,6 +106,44 @@ class StudentLectureCatalogQuery
             'items' => $items,
             'curriculumSections' => $sections,
             'lectureSections' => $lectureSections,
+        ];
+    }
+
+    /**
+     * @return array{status: string, label: string, percent: int}
+     */
+    private function progressSummary(?LectureProgress $progress): array
+    {
+        if (! $progress instanceof LectureProgress) {
+            return [
+                'status' => 'not_started',
+                'label' => 'لم تبدأ',
+                'percent' => 0,
+            ];
+        }
+
+        $percent = (int) round((float) $progress->completion_percent);
+
+        if ($progress->completed_at !== null || $percent >= 100) {
+            return [
+                'status' => 'completed',
+                'label' => 'مكتمل',
+                'percent' => 100,
+            ];
+        }
+
+        if ($percent > 0) {
+            return [
+                'status' => 'in_progress',
+                'label' => $percent.'% مكتمل',
+                'percent' => $percent,
+            ];
+        }
+
+        return [
+            'status' => 'started',
+            'label' => 'بدأت',
+            'percent' => 0,
         ];
     }
 }

@@ -51,6 +51,7 @@
                         <td>
                             <div class="flex flex-wrap gap-2">
                                 <a href="{{ route('admin.lectures.edit', $row) }}" class="btn-secondary !px-4 !py-2">تعديل</a>
+                                <a href="{{ route('admin.lectures.progress.index', $row) }}" class="btn-secondary !px-4 !py-2">تقدم الطلاب</a>
                                 <form method="POST" action="{{ route('admin.lectures.destroy', $row) }}" onsubmit="return confirm('تأكيد حذف المحتوى؟');">
                                     @csrf
                                     @method('DELETE')

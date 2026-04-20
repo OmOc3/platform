@@ -7,11 +7,14 @@ use App\Modules\Academic\Models\CurriculumSection;
 use App\Modules\Academic\Models\Exam;
 use App\Modules\Academic\Models\Grade;
 use App\Modules\Academic\Models\Lecture;
+use App\Modules\Academic\Models\LectureAsset;
+use App\Modules\Academic\Models\LectureCheckpoint;
 use App\Modules\Academic\Models\LectureSection;
 use App\Modules\Academic\Models\Track;
 use App\Modules\Commerce\Models\Package;
 use App\Modules\Commerce\Models\Product;
 use App\Shared\Enums\ContentKind;
+use App\Shared\Enums\LectureAssetKind;
 use App\Shared\Enums\ProductKind;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -193,6 +196,111 @@ class AcademicContentSeeder extends Seeder
             'sort_order' => 3,
         ]);
 
+        $this->syncLectureDelivery($freeLecture, [
+            [
+                'kind' => LectureAssetKind::EmbedVideo,
+                'title' => 'فيديو تمهيدي مباشر',
+                'url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                'body' => 'شاهد المقدمة العامة للوحدة وافتح الملاحظات المساندة بعدها.',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'kind' => LectureAssetKind::TextBlock,
+                'title' => 'خطة المتابعة',
+                'url' => null,
+                'body' => 'ابدأ بالتمهيد، ثم راجع المفاهيم الأساسية، وبعدها انتقل مباشرة إلى الاختبار المفتوح للتأكد من الفهم الأولي.',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'kind' => LectureAssetKind::ResourceLink,
+                'title' => 'ورقة النقاط الأساسية',
+                'url' => 'https://example.com/foundation-kinematics-notes',
+                'body' => 'ملخص خارجي سريع لأهم المصطلحات.',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+        ], [
+            [
+                'title' => 'إنهاء التمهيد',
+                'position_seconds' => 300,
+                'sort_order' => 1,
+                'is_required' => true,
+            ],
+            [
+                'title' => 'مراجعة التعاريف الأساسية',
+                'position_seconds' => 900,
+                'sort_order' => 2,
+                'is_required' => true,
+            ],
+        ]);
+
+        $this->syncLectureDelivery($newtonLecture, [
+            [
+                'kind' => LectureAssetKind::ExternalVideo,
+                'title' => 'الفيديو الرئيسي لقوانين نيوتن',
+                'url' => 'https://example.com/newton-laws-core',
+                'body' => 'رابط العرض الأساسي للمحاضرة مع الأمثلة التطبيقية.',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'kind' => LectureAssetKind::AttachmentLink,
+                'title' => 'شيت تدريبات القوانين',
+                'url' => 'https://example.com/newton-worksheet.pdf',
+                'body' => 'حمّل الشيت وابدأ بحل الأمثلة بعد متابعة الشرح.',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+            [
+                'kind' => LectureAssetKind::TextBlock,
+                'title' => 'ملحوظات سريعة قبل الاختبار',
+                'url' => null,
+                'body' => 'ركّز على التمييز بين القوة المحصلة والقوى المؤثرة، وارجع إلى الرسم الحر قبل التعويض في القانون.',
+                'sort_order' => 3,
+                'is_active' => true,
+            ],
+        ], [
+            [
+                'title' => 'إنهاء الشرح الأساسي',
+                'position_seconds' => 900,
+                'sort_order' => 1,
+                'is_required' => true,
+            ],
+            [
+                'title' => 'حل المثال الأول',
+                'position_seconds' => 1800,
+                'sort_order' => 2,
+                'is_required' => true,
+            ],
+            [
+                'title' => 'مراجعة النقاط الصعبة',
+                'position_seconds' => 2700,
+                'sort_order' => 3,
+                'is_required' => false,
+            ],
+        ]);
+
+        $this->syncLectureDelivery($electricityReview, [
+            [
+                'kind' => LectureAssetKind::TextBlock,
+                'title' => 'خريطة مراجعة الوحدة',
+                'url' => null,
+                'body' => 'استخدم هذه المراجعة كنقطة تجميع سريعة قبل الاختبار، ثم راجع قائمة الأخطاء إن وُجدت.',
+                'sort_order' => 1,
+                'is_active' => true,
+            ],
+            [
+                'kind' => LectureAssetKind::ResourceLink,
+                'title' => 'ملف أمثلة إضافية',
+                'url' => 'https://example.com/electricity-revision-examples',
+                'body' => 'روابط مسائل إضافية للتدريب الذاتي.',
+                'sort_order' => 2,
+                'is_active' => true,
+            ],
+        ], []);
+
         $this->syncExamQuestions($openExam, [
             [
                 'prompt' => 'أي كمية تعبّر عن مقدار تغيّر موضع الجسم بين نقطتين؟',
@@ -359,7 +467,10 @@ class AcademicContentSeeder extends Seeder
                 'is_free' => $data['is_free'],
                 'published_at' => now(),
                 'sort_order' => $data['sort_order'],
-                'metadata' => ['seeded' => true],
+                'metadata' => [
+                    'seeded' => true,
+                    'completion_threshold_percent' => 90,
+                ],
             ],
         );
     }
@@ -409,6 +520,40 @@ class AcademicContentSeeder extends Seeder
             'access_period_days' => $accessPeriodDays,
             'metadata' => ['overlap_rule' => $overlapRule],
         ]);
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $assets
+     * @param  array<int, array<string, mixed>>  $checkpoints
+     */
+    private function syncLectureDelivery(Lecture $lecture, array $assets, array $checkpoints): void
+    {
+        LectureAsset::query()->where('lecture_id', $lecture->id)->delete();
+        LectureCheckpoint::query()->where('lecture_id', $lecture->id)->delete();
+
+        foreach ($assets as $asset) {
+            LectureAsset::query()->create([
+                'lecture_id' => $lecture->id,
+                'kind' => $asset['kind'],
+                'title' => $asset['title'],
+                'url' => $asset['url'] ?? null,
+                'body' => $asset['body'] ?? null,
+                'sort_order' => $asset['sort_order'] ?? 0,
+                'is_active' => (bool) ($asset['is_active'] ?? true),
+                'metadata' => ['seeded' => true],
+            ]);
+        }
+
+        foreach ($checkpoints as $checkpoint) {
+            LectureCheckpoint::query()->create([
+                'lecture_id' => $lecture->id,
+                'title' => $checkpoint['title'],
+                'position_seconds' => $checkpoint['position_seconds'] ?? null,
+                'sort_order' => $checkpoint['sort_order'] ?? 0,
+                'is_required' => (bool) ($checkpoint['is_required'] ?? true),
+                'metadata' => ['seeded' => true],
+            ]);
+        }
     }
 
     /**

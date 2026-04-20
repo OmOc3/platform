@@ -97,6 +97,21 @@ class Lecture extends Model
         return $this->hasMany(Exam::class)->orderBy('sort_order');
     }
 
+    public function assets(): HasMany
+    {
+        return $this->hasMany(LectureAsset::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function checkpoints(): HasMany
+    {
+        return $this->hasMany(LectureCheckpoint::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function progressRecords(): HasMany
+    {
+        return $this->hasMany(LectureProgress::class)->latest('last_opened_at');
+    }
+
     public function packageItems(): HasMany
     {
         return $this->hasMany(PackageItem::class, 'item_id')

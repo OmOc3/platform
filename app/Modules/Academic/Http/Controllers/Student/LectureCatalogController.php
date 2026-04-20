@@ -8,9 +8,12 @@ use App\Modules\Academic\Models\ExamAttempt;
 use App\Modules\Academic\Models\Lecture;
 use App\Modules\Academic\Queries\StudentLectureCatalogQuery;
 use App\Shared\Contracts\AccessResolver;
+use App\Shared\Contracts\LectureProgressService;
 use App\Shared\Enums\ContentAccessState;
 use App\Shared\Enums\ExamAttemptStatus;
+use App\Shared\Enums\LectureAssetKind;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 
 class LectureCatalogController extends Controller
@@ -18,6 +21,7 @@ class LectureCatalogController extends Controller
     public function __construct(
         private readonly StudentLectureCatalogQuery $studentLectureCatalogQuery,
         private readonly AccessResolver $accessResolver,
+        private readonly LectureProgressService $lectureProgressService,
     ) {
     }
 
@@ -33,10 +37,43 @@ class LectureCatalogController extends Controller
         abort_unless($lecture->is_active, 404);
 
         $student = auth('student')->user();
+        $lecture->load([
+            'grade',
+            'track',
+            'curriculumSection',
+            'lectureSection',
+            'product',
+            'assets' => fn ($query) => $query->where('is_active', true)->orderBy('sort_order')->orderBy('id'),
+            'checkpoints' => fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+            'exams' => fn ($query) => $query
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderByDesc('published_at')
+                ->with(['attempts' => fn ($attempts) => $attempts
+                    ->where('student_id', $student->id)
+                    ->latest('started_at')]),
+        ]);
+        $access = $this->accessResolver->resolveState($student, $lecture);
+        $canConsume = in_array($access['state'], [
+            ContentAccessState::Open,
+            ContentAccessState::Free,
+            ContentAccessState::OwnedViaEntitlement,
+        ], true);
+        $progress = $canConsume ? $this->lectureProgressService->touchOpen($student, $lecture) : null;
+        $primaryAsset = $canConsume ? $this->resolvePrimaryAsset($lecture->assets) : null;
+        $supportingAssets = $canConsume && $primaryAsset
+            ? $lecture->assets->reject(fn ($asset) => $asset->is($primaryAsset))->values()
+            : collect();
+        $relatedExams = $canConsume ? $this->relatedExamsForLecture($lecture, $student) : collect();
 
         return view('student.catalog.lectures.show', [
-            'lecture' => $lecture->load(['grade', 'track', 'curriculumSection', 'lectureSection', 'product']),
-            'access' => $this->accessResolver->resolveState($student, $lecture),
+            'lecture' => $lecture,
+            'access' => $access,
+            'canConsume' => $canConsume,
+            'progress' => $progress,
+            'primaryAsset' => $primaryAsset,
+            'supportingAssets' => $supportingAssets,
+            'relatedExams' => $relatedExams,
         ]);
     }
 
@@ -88,5 +125,57 @@ class LectureCatalogController extends Controller
             'canStartAttempt' => $canStartAttempt,
             'attemptMessage' => $attemptMessage,
         ]);
+    }
+
+    private function resolvePrimaryAsset(Collection $assets): mixed
+    {
+        $priority = [
+            LectureAssetKind::EmbedVideo->value => 1,
+            LectureAssetKind::ExternalVideo->value => 2,
+            LectureAssetKind::TextBlock->value => 3,
+            LectureAssetKind::AttachmentLink->value => 4,
+            LectureAssetKind::ResourceLink->value => 5,
+        ];
+
+        return $assets
+            ->sortBy(fn ($asset): array => [$priority[$asset->kind->value] ?? 99, $asset->sort_order, $asset->id])
+            ->first();
+    }
+
+    private function relatedExamsForLecture(Lecture $lecture, mixed $student): Collection
+    {
+        return $lecture->exams
+            ->map(function (Exam $exam) use ($student): array {
+                $access = $this->accessResolver->resolveState($student, $exam);
+                $attempts = $exam->attempts;
+                $currentAttempt = $attempts->first(fn (ExamAttempt $attempt): bool => $attempt->status === ExamAttemptStatus::InProgress);
+                $gradedAttempt = $attempts->first(fn (ExamAttempt $attempt): bool => $attempt->status === ExamAttemptStatus::Graded);
+
+                $cta = match (true) {
+                    $currentAttempt instanceof ExamAttempt => [
+                        'label' => 'استكمل الاختبار',
+                        'href' => route('student.exam-attempts.show', $currentAttempt),
+                    ],
+                    $gradedAttempt instanceof ExamAttempt => [
+                        'label' => 'راجع النتيجة',
+                        'href' => route('student.exam-attempts.result', $gradedAttempt),
+                    ],
+                    in_array($access['state'], [ContentAccessState::Open, ContentAccessState::Free, ContentAccessState::OwnedViaEntitlement], true) => [
+                        'label' => 'ابدأ الاختبار',
+                        'href' => route('student.lectures.exams.show', $exam),
+                    ],
+                    default => [
+                        'label' => 'استعرض الاختبار',
+                        'href' => route('student.lectures.exams.show', $exam),
+                    ],
+                };
+
+                return [
+                    'exam' => $exam,
+                    'access' => $access,
+                    'cta' => $cta,
+                ];
+            })
+            ->values();
     }
 }
