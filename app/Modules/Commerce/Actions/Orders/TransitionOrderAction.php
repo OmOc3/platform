@@ -26,13 +26,13 @@ class TransitionOrderAction
         return DB::transaction(function () use ($order, $targetStatus, $actor): array {
             /** @var Order $lockedOrder */
             $lockedOrder = Order::query()
-                ->with(['student', 'items.product.package', 'items.entitlement'])
+                ->with(['student', 'items.product.package', 'items.entitlement', 'shipment', 'payments'])
                 ->lockForUpdate()
                 ->findOrFail($order->id);
 
             if ($lockedOrder->status === $targetStatus) {
                 return [
-                    'order' => $lockedOrder->fresh(['student', 'items.product.package', 'items.entitlement']),
+                    'order' => $lockedOrder->fresh(['student', 'items.product.package', 'items.entitlement', 'shipment', 'payments']),
                     'changed' => false,
                     'message' => 'الطلب بالفعل في الحالة المطلوبة.',
                     'granted_count' => $lockedOrder->kind === OrderKind::Digital
@@ -52,7 +52,14 @@ class TransitionOrderAction
 
             $lockedOrder->status = $targetStatus;
 
-            if (in_array($targetStatus, [OrderStatus::PendingPayment, OrderStatus::Paid, OrderStatus::Fulfilled], true) && ! $lockedOrder->placed_at) {
+            if (in_array($targetStatus, [
+                OrderStatus::PendingPayment,
+                OrderStatus::Paid,
+                OrderStatus::Fulfilled,
+                OrderStatus::ReadyForShipping,
+                OrderStatus::Shipped,
+                OrderStatus::Completed,
+            ], true) && ! $lockedOrder->placed_at) {
                 $lockedOrder->placed_at = now();
             }
 
@@ -66,7 +73,7 @@ class TransitionOrderAction
                 ]))->count();
             }
 
-            $freshOrder = $lockedOrder->fresh(['student', 'items.product.package', 'items.entitlement']);
+            $freshOrder = $lockedOrder->fresh(['student', 'items.product.package', 'items.entitlement', 'shipment', 'payments']);
 
             $this->auditLogger->log(
                 event: 'commerce.order.transitioned',
@@ -84,9 +91,14 @@ class TransitionOrderAction
             return [
                 'order' => $freshOrder,
                 'changed' => true,
-                'message' => $targetStatus === OrderStatus::Fulfilled
-                    ? 'تم تفعيل الطلب وإضافة الاستحقاقات الرقمية المرتبطة به.'
-                    : 'تم تحديث حالة الطلب.',
+                'message' => match ($targetStatus) {
+                    OrderStatus::Fulfilled => 'تم تفعيل الطلب وإضافة الاستحقاقات الرقمية المرتبطة به.',
+                    OrderStatus::ReadyForShipping => 'تم تجهيز الطلب للشحن.',
+                    OrderStatus::Shipped => 'تم تحديث الطلب إلى مرحلة الشحن.',
+                    OrderStatus::Completed => 'تم إكمال الطلب.',
+                    OrderStatus::Refunded => 'تم تسجيل حالة الارتجاع على الطلب.',
+                    default => 'تم تحديث حالة الطلب.',
+                },
                 'granted_count' => $grantedCount,
             ];
         });
@@ -100,7 +112,12 @@ class TransitionOrderAction
         return match ($order->status) {
             OrderStatus::Draft => [OrderStatus::PendingPayment],
             OrderStatus::PendingPayment => [OrderStatus::Paid, OrderStatus::Cancelled],
-            OrderStatus::Paid => [OrderStatus::Fulfilled, OrderStatus::Cancelled],
+            OrderStatus::Paid => $order->kind === OrderKind::Digital
+                ? [OrderStatus::Fulfilled, OrderStatus::Cancelled, OrderStatus::Refunded]
+                : [OrderStatus::ReadyForShipping, OrderStatus::Cancelled, OrderStatus::Refunded],
+            OrderStatus::ReadyForShipping => [OrderStatus::Shipped, OrderStatus::Cancelled, OrderStatus::Refunded],
+            OrderStatus::Shipped => [OrderStatus::Completed, OrderStatus::Refunded],
+            OrderStatus::Fulfilled, OrderStatus::Completed => [OrderStatus::Refunded],
             default => [],
         };
     }

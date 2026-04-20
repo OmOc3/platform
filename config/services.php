@@ -35,4 +35,18 @@ return [
         ],
     ],
 
+    'commerce' => [
+        'default_payment_provider' => env('COMMERCE_PAYMENT_PROVIDER', 'fake'),
+        'fake' => [
+            'expires_in_minutes' => env('COMMERCE_FAKE_PAYMENT_EXPIRES_MINUTES', 30),
+        ],
+        'shipping' => [
+            'fees' => [
+                'cairo' => env('COMMERCE_SHIPPING_FEE_CAIRO', 35),
+                'alexandria' => env('COMMERCE_SHIPPING_FEE_ALEXANDRIA', 45),
+                'default' => env('COMMERCE_SHIPPING_FEE_DEFAULT', 60),
+            ],
+        ],
+    ],
+
 ];

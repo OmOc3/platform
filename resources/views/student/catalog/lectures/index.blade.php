@@ -3,7 +3,7 @@
         <section class="panel-tight">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">كتالوج المحتوى الأكاديمي</p>
+                    <p class="section-kicker">كتالوج المحتوى الأكاديمي</p>
                     <h2 class="mt-2 text-2xl font-bold lg:text-3xl">المحاضرات / الامتحانات / المراجعات</h2>
                     <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">
                         بدّل بين أنواع المحتوى المختلفة، ثم صفّ النتائج حسب القسم أو اختر المحاضرات المجانية فقط عند الحاجة.
@@ -79,7 +79,7 @@
                         <div class="flex flex-col gap-5 lg:flex-row">
                             <div class="catalog-thumb max-w-[11rem] shrink-0 lg:w-[11rem]">
                                 @if ($resource->thumbnail_url)
-                                    <img src="{{ $resource->thumbnail_url }}" alt="{{ $resource->title }}">
+                                    <img src="{{ $resource->thumbnail_url }}" alt="{{ $resource->title }}" loading="lazy" decoding="async">
                                 @else
                                     <div class="catalog-thumb__fallback">
                                         <span>{{ $resourceTypeLabel }}</span>
@@ -109,7 +109,7 @@
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $resource->short_description }}</p>
 
                                 <div class="mt-5 grid gap-3 text-sm sm:grid-cols-3">
-                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                    <div class="stat-tile">
                                         <p class="text-xs text-[var(--color-ink-500)]">السعر</p>
                                         <p class="mt-2 font-semibold">
                                             @if (($resource->is_free ?? false) || (int) $resource->price_amount === 0)
@@ -119,11 +119,11 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                    <div class="stat-tile">
                                         <p class="text-xs text-[var(--color-ink-500)]">المدة</p>
                                         <p class="mt-2 font-semibold">{{ $resource->duration_minutes ? $resource->duration_minutes.' دقيقة' : 'غير محدد' }}</p>
                                     </div>
-                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                    <div class="stat-tile">
                                         <p class="text-xs text-[var(--color-ink-500)]">القسم</p>
                                         <p class="mt-2 font-semibold">{{ $isExam ? ($resource->lecture?->title ?? 'اختبار مستقل') : ($resource->lectureSection?->name_ar ?? 'عام') }}</p>
                                     </div>
@@ -134,13 +134,13 @@
                                 @endif
 
                                 @if ($isExam && $latestAttempt)
-                                    <div class="mt-4 rounded-[1.6rem] bg-[color-mix(in_oklch,var(--color-success)_8%,white)] p-4">
+                                    <div class="surface-tone surface-tone--success mt-4 rounded-[1.3rem] p-4">
                                         <div class="flex flex-wrap items-center justify-between gap-3">
                                             <div>
-                                                <p class="text-sm font-semibold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">آخر نتيجة مسجلة</p>
+                                                <p class="text-sm font-semibold">آخر نتيجة مسجلة</p>
                                                 <p class="mt-2 text-xs text-[var(--color-ink-500)]">{{ optional($latestAttempt->graded_at)->format('Y/m/d') ?: '—' }} · {{ optional($latestAttempt->graded_at)->format('H:i') ?: '—' }}</p>
                                             </div>
-                                            <span class="text-xl font-bold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">{{ $latestAttempt->total_score }}/{{ $latestAttempt->max_score }}</span>
+                                            <span class="text-xl font-bold">{{ $latestAttempt->total_score }}/{{ $latestAttempt->max_score }}</span>
                                         </div>
                                     </div>
                                 @endif

@@ -1,12 +1,22 @@
 <x-layouts.admin title="لوحة التحكم" heading="لوحة التحكم" subheading="ملخص تشغيلي سريع للطلاب، الطلبات، الشكاوى، والسناتر من شاشة واحدة.">
-    <section class="admin-metric-grid">
-        @foreach ($stats as $stat)
-            <x-admin.metric-card
-                :label="$stat['label']"
-                :value="$stat['value']"
-                description="مؤشر مباشر يحتاجه فريق الإدارة في المتابعة اليومية."
-            />
-        @endforeach
+    <section class="panel-tight">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+                <p class="section-kicker">الصورة العامة</p>
+                <h2 class="mt-2 text-xl font-bold">مؤشرات التشغيل اليومية</h2>
+            </div>
+            <p class="text-sm leading-7 text-[var(--color-ink-700)]">قراءة سريعة للحجم الحالي قبل النزول إلى الجداول وسجلات المتابعة.</p>
+        </div>
+
+        <div class="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            @foreach ($stats as $stat)
+                <article class="space-y-3">
+                    <p class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">{{ $stat['label'] }}</p>
+                    <p class="text-3xl font-bold text-[var(--color-ink-900)]">{{ $stat['value'] }}</p>
+                    <p class="text-sm leading-7 text-[var(--color-ink-700)]">مؤشر مباشر يحتاجه فريق الإدارة في المتابعة اليومية.</p>
+                </article>
+            @endforeach
+        </div>
     </section>
 
     <section class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
@@ -37,7 +47,7 @@
 
         <section class="panel-tight space-y-6">
             <div>
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">مؤشرات مساندة</p>
+                <p class="section-kicker">مؤشرات مساندة</p>
                 <div class="mt-4 grid gap-3 sm:grid-cols-2">
                     @foreach ($secondaryStats as $stat)
                         <div class="admin-workflow-card">

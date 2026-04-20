@@ -10,7 +10,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالطالب أو البريد أو الرقم">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالطالب أو البريد أو الرقم" aria-label="ابحث في تقدم الطلاب داخل المحاضرات">
                 <select name="status" class="form-select">
                     <option value="">كل الحالات</option>
                     <option value="started" @selected(request('status') === 'started')>بدأت ولم تكتمل</option>

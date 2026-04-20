@@ -13,7 +13,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الطالب أو نص الرسالة">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الطالب أو نص الرسالة" aria-label="ابحث في الشكاوى والاقتراحات">
                 <select name="type" class="form-select">
                     <option value="">كل الأنواع</option>
                     @foreach ($types as $type)

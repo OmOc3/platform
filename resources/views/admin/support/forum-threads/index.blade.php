@@ -2,7 +2,7 @@
     <x-admin.table-shell title="موضوعات المنتدى" description="تصفية حسب الحالة والرؤية والبحث باسم الطالب أو عنوان الموضوع.">
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بعنوان الموضوع أو الطالب">
+    <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بعنوان الموضوع أو الطالب" aria-label="ابحث في موضوعات ملتقى الأسئلة">
                 <select name="status" class="form-select">
                     <option value="">كل الحالات</option>
                     @foreach ($statuses as $status)

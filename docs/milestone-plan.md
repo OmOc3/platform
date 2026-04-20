@@ -60,6 +60,16 @@ Status: complete
 
 Status: complete
 
+## Milestone 6
+- Payment attempts and payment lifecycle foundation
+- Fake provider-backed payment initiation and webhook confirmation
+- Safe order finalization after payment confirmation
+- Automatic digital fulfillment after successful payment
+- Shipping foundation for book orders
+- Admin payment and shipment operations pages
+
+Status: complete
+
 ## Runtime and Verification Baseline
 - المسار المحلي الرسمي للتشغيل والتحقق هو Sail + MySQL.
 - التطبيق يستخدم قاعدة `platform`.
@@ -67,11 +77,10 @@ Status: complete
 - لم يعد `.runtime + SQLite` هو المسار الرسمي للتحقق المحلي.
 
 ## Next Milestones
-- Payment gateway integration and settlement automation
-- Shipping execution and physical order operations
+- Real payment gateway integration and settlement automation
+- Carrier integration and physical shipping execution
 - Essay/manual review and delayed result release
 - Advanced exam analytics and richer student performance reporting
-- Lecture delivery / LMS completion flows
 - Center operations expansion
 - Ticketing and support backend completion
 - Payroll and operations domains

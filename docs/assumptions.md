@@ -15,8 +15,15 @@
   - entitlement ناتج عن باقة
   - منحة إدارية
 - شراء الباقة يمنح entitlement للباقة نفسها، بينما فتح المحاضرات المدرجة تحتها يعتمد على `AccessResolver`.
-- الكتب تظل منفصلة منطقيًا عن التدفق الرقمي حتى داخل السلة نفسها.
-- الدفع الفعلي غير مفعل بعد؛ الموجود حاليًا هو draft checkout ثم انتقالات إدارية آمنة حتى `fulfilled`.
+- checkout يقسم السلة إلى طلب رقمي وطلب كتب مستقلين، ولا يوجد mixed order موحد في v1.
+- v1 الحالي يدعم:
+  - payment attempts مرتبطة بالطلبات
+  - payment provider abstraction
+  - webhook-based confirmation
+  - finalization تلقائي للطلبات الرقمية
+  - shipment foundation لطلبات الكتب
+- المزود الحالي هو `fake` provider فقط حتى يتم ربط PSP حقيقي لاحقًا.
+- refund state handling حقيقي ومؤمَّن، لكن refund execution الخارجي ما زال fake/manual-friendly.
 
 ## Exam Engine Assumptions
 - v1 يدعم فقط objective multiple-choice questions.
@@ -38,11 +45,16 @@
 - التطبيق محليًا يعمل على قاعدة `platform`.
 - الاختبارات تعمل على MySQL باستخدام قاعدة `testing`.
 - لا يُعتمد على `.runtime` كمسار تشغيل قاعدة بيانات محلي بعد الآن.
-- البيانات التجريبية للامتحانات تتضمن أسئلة واختيارات فعلية حتى يمكن الدخول إلى تجربة الامتحان مباشرة بعد `migrate:fresh --seed`.
+- البيانات التجريبية تتضمن الآن:
+  - أمثلة exam attempts فعلية
+  - lecture progress examples
+  - payment attempts pending
+  - digital paid/fulfilled flows
+  - book shipment flows
 
 ## Deferred Decisions
-- payment gateway النهائي لم يُحسم بعد.
-- shipping fulfillment التفصيلي لطلبات الكتب لم يُنفذ بعد.
+- real payment gateway integration لم يُحسم بعد.
+- shipping fulfillment عبر carrier خارجي لم يُنفذ بعد.
 - advanced proctoring مؤجل.
 - essay/manual review workflows مؤجلة.
 - advanced exam analytics مؤجلة.

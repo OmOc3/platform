@@ -10,7 +10,7 @@
         <section class="panel-tight">
             <div class="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                 <div>
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">كتالوج العروض</p>
+                    <p class="section-kicker">كتالوج العروض</p>
                     <h2 class="mt-2 text-2xl font-bold lg:text-3xl">كل باقة تظهر هنا بحالتها الحقيقية قبل الشراء.</h2>
                     <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">
                         إذا كنت اشتريت العرض بالفعل أو لديك محاضرات متداخلة معه، ستظهر الرسالة المناسبة مباشرة. وإذا كانت الباقة قابلة للشراء فستضيفها إلى السلة من نفس الشاشة.
@@ -60,7 +60,7 @@
                                 <div class="flex flex-col gap-5 lg:flex-row">
                                     <div class="catalog-thumb max-w-[12rem] shrink-0 lg:w-[12rem]">
                                         @if ($package->product?->thumbnail_url)
-                                            <img src="{{ $package->product->thumbnail_url }}" alt="{{ $package->product?->name_ar }}">
+                                            <img src="{{ $package->product->thumbnail_url }}" alt="{{ $package->product?->name_ar }}" loading="lazy" decoding="async">
                                         @else
                                             <div class="catalog-thumb__fallback">
                                                 <span>{{ $package->billing_cycle_label ?: 'باقة' }}</span>
@@ -82,15 +82,15 @@
                                         <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $package->product?->description }}</p>
 
                                         <div class="mt-5 grid gap-3 sm:grid-cols-3">
-                                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                            <div class="stat-tile">
                                                 <p class="text-xs text-[var(--color-ink-500)]">السعر</p>
                                                 <p class="mt-2 font-semibold">{{ number_format($package->product?->price_amount ?? 0) }} {{ $package->product?->currency }}</p>
                                             </div>
-                                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                            <div class="stat-tile">
                                                 <p class="text-xs text-[var(--color-ink-500)]">عدد المحاضرات</p>
                                                 <p class="mt-2 font-semibold">{{ $package->items->count() }}</p>
                                             </div>
-                                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                            <div class="stat-tile">
                                                 <p class="text-xs text-[var(--color-ink-500)]">مدة التفعيل</p>
                                                 <p class="mt-2 font-semibold">{{ $package->access_period_days ? $package->access_period_days.' يوم' : 'حسب الباقة' }}</p>
                                             </div>
@@ -100,7 +100,7 @@
                                         @if ($eligibility['overlaps'] !== [])
                                             <div class="mt-3 flex flex-wrap gap-2">
                                                 @foreach ($eligibility['overlaps'] as $title)
-                                                    <span class="status-pill bg-[color-mix(in_oklch,var(--color-danger)_10%,white)] text-[color-mix(in_oklch,var(--color-danger)_70%,black)]">{{ $title }}</span>
+                                                    <span class="status-pill status-pill--danger">{{ $title }}</span>
                                                 @endforeach
                                             </div>
                                         @endif

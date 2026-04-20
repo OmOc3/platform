@@ -3,7 +3,7 @@
         <section class="panel-tight">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">مكتبة الكتب</p>
+                    <p class="section-kicker">مكتبة الكتب</p>
                     <h2 class="mt-2 text-2xl font-bold lg:text-3xl">كتب ومذكرات يمكن طلبها مباشرة من المتجر.</h2>
                     <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">
                         كل بطاقة تعرض السعر، الصفحات، حالة المخزون، وما إذا كان الكتاب موجودًا بالفعل داخل السلة حتى لا تكرر الإضافة.
@@ -13,7 +13,7 @@
             </div>
 
             <form method="GET" class="mt-6 grid gap-3 lg:grid-cols-[1fr_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الكتاب أو الوصف المختصر">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الكتاب أو الوصف المختصر" aria-label="ابحث في الكتب">
                 <button class="btn-secondary">بحث</button>
             </form>
         </section>
@@ -27,7 +27,7 @@
                     <div class="flex flex-col gap-5 lg:flex-row">
                         <div class="catalog-thumb catalog-thumb--book max-w-[11rem] shrink-0 lg:w-[11rem]">
                             @if ($book->product?->thumbnail_url)
-                                <img src="{{ $book->product->thumbnail_url }}" alt="{{ $book->product?->name_ar }}">
+                                <img src="{{ $book->product->thumbnail_url }}" alt="{{ $book->product?->name_ar }}" loading="lazy" decoding="async">
                             @else
                                 <div class="catalog-thumb__fallback">
                                     <span>{{ $book->cover_badge ?: 'كتاب' }}</span>
@@ -51,15 +51,15 @@
                             <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $book->product?->teaser }}</p>
 
                             <div class="mt-5 grid gap-3 sm:grid-cols-3">
-                                <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                <div class="stat-tile">
                                     <p class="text-xs text-[var(--color-ink-500)]">السعر</p>
                                     <p class="mt-2 font-semibold">{{ number_format($book->product?->price_amount ?? 0) }} {{ $book->product?->currency }}</p>
                                 </div>
-                                <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                <div class="stat-tile">
                                     <p class="text-xs text-[var(--color-ink-500)]">الصفحات</p>
                                     <p class="mt-2 font-semibold">{{ $book->page_count ?: '—' }}</p>
                                 </div>
-                                <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                <div class="stat-tile">
                                     <p class="text-xs text-[var(--color-ink-500)]">المخزون</p>
                                     <p class="mt-2 font-semibold">{{ $book->stock_quantity }}</p>
                                 </div>

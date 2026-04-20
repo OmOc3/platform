@@ -27,17 +27,17 @@ class CheckoutController extends Controller
             'student' => $student,
             ...$this->cartSummaryQuery->dataFor($student),
             'digitalOrder' => Order::query()
-                ->with('items.product')
+                ->with(['items.product', 'payments' => fn ($query) => $query->latest('created_at')])
                 ->where('student_id', $student->id)
                 ->where('kind', OrderKind::Digital->value)
-                ->where('status', OrderStatus::Draft->value)
+                ->whereIn('status', [OrderStatus::Draft->value, OrderStatus::PendingPayment->value])
                 ->latest('updated_at')
                 ->first(),
             'bookOrder' => Order::query()
-                ->with('items.product')
+                ->with(['items.product', 'payments' => fn ($query) => $query->latest('created_at')])
                 ->where('student_id', $student->id)
                 ->where('kind', OrderKind::Book->value)
-                ->where('status', OrderStatus::Draft->value)
+                ->whereIn('status', [OrderStatus::Draft->value, OrderStatus::PendingPayment->value])
                 ->latest('updated_at')
                 ->first(),
         ]);

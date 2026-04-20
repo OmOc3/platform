@@ -30,7 +30,7 @@
 ## Application Patterns
 - Controllers stay thin and delegate mutations to `Actions`.
 - Query/list pages use dedicated `Queries` plus shared table UI primitives.
-- Domain services are exposed through contracts such as `AccessResolver`, `CheckoutService`, `EntitlementGrantor`, `ExamAttemptService`, `AttendanceRecorder`, `TicketAssignmentService`, and `AuditLogger`.
+- Domain services are exposed through contracts such as `AccessResolver`, `CheckoutService`, `EntitlementGrantor`, `ExamAttemptService`, `LectureProgressService`, `PaymentProviderRegistry`, `ShippingFeeCalculator`, `AttendanceRecorder`, `TicketAssignmentService`, and `AuditLogger`.
 - All business statuses are enum/config driven; no raw status strings in views.
 
 ## UI Composition Rules
@@ -47,3 +47,4 @@
 - New domains must live under `app/Modules/<Domain>` and expose policies, actions, and queries before adding controllers.
 - New admin pages should reuse the shared table/form components before introducing custom page chrome.
 - Integrations with payments, shipping, SMS, or storage must enter through contracts bound in the service container.
+- Payment confirmation and shipment progression are modeled as explicit lifecycle actions and not embedded in controllers or Blade.

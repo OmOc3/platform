@@ -3,7 +3,7 @@
         <section class="panel-tight">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">جدار الأسئلة</p>
+                    <p class="section-kicker">جدار الأسئلة</p>
                     <h2 class="mt-2 text-2xl font-bold lg:text-3xl">تابع كل الأسئلة أو ارجع فقط إلى أسئلتك.</h2>
                     <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">
                         يعرض هذا القسم الأسئلة العامة، الصور المرفقة، الردود الإدارية، والردود الصوتية في صياغة أقرب إلى جدار دعم أكاديمي حي.
@@ -27,7 +27,7 @@
                 @if ($mode === 'mine')
                     <input type="hidden" name="mine" value="1">
                 @endif
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث في العنوان أو نص السؤال">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث في العنوان أو نص السؤال" aria-label="ابحث في موضوعات ملتقى الأسئلة">
                 <button class="btn-secondary">بحث</button>
             </form>
         </section>
@@ -63,11 +63,11 @@
 
                                     @if ($attachment->type->value === 'image')
                                         <a href="{{ $attachmentUrl }}" target="_blank" rel="noreferrer" class="forum-attachment forum-attachment--image">
-                                            <img src="{{ $attachmentUrl }}" alt="{{ $attachment->original_name }}">
+                                            <img src="{{ $attachmentUrl }}" alt="{{ $attachment->original_name }}" loading="lazy" decoding="async">
                                         </a>
                                     @else
                                         <div class="forum-attachment forum-attachment--audio">
-                                            <p class="text-xs font-semibold text-[var(--color-brand-700)]">رد أو سؤال صوتي</p>
+                                            <p class="section-kicker">رد أو سؤال صوتي</p>
                                             <audio controls class="mt-3 w-full">
                                                 <source src="{{ $attachmentUrl }}" type="{{ $attachment->mime_type }}">
                                             </audio>
@@ -78,7 +78,7 @@
                         @endif
 
                         @if ($staffReply)
-                            <div class="mt-5 rounded-[1.8rem] bg-[color-mix(in_oklch,var(--color-success)_10%,white)] p-4">
+                            <div class="surface-tone surface-tone--success mt-5 rounded-[1.8rem] p-4">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <x-admin.status-badge label="آخر رد إداري" tone="success" />
                                     <span class="text-xs text-[var(--color-ink-500)]">{{ $staffReply->author?->name ?? 'الإدارة' }}</span>
@@ -108,7 +108,7 @@
             </div>
 
             <aside class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">إضافة سؤال جديد</p>
+                <p class="section-kicker">إضافة سؤال جديد</p>
                 <form method="POST" action="{{ route('student.forum.store') }}" enctype="multipart/form-data" class="mt-5 space-y-4">
                     @csrf
 

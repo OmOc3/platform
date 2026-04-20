@@ -147,23 +147,50 @@ class OrderFulfillmentTest extends TestCase
         $this->assertSame(ContentAccessState::OwnedViaEntitlement, $accessResolver->resolveState($student, $lecture)['state']);
     }
 
-    public function test_fulfilling_book_order_does_not_create_digital_entitlements(): void
+    public function test_preparing_paid_book_order_for_shipping_does_not_create_digital_entitlements(): void
     {
         $this->seed(DatabaseSeeder::class);
 
         $book = Book::query()->with('product')->firstOrFail();
         $student = Student::factory()->create();
-        $order = $this->createOrder($student, $book->product, OrderKind::Book, OrderStatus::Paid, $book->product->price_amount);
+        $order = $this->createOrder(
+            $student,
+            $book->product,
+            OrderKind::Book,
+            OrderStatus::Paid,
+            $book->product->price_amount,
+            [
+                'shipping_address' => [
+                    'recipient_name' => $student->name,
+                    'phone' => $student->phone,
+                    'alternate_phone' => $student->parent_phone,
+                    'governorate' => 'القاهرة',
+                    'city' => 'مدينة نصر',
+                    'address_line1' => 'شارع عباس العقاد',
+                ],
+                'shipping_summary' => [
+                    'amount' => 35,
+                    'label' => 'رسوم شحن تقديرية',
+                    'warning' => null,
+                    'supported_governorates' => ['القاهرة', 'الجيزة', 'الإسكندرية'],
+                ],
+            ],
+        );
 
         $this->signInAdmin(['orders.view', 'orders.manage']);
 
         $this->put(route('admin.orders.transition', $order), [
-            'status' => OrderStatus::Fulfilled->value,
+            'status' => OrderStatus::ReadyForShipping->value,
         ])->assertRedirect();
 
         $this->assertDatabaseHas('orders', [
             'id' => $order->id,
-            'status' => OrderStatus::Fulfilled->value,
+            'status' => OrderStatus::ReadyForShipping->value,
+        ]);
+
+        $this->assertDatabaseHas('shipments', [
+            'order_id' => $order->id,
+            'status' => 'pending',
         ]);
 
         $this->assertDatabaseMissing('entitlements', [
@@ -205,6 +232,7 @@ class OrderFulfillmentTest extends TestCase
         OrderKind $kind,
         OrderStatus $status,
         int $priceAmount,
+        ?array $meta = null,
     ): Order {
         $order = Order::factory()->create([
             'student_id' => $student->id,
@@ -213,6 +241,7 @@ class OrderFulfillmentTest extends TestCase
             'subtotal_amount' => $priceAmount,
             'total_amount' => $priceAmount,
             'currency' => $product->currency,
+            'meta' => $meta,
         ]);
 
         OrderItem::factory()->create([

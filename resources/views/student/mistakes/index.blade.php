@@ -36,7 +36,7 @@
                                 <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">المحاضرة</p>
                                 <h2 class="mt-3 text-xl font-bold">{{ $group['lecture']?->title ?? 'محتوى غير محدد' }}</h2>
                             </div>
-                            <span class="status-pill bg-[color-mix(in_oklch,var(--color-danger)_12%,white)] text-[color-mix(in_oklch,var(--color-danger)_70%,black)]">{{ $group['count'] }} خطأ</span>
+                            <span class="status-pill status-pill--danger">{{ $group['count'] }} خطأ</span>
                         </div>
 
                         <div class="mt-5 grid gap-3 sm:grid-cols-2">

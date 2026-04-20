@@ -9,6 +9,8 @@ use App\Shared\Contracts\CheckoutService;
 use App\Shared\Contracts\EntitlementGrantor;
 use App\Shared\Contracts\ExamAttemptService;
 use App\Shared\Contracts\LectureProgressService;
+use App\Shared\Contracts\PaymentProviderRegistry;
+use App\Shared\Contracts\ShippingFeeCalculator;
 use App\Shared\Contracts\TicketAssignmentService;
 use App\Shared\Services\DatabaseAccessResolver;
 use App\Shared\Services\DatabaseAttendanceRecorder;
@@ -17,6 +19,8 @@ use App\Shared\Services\DatabaseCheckoutService;
 use App\Shared\Services\DatabaseEntitlementGrantor;
 use App\Shared\Services\DatabaseExamAttemptService;
 use App\Shared\Services\DatabaseLectureProgressService;
+use App\Shared\Services\ConfiguredPaymentProviderRegistry;
+use App\Shared\Services\DatabaseShippingFeeCalculator;
 use App\Shared\Services\DatabaseTicketAssignmentService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EntitlementGrantor::class, DatabaseEntitlementGrantor::class);
         $this->app->bind(ExamAttemptService::class, DatabaseExamAttemptService::class);
         $this->app->bind(LectureProgressService::class, DatabaseLectureProgressService::class);
+        $this->app->bind(PaymentProviderRegistry::class, ConfiguredPaymentProviderRegistry::class);
+        $this->app->bind(ShippingFeeCalculator::class, DatabaseShippingFeeCalculator::class);
         $this->app->bind(TicketAssignmentService::class, DatabaseTicketAssignmentService::class);
     }
 

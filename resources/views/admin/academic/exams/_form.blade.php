@@ -112,7 +112,7 @@
     </div>
 </div>
 
-<section class="mt-8 rounded-[2rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] bg-[var(--color-brand-50)]/70 p-5">
+<section class="surface-tone surface-tone--brand mt-8 rounded-[2rem] p-5">
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h2 class="text-lg font-semibold">أسئلة الاختبار</h2>
@@ -127,7 +127,7 @@
 
     <div class="mt-5 space-y-5" data-question-list>
         @foreach ($questionDrafts as $questionIndex => $questionDraft)
-            <article class="rounded-[1.8rem] bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]" data-question-card>
+            <article class="surface-card rounded-[1.8rem] p-5" data-question-card>
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">سؤال <span data-question-number>{{ $loop->iteration }}</span></p>
                     <button type="button" class="btn-danger !px-4 !py-2" data-remove-question>حذف السؤال</button>
@@ -154,7 +154,7 @@
                     <textarea name="questions[{{ $questionIndex }}][explanation]" class="form-textarea" rows="2">{{ $questionDraft['explanation'] ?? '' }}</textarea>
                 </div>
 
-                <div class="mt-5 rounded-[1.6rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+                <div class="surface-outline surface-outline--brand mt-5 rounded-[1.6rem] p-4">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <p class="text-sm font-semibold">الاختيارات</p>
                         <button type="button" class="btn-secondary !px-4 !py-2" data-add-choice>إضافة اختيار</button>
@@ -248,7 +248,7 @@
             `;
 
             const buildQuestionCard = (questionIndex) => `
-                <article class="rounded-[1.8rem] bg-white p-5 shadow-[0_18px_40px_rgba(15,23,42,0.06)]" data-question-card>
+                <article class="surface-card rounded-[1.8rem] p-5" data-question-card>
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">سؤال <span data-question-number></span></p>
                         <button type="button" class="btn-danger !px-4 !py-2" data-remove-question>حذف السؤال</button>
@@ -268,7 +268,7 @@
                         <label class="field-label">التفسير بعد التصحيح</label>
                         <textarea name="questions[${questionIndex}][explanation]" class="form-textarea" rows="2"></textarea>
                     </div>
-                    <div class="mt-5 rounded-[1.6rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+                    <div class="surface-outline surface-outline--brand mt-5 rounded-[1.6rem] p-4">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <p class="text-sm font-semibold">الاختيارات</p>
                             <button type="button" class="btn-secondary !px-4 !py-2" data-add-choice>إضافة اختيار</button>

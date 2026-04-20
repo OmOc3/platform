@@ -197,7 +197,7 @@ return [
             ],
         ],
         [
-            'label' => 'الإدارة والحَوْكمة',
+            'label' => 'الإدارة والحوكمة',
             'items' => [
                 ['label' => 'المشرفون', 'route' => 'admin.admins.index', 'permission' => 'admins.view'],
                 ['label' => 'الإعدادات', 'route' => 'admin.settings.index', 'permission' => 'settings.view'],
@@ -231,6 +231,8 @@ return [
                 ['label' => 'الباقات', 'route' => 'admin.packages.index', 'permission' => 'packages.view'],
                 ['label' => 'الكتب', 'route' => 'admin.books.index', 'permission' => 'books.view'],
                 ['label' => 'الطلبات', 'route' => 'admin.orders.index', 'permission' => 'orders.view'],
+                ['label' => 'المدفوعات', 'route' => 'admin.payments.index', 'permission' => 'transactions.view'],
+                ['label' => 'الشحن', 'route' => 'admin.shipments.index', 'permission' => 'shipping.view'],
                 ['label' => 'ملتقى الأسئلة', 'route' => 'admin.forum-threads.index', 'permission' => 'forum.view'],
             ],
         ],

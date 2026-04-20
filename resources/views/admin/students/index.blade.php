@@ -13,7 +13,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 lg:grid-cols-8">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input lg:col-span-2" placeholder="الاسم أو البريد أو الهاتف أو الرقم">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input lg:col-span-2" placeholder="الاسم أو البريد أو الهاتف أو الرقم" aria-label="ابحث في الطلاب">
                 <select name="status" class="form-select">
                     <option value="">كل الحالات</option>
                     @foreach ($statuses as $status)

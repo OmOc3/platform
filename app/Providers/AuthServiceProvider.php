@@ -19,11 +19,15 @@ use App\Modules\Academic\Policies\TrackPolicy;
 use App\Modules\Commerce\Models\Book;
 use App\Modules\Commerce\Models\Entitlement;
 use App\Modules\Commerce\Models\Order;
+use App\Modules\Commerce\Models\Payment;
 use App\Modules\Commerce\Models\Package;
+use App\Modules\Commerce\Models\Shipment;
 use App\Modules\Commerce\Policies\BookPolicy;
 use App\Modules\Commerce\Policies\EntitlementPolicy;
 use App\Modules\Commerce\Policies\OrderPolicy;
+use App\Modules\Commerce\Policies\PaymentPolicy;
 use App\Modules\Commerce\Policies\PackagePolicy;
+use App\Modules\Commerce\Policies\ShipmentPolicy;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
 use App\Modules\Support\Policies\ComplaintPolicy;
@@ -54,6 +58,7 @@ class AuthServiceProvider extends ServiceProvider
         Book::class => BookPolicy::class,
         Entitlement::class => EntitlementPolicy::class,
         Order::class => OrderPolicy::class,
+        Payment::class => PaymentPolicy::class,
         CurriculumSection::class => CurriculumSectionPolicy::class,
         Exam::class => ExamPolicy::class,
         ExamAttempt::class => ExamAttemptPolicy::class,
@@ -63,6 +68,7 @@ class AuthServiceProvider extends ServiceProvider
         LectureSection::class => LectureSectionPolicy::class,
         MistakeItem::class => MistakeItemPolicy::class,
         Package::class => PackagePolicy::class,
+        Shipment::class => ShipmentPolicy::class,
         Setting::class => SettingPolicy::class,
         Track::class => TrackPolicy::class,
         Student::class => StudentPolicy::class,

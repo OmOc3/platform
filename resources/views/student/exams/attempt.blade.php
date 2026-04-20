@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="rounded-[1.4rem] border border-[color-mix(in_oklch,var(--color-brand-100)_85%,white)] p-4">
+                <div class="surface-outline surface-outline--brand rounded-[1.4rem] p-4">
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">التنقل بين الأسئلة</p>
                     <div class="mt-3 flex flex-wrap gap-2">
                         @foreach ($examAttempt->exam->examQuestions as $index => $examQuestion)
@@ -36,7 +36,7 @@
                 @csrf
 
                 @error('answers')
-                    <p class="rounded-2xl bg-[color-mix(in_oklch,var(--color-danger)_10%,white)] px-4 py-3 text-sm font-medium text-[var(--color-danger)]">{{ $message }}</p>
+                    <p class="surface-tone surface-tone--danger rounded-2xl px-4 py-3 text-sm font-medium">{{ $message }}</p>
                 @enderror
 
                 @foreach ($examAttempt->exam->examQuestions as $index => $examQuestion)
@@ -44,7 +44,7 @@
                         $question = $examQuestion->question;
                         $selectedAnswer = old('answers.'.$question->id, $answerMap[$question->id] ?? null);
                     @endphp
-                    <section id="question-{{ $question->id }}" class="rounded-[1.8rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-5">
+                    <section id="question-{{ $question->id }}" class="surface-outline surface-outline--brand rounded-[1.8rem] p-5">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <p class="text-sm font-semibold text-[var(--color-brand-700)]">السؤال {{ $index + 1 }}</p>
                             <x-admin.status-badge :label="$examQuestion->max_score.' درجة'" tone="neutral" />
@@ -67,7 +67,7 @@
                     </section>
                 @endforeach
 
-                <div class="flex flex-wrap gap-3 border-t border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] pt-5">
+                <div class="flex flex-wrap gap-3 border-t border-[var(--color-border-soft)] pt-5">
                     <button type="submit" class="btn-secondary">حفظ التقدم</button>
                     <button type="submit"
                             class="btn-primary"

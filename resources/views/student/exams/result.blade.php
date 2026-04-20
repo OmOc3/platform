@@ -40,7 +40,7 @@
 
         <section class="grid gap-6 xl:grid-cols-[0.34fr_1.66fr]">
             <aside class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">التنقل بين الأسئلة</p>
+                <p class="section-kicker">التنقل بين الأسئلة</p>
                 <div class="mt-4 grid grid-cols-4 gap-2">
                     @foreach ($questionResults as $result)
                         <a
@@ -70,14 +70,14 @@
                                 <x-admin.status-badge :label="'السؤال '.$result['number']" />
                                 <x-admin.status-badge :label="$result['is_correct'] ? 'إجابة صحيحة' : 'إجابة تحتاج مراجعة'" :tone="$result['is_correct'] ? 'success' : 'danger'" />
                             </div>
-                            <span class="status-pill bg-[var(--color-panel-muted)] text-[var(--color-brand-700)]">{{ $result['awarded_score'] }}/{{ $result['max_score'] }}</span>
+                            <span class="status-pill status-pill--brand">{{ $result['awarded_score'] }}/{{ $result['max_score'] }}</span>
                         </div>
 
                         <h2 class="mt-4 text-lg font-semibold leading-9">{{ $result['question']?->prompt }}</h2>
 
                         @if ($questionImageUrl)
                             <div class="mt-5 overflow-hidden rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-3">
-                                <img src="{{ $questionImageUrl }}" alt="صورة السؤال {{ $result['number'] }}" class="w-full rounded-[1.2rem] object-cover">
+                                <img src="{{ $questionImageUrl }}" alt="صورة السؤال {{ $result['number'] }}" class="w-full rounded-[1.2rem] object-cover" loading="lazy" decoding="async">
                             </div>
                         @endif
 
@@ -107,24 +107,24 @@
 
                         <div class="mt-5 grid gap-4 lg:grid-cols-2">
                             <div class="rounded-[1.8rem] bg-[var(--color-panel-muted)] p-5">
-                                <p class="text-sm font-semibold text-[var(--color-brand-700)]">إجابتك</p>
+                                <p class="text-sm font-semibold text-[var(--color-ink-900)]">إجابتك</p>
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $result['selected_choice'] }}</p>
                             </div>
 
-                            <div class="rounded-[1.8rem] bg-[color-mix(in_oklch,var(--color-success)_8%,white)] p-5">
-                                <p class="text-sm font-semibold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">الإجابة الصحيحة</p>
+                            <div class="surface-tone surface-tone--success rounded-[1.8rem] p-5">
+                                <p class="text-sm font-semibold">الإجابة الصحيحة</p>
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $result['correct_choice'] ?? '—' }}</p>
                             </div>
                         </div>
 
                         @if ($solutionImageUrl)
                             <div class="mt-5 overflow-hidden rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-3">
-                                <img src="{{ $solutionImageUrl }}" alt="صورة الحل {{ $result['number'] }}" class="w-full rounded-[1.2rem] object-cover">
+                                <img src="{{ $solutionImageUrl }}" alt="صورة الحل {{ $result['number'] }}" class="w-full rounded-[1.2rem] object-cover" loading="lazy" decoding="async">
                             </div>
                         @endif
 
-                        <div class="mt-5 rounded-[1.8rem] border border-[color-mix(in_oklch,var(--color-violet-200)_65%,white)] bg-[color-mix(in_oklch,var(--color-violet-100)_45%,white)] p-5">
-                            <p class="text-sm font-semibold text-[var(--color-violet-700)]">معلومة هامة أو الإجابة نموذجية</p>
+                        <div class="mt-5 rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-5">
+                            <p class="text-sm font-semibold text-[var(--color-brand-700)]">معلومة هامة أو الإجابة نموذجية</p>
                             <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $result['important_note'] ?: $result['explanation'] ?: 'لا يوجد شرح إضافي لهذا السؤال.' }}</p>
                         </div>
                     </article>

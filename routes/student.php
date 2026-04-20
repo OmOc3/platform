@@ -6,6 +6,7 @@ use App\Modules\Academic\Http\Controllers\Student\LectureProgressController;
 use App\Modules\Commerce\Http\Controllers\Student\BookCatalogController;
 use App\Modules\Commerce\Http\Controllers\Student\CartController;
 use App\Modules\Commerce\Http\Controllers\Student\CheckoutController;
+use App\Modules\Commerce\Http\Controllers\Student\OrderPaymentController;
 use App\Modules\Commerce\Http\Controllers\Student\PackageCatalogController;
 use App\Modules\Students\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Modules\Students\Http\Controllers\Auth\NewPasswordController;
@@ -82,5 +83,8 @@ Route::prefix('student')->name('student.')->group(function (): void {
 
         Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
         Route::post('/checkout/prepare', [CheckoutController::class, 'prepare'])->name('checkout.prepare');
+        Route::post('/checkout/orders/{order}/payments', [OrderPaymentController::class, 'store'])->name('checkout.orders.payments.store');
+        Route::get('/order-payments/fake/{payment}', [OrderPaymentController::class, 'showFakeCheckout'])->name('order-payments.fake.show');
+        Route::post('/order-payments/fake/{payment}', [OrderPaymentController::class, 'completeFakeCheckout'])->name('order-payments.fake.complete');
     });
 });

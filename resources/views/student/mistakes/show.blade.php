@@ -2,7 +2,7 @@
     <section class="grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
         <aside class="space-y-6">
             <section class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">مجموعات الأخطاء</p>
+                <p class="section-kicker">مجموعات الأخطاء</p>
                 <div class="mt-4 space-y-3">
                     @foreach ($groups as $group)
                         @php($isCurrent = $group['lecture']?->is($lecture))
@@ -26,7 +26,7 @@
             </section>
 
             <section class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">ملخص هذه المحاضرة</p>
+                <p class="section-kicker">ملخص هذه المحاضرة</p>
                 <div class="mt-5 grid gap-3">
                     <div class="portal-summary-card">
                         <span class="portal-summary-card__label">عدد الأخطاء</span>
@@ -59,41 +59,41 @@
                                 <x-admin.status-badge :label="$item->exam->title" />
                             @endif
                         </div>
-                        <span class="status-pill bg-[color-mix(in_oklch,var(--color-danger)_12%,white)] text-[color-mix(in_oklch,var(--color-danger)_70%,black)]">فقدت {{ $item->score_lost ?? 0 }} درجة</span>
+                        <span class="status-pill status-pill--danger">فقدت {{ $item->score_lost ?? 0 }} درجة</span>
                     </div>
 
                     <div class="mt-6 space-y-5">
                         <div>
-                            <p class="text-sm font-semibold text-[var(--color-brand-700)]">السؤال</p>
+                            <p class="section-kicker">السؤال</p>
                             <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $item->question_text }}</p>
                         </div>
 
                         @if ($questionImageUrl)
                             <div class="overflow-hidden rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-3">
-                                <img src="{{ $questionImageUrl }}" alt="صورة السؤال {{ $index + 1 }}" class="w-full rounded-[1.2rem] object-cover">
+                                <img src="{{ $questionImageUrl }}" alt="صورة السؤال {{ $index + 1 }}" class="w-full rounded-[1.2rem] object-cover" loading="lazy" decoding="async">
                             </div>
                         @endif
 
                         <div class="grid gap-4 lg:grid-cols-2">
-                            <div class="rounded-[1.8rem] bg-[color-mix(in_oklch,var(--color-success)_8%,white)] p-5">
-                                <p class="text-sm font-semibold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">الإجابة الصحيحة</p>
+                            <div class="surface-tone surface-tone--success rounded-[1.8rem] p-5">
+                                <p class="text-sm font-semibold">الإجابة الصحيحة</p>
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $item->correct_answer_snapshot ?: '—' }}</p>
                             </div>
 
                             <div class="rounded-[1.8rem] bg-[var(--color-panel-muted)] p-5">
-                                <p class="text-sm font-semibold text-[var(--color-brand-700)]">الإجابة النموذجية</p>
+                                <p class="text-sm font-semibold text-[var(--color-ink-900)]">الإجابة النموذجية</p>
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $item->model_answer_snapshot ?: '—' }}</p>
                             </div>
                         </div>
 
                         @if ($solutionImageUrl)
                             <div class="overflow-hidden rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-3">
-                                <img src="{{ $solutionImageUrl }}" alt="صورة الحل {{ $index + 1 }}" class="w-full rounded-[1.2rem] object-cover">
+                                <img src="{{ $solutionImageUrl }}" alt="صورة الحل {{ $index + 1 }}" class="w-full rounded-[1.2rem] object-cover" loading="lazy" decoding="async">
                             </div>
                         @endif
 
-                        <div class="rounded-[1.8rem] border border-[color-mix(in_oklch,var(--color-violet-200)_65%,white)] bg-[color-mix(in_oklch,var(--color-violet-100)_45%,white)] p-5">
-                            <p class="text-sm font-semibold text-[var(--color-violet-700)]">معلومة هامة أو الإجابة نموذجية</p>
+                        <div class="rounded-[1.8rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-5">
+                            <p class="text-sm font-semibold text-[var(--color-brand-700)]">معلومة هامة أو الإجابة نموذجية</p>
                             <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $item->explanation ?: 'لا توجد ملاحظة إضافية لهذه الجزئية بعد.' }}</p>
                         </div>
                     </div>

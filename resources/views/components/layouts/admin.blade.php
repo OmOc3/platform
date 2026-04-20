@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? 'لوحة الإدارة').' - '.$platformBrand['name'] }}</title>
+    <x-font-links />
     <x-theme.init-script />
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="surface-shell">
+    <a href="#admin-main" class="skip-link">تخطَّ إلى المحتوى</a>
     @php($admin = auth('admin')->user())
     @php($menuSections = app(\App\Shared\Support\Navigation\AdminNavigation::class)->sections($admin))
     @php($isActiveRoute = fn (string $route) => request()->routeIs($route) || str_starts_with((string) optional(request()->route())->getName(), $route.'.'))
 
-    <div class="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6">
+    <div class="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6">
         <aside class="panel hidden h-[calc(100vh-2rem)] overflow-y-auto p-5 lg:block" aria-label="التنقل الإداري الرئيسي">
             <div class="space-y-2 border-b border-[var(--color-border-soft)] pb-5">
                 <p class="font-display text-2xl text-[var(--color-brand-700)]">{{ $platformBrand['name'] }}</p>
@@ -41,10 +43,10 @@
             </nav>
         </aside>
 
-        <main class="space-y-6 py-1">
+        <main id="admin-main" tabindex="-1" class="space-y-6 py-1">
             <header class="panel flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">لوحة الإدارة</p>
+                    <p class="section-kicker">لوحة الإدارة</p>
                     <h1 class="mt-2 text-2xl font-bold">{{ $heading ?? 'إدارة المنصة' }}</h1>
                     @isset($subheading)
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">{{ $subheading }}</p>
@@ -54,7 +56,7 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <x-theme.toggle />
 
-                    <div class="surface-inset rounded-full px-4 py-2 text-sm text-[var(--color-ink-700)]">
+                    <div class="surface-inset rounded-xl px-4 py-2 text-sm text-[var(--color-ink-700)]">
                         {{ $admin?->name }}
                     </div>
 

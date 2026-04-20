@@ -12,7 +12,7 @@ class StudentBookOrdersQuery
     public function builder(Student $student): Builder
     {
         return Order::query()
-            ->with(['items.product.book'])
+            ->with(['items.product.book', 'shipment', 'payments'])
             ->where('student_id', $student->id)
             ->where('kind', OrderKind::Book->value)
             ->latest('placed_at');

@@ -6,7 +6,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الحدث أو نوع الكيان">
+        <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الحدث أو نوع الكيان" aria-label="ابحث في سجل العمليات">
                 <button class="btn-secondary">تطبيق</button>
             </form>
         </x-slot:filters>

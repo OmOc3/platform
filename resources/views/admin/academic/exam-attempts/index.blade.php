@@ -2,7 +2,7 @@
     <x-admin.table-shell title="محاولات الاختبارات" description="اعرض المحاولات حسب الطالب أو الاختبار أو حالة التصحيح.">
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_240px_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الطالب أو عنوان الاختبار">
+    <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الطالب أو عنوان الاختبار" aria-label="ابحث في محاولات الاختبارات">
                 <select name="exam_id" class="form-select">
                     <option value="">كل الاختبارات</option>
                     @foreach ($exams as $exam)

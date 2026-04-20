@@ -10,7 +10,7 @@
                     <div class="flex items-center gap-4">
                         <div class="portal-avatar">{{ $initials }}</div>
                         <div>
-                            <p class="text-sm font-semibold text-[var(--color-brand-700)]">الملف الشخصي</p>
+                            <p class="section-kicker">الملف الشخصي</p>
                             <h2 class="mt-2 text-2xl font-bold lg:text-3xl">{{ $student->name }}</h2>
                             <p class="mt-2 text-sm text-[var(--color-ink-500)]">رقم الطالب {{ $student->student_number }}</p>
                         </div>
@@ -40,7 +40,7 @@
             </article>
 
             <aside class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">روابط الحساب</p>
+                <p class="section-kicker">روابط الحساب</p>
                 <div class="mt-5 grid gap-3">
                     <a href="{{ route('student.payments.index') }}" class="portal-menu-link">مدفوعات المحاضرات</a>
                     <a href="{{ route('student.book-orders.index') }}" class="portal-menu-link">مدفوعات الكتب</a>
@@ -48,7 +48,7 @@
                     <a href="{{ route('student.cart.index') }}" class="portal-menu-link">بيانات الاستلام والسلة</a>
                 </div>
 
-                <div class="mt-6 rounded-[1.8rem] bg-[var(--color-panel-muted)] p-4">
+                <div class="surface-inset mt-6 rounded-[1.3rem] p-4">
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">ملحوظة</p>
                     <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">
                         استخدم هذه الصفحة لتحديث الهاتف والمحافظة وملاحظات الاستلام حتى تنعكس مباشرةً على صفحات السلة والطلبات.
@@ -59,7 +59,7 @@
 
         <section class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
             <article class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">بيانات الحساب الحالية</p>
+                <p class="section-kicker">بيانات الحساب الحالية</p>
 
                 <dl class="mt-5 space-y-4 text-sm">
                     <div class="flex items-start justify-between gap-4 border-b border-[var(--color-border-soft)] pb-4">
@@ -98,7 +98,7 @@
             </article>
 
             <section id="profile-edit" class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">تعديل البيانات</p>
+                <p class="section-kicker">تعديل البيانات</p>
                 <form method="POST" action="{{ route('student.profile.update') }}" class="mt-5 grid gap-5 md:grid-cols-2">
                     @csrf
                     @method('PUT')

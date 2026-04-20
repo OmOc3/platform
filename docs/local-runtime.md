@@ -64,3 +64,11 @@ cp .env.example .env
 - الاختبارات تستخدم قاعدة `testing`
 
 ويتم إنشاء قاعدة `testing` تلقائيًا عبر Sail.
+
+## Commerce Environment
+
+- `COMMERCE_PAYMENT_PROVIDER=fake`
+- `COMMERCE_FAKE_PAYMENT_EXPIRES_MINUTES=30`
+- `COMMERCE_SHIPPING_FEE_CAIRO=35`
+- `COMMERCE_SHIPPING_FEE_ALEXANDRIA=45`
+- `COMMERCE_SHIPPING_FEE_DEFAULT=60`

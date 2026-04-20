@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="rounded-[1.4rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+            <div class="surface-outline surface-outline--brand rounded-[1.4rem] p-4">
                 <p class="text-xs text-[var(--color-ink-500)]">الطوابع الزمنية</p>
                 <dl class="mt-3 grid gap-3 sm:grid-cols-3">
                     <div>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-4 rounded-[1.4rem] border border-[color-mix(in_oklch,var(--color-brand-100)_88%,white)] p-4">
+                    <div class="surface-outline surface-outline--brand mt-4 rounded-[1.4rem] p-4">
                         <p class="text-xs text-[var(--color-ink-500)]">التفسير</p>
                         <p class="mt-2 text-sm leading-8 text-[var(--color-ink-700)]">{{ $result['explanation'] ?: 'لا يوجد تفسير مسجل لهذا السؤال.' }}</p>
                     </div>

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&family=Manrope:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -7,47 +6,43 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Readex Pro', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-sans: 'Readex Pro', ui-sans-serif, system-ui, sans-serif;
     --font-display: 'Aref Ruqaa Ink', serif;
-    --color-brand-50: oklch(0.97 0.015 70);
-    --color-brand-100: oklch(0.93 0.03 70);
-    --color-brand-200: oklch(0.88 0.04 68);
-    --color-brand-400: oklch(0.68 0.09 60);
-    --color-brand-500: oklch(0.58 0.12 55);
-    --color-brand-700: oklch(0.34 0.07 43);
-    --color-ink-900: oklch(0.24 0.015 60);
-    --color-ink-600: oklch(0.5 0.013 60);
-    --color-ink-700: oklch(0.44 0.015 60);
-    --color-ink-500: oklch(0.59 0.012 60);
-    --color-surface: oklch(0.985 0.006 70);
-    --color-surface-strong: oklch(0.96 0.01 67);
-    --color-violet-100: oklch(0.9 0.06 315);
-    --color-violet-300: oklch(0.79 0.09 316);
-    --color-violet-500: oklch(0.63 0.14 318);
-    --color-violet-600: oklch(0.54 0.13 317);
-    --color-violet-700: oklch(0.43 0.1 314);
-    --color-success: oklch(0.68 0.14 145);
-    --color-warning: oklch(0.76 0.15 78);
-    --color-danger: oklch(0.62 0.19 24);
+    --color-brand-50: oklch(0.985 0.006 250);
+    --color-brand-100: oklch(0.955 0.016 248);
+    --color-brand-200: oklch(0.905 0.021 247);
+    --color-brand-400: oklch(0.66 0.074 248);
+    --color-brand-500: oklch(0.53 0.084 248);
+    --color-brand-700: oklch(0.31 0.052 249);
+    --color-ink-900: oklch(0.24 0.02 250);
+    --color-ink-700: oklch(0.43 0.016 248);
+    --color-ink-600: oklch(0.55 0.014 248);
+    --color-ink-500: oklch(0.67 0.012 248);
+    --color-surface: oklch(0.992 0.003 248);
+    --color-surface-strong: oklch(0.982 0.004 248);
+    --color-success: oklch(0.65 0.09 160);
+    --color-warning: oklch(0.78 0.12 86);
+    --color-danger: oklch(0.6 0.15 28);
 }
 
 @layer base {
     :root {
-        --color-panel-bg: color-mix(in oklch, white 88%, var(--color-brand-50));
-        --color-panel-strong: white;
-        --color-panel-muted: color-mix(in oklch, white 72%, var(--color-brand-50));
-        --color-border-soft: color-mix(in oklch, var(--color-brand-200) 65%, white);
-        --color-border-strong: color-mix(in oklch, var(--color-brand-200) 80%, white);
+        --color-panel-bg: color-mix(in oklch, white 96%, var(--color-brand-50));
+        --color-panel-strong: color-mix(in oklch, white 98%, var(--color-brand-50));
+        --color-panel-muted: color-mix(in oklch, white 93%, var(--color-brand-100));
+        --color-border-soft: color-mix(in oklch, var(--color-brand-200) 42%, white);
+        --color-border-strong: color-mix(in oklch, var(--color-brand-400) 18%, white);
         --color-field-bg: white;
         --color-primary-bg: var(--color-brand-700);
-        --color-primary-foreground: white;
-        --shadow-elevated: 0 20px 60px rgba(71, 58, 29, 0.08);
-        --shadow-soft: 0 20px 60px rgba(71, 58, 29, 0.06);
-        --theme-toggle-bg: color-mix(in oklch, white 88%, var(--color-brand-50));
-        --theme-toggle-border: color-mix(in oklch, var(--color-brand-200) 72%, white);
+        --color-primary-foreground: color-mix(in oklch, white 98%, var(--color-brand-50));
+        --shadow-elevated: 0 24px 60px rgba(15, 23, 42, 0.06);
+        --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.05);
+        --shadow-line: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        --theme-toggle-bg: color-mix(in oklch, white 96%, var(--color-brand-50));
+        --theme-toggle-border: color-mix(in oklch, var(--color-brand-200) 40%, white);
         --theme-toggle-indicator: var(--color-brand-700);
-        --surface-shell-overlay: radial-gradient(circle at top, color-mix(in oklch, var(--color-brand-100) 40%, white), transparent 45%);
-        --surface-shell-base: linear-gradient(180deg, color-mix(in oklch, var(--color-brand-50) 60%, white), white);
+        --surface-shell-overlay: radial-gradient(circle at top center, color-mix(in oklch, var(--color-brand-100) 28%, transparent), transparent 42%);
+        --surface-shell-base: linear-gradient(180deg, color-mix(in oklch, white 92%, var(--color-brand-50)), var(--color-surface) 24rem);
     }
 
     html {
@@ -55,78 +50,129 @@
     }
 
     html[data-theme='dark'] {
-        --color-ink-900: oklch(0.94 0.01 80);
-        --color-ink-600: oklch(0.74 0.012 80);
-        --color-ink-700: oklch(0.8 0.012 80);
-        --color-ink-500: oklch(0.67 0.012 80);
-        --color-surface: oklch(0.19 0.01 70);
-        --color-surface-strong: oklch(0.24 0.012 70);
-        --color-panel-bg: color-mix(in oklch, oklch(0.24 0.012 70) 92%, black);
-        --color-panel-strong: color-mix(in oklch, oklch(0.28 0.012 70) 94%, black);
-        --color-panel-muted: color-mix(in oklch, oklch(0.32 0.014 70) 88%, black);
-        --color-border-soft: color-mix(in oklch, var(--color-brand-200) 38%, black);
-        --color-border-strong: color-mix(in oklch, var(--color-brand-200) 55%, black);
-        --color-field-bg: color-mix(in oklch, oklch(0.24 0.01 70) 94%, black);
-        --color-primary-bg: color-mix(in oklch, var(--color-brand-700) 72%, black);
-        --color-primary-foreground: white;
-        --shadow-elevated: 0 24px 70px rgba(0, 0, 0, 0.34);
-        --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.28);
-        --theme-toggle-bg: color-mix(in oklch, var(--color-panel-strong) 86%, black);
-        --theme-toggle-border: color-mix(in oklch, var(--color-brand-200) 45%, black);
-        --theme-toggle-indicator: color-mix(in oklch, var(--color-brand-100) 82%, white);
-        --surface-shell-overlay: radial-gradient(circle at top, color-mix(in oklch, var(--color-brand-100) 20%, black), transparent 48%);
-        --surface-shell-base: linear-gradient(180deg, oklch(0.19 0.01 70), oklch(0.16 0.008 70));
+        --color-brand-50: oklch(0.24 0.012 248);
+        --color-brand-100: oklch(0.3 0.016 248);
+        --color-brand-200: oklch(0.38 0.018 248);
+        --color-brand-400: oklch(0.72 0.05 248);
+        --color-brand-500: oklch(0.8 0.04 248);
+        --color-brand-700: oklch(0.88 0.025 248);
+        --color-ink-900: oklch(0.94 0.01 248);
+        --color-ink-700: oklch(0.81 0.012 248);
+        --color-ink-600: oklch(0.74 0.012 248);
+        --color-ink-500: oklch(0.64 0.01 248);
+        --color-surface: oklch(0.16 0.008 248);
+        --color-surface-strong: oklch(0.2 0.009 248);
+        --color-panel-bg: color-mix(in oklch, oklch(0.19 0.009 248) 94%, black);
+        --color-panel-strong: color-mix(in oklch, oklch(0.22 0.01 248) 96%, black);
+        --color-panel-muted: color-mix(in oklch, oklch(0.27 0.012 248) 90%, black);
+        --color-border-soft: color-mix(in oklch, var(--color-brand-200) 34%, black);
+        --color-border-strong: color-mix(in oklch, var(--color-brand-400) 18%, black);
+        --color-field-bg: color-mix(in oklch, oklch(0.2 0.008 248) 96%, black);
+        --color-primary-bg: color-mix(in oklch, var(--color-brand-500) 54%, black);
+        --color-primary-foreground: oklch(0.96 0.005 248);
+        --shadow-elevated: 0 28px 72px rgba(0, 0, 0, 0.28);
+        --shadow-soft: 0 16px 34px rgba(0, 0, 0, 0.22);
+        --shadow-line: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        --theme-toggle-bg: color-mix(in oklch, var(--color-panel-strong) 82%, black);
+        --theme-toggle-border: color-mix(in oklch, var(--color-brand-200) 30%, black);
+        --theme-toggle-indicator: color-mix(in oklch, var(--color-brand-500) 62%, white);
+        --surface-shell-overlay: radial-gradient(circle at top center, color-mix(in oklch, var(--color-brand-100) 32%, transparent), transparent 48%);
+        --surface-shell-base: linear-gradient(180deg, oklch(0.16 0.008 248), oklch(0.13 0.008 248));
+    }
+
+    html,
+    body {
+        min-height: 100%;
     }
 
     body {
         @apply min-h-screen bg-[var(--color-surface)] text-[var(--color-ink-900)] antialiased;
+        font-family: var(--font-sans);
     }
 
     a {
         @apply transition-colors duration-150;
     }
 
+    summary {
+        outline: none;
+    }
+
     ::selection {
-        background-color: color-mix(in oklch, var(--color-brand-200) 65%, white);
+        background-color: color-mix(in oklch, var(--color-brand-200) 42%, white);
     }
 }
 
 @layer components {
+    .skip-link {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 80;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.95rem;
+        padding: 0.8rem 1rem;
+        background-color: var(--color-primary-bg);
+        color: var(--color-primary-foreground);
+        box-shadow: var(--shadow-elevated);
+        transform: translateY(-160%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    .skip-link:focus-visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+        outline: none;
+        box-shadow:
+            0 0 0 2px var(--color-panel-strong),
+            0 0 0 4px color-mix(in oklch, var(--color-brand-400) 42%, var(--color-panel-strong)),
+            var(--shadow-elevated);
+    }
+
     .surface-shell {
         @apply min-h-screen;
+        background-color: var(--color-surface);
         background-image: var(--surface-shell-overlay), var(--surface-shell-base);
     }
 
     .panel {
-        @apply rounded-3xl;
+        @apply rounded-[1.75rem];
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-bg);
-        box-shadow: var(--shadow-elevated);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .panel-tight {
-        @apply rounded-3xl p-5 lg:p-6;
+        @apply rounded-[1.6rem] p-5 lg:p-6;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-bg);
-        box-shadow: var(--shadow-elevated);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .btn-primary {
-        @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-400)] focus:ring-offset-2;
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-400)] focus:ring-offset-2;
         --tw-ring-offset-color: var(--color-surface);
         background-color: var(--color-primary-bg);
         color: var(--color-primary-foreground);
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
     }
 
     .btn-primary:hover {
-        background-color: color-mix(in oklch, var(--color-primary-bg) 84%, black);
+        background-color: color-mix(in oklch, var(--color-primary-bg) 88%, black);
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold text-[var(--color-ink-900)] transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-200)] focus:ring-offset-2;
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-200)] focus:ring-offset-2;
         --tw-ring-offset-color: var(--color-surface);
         border: 1px solid var(--color-border-strong);
         background-color: var(--color-panel-strong);
+        color: var(--color-ink-900);
+        box-shadow: var(--shadow-line);
     }
 
     .btn-secondary:hover {
@@ -134,24 +180,28 @@
     }
 
     .btn-danger {
-        @apply inline-flex items-center justify-center rounded-full bg-[var(--color-danger)] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] focus:ring-offset-2;
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] focus:ring-offset-2;
         --tw-ring-offset-color: var(--color-surface);
+        background-color: color-mix(in oklch, var(--color-danger) 88%, black);
+        color: white;
     }
 
     .form-input,
     .form-select,
     .form-textarea {
-        @apply w-full rounded-2xl px-4 py-3 text-sm text-[var(--color-ink-900)] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2;
+        @apply w-full rounded-xl px-4 py-3 text-sm shadow-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2;
         --tw-ring-offset-color: var(--color-surface);
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-field-bg);
+        color: var(--color-ink-900);
+        box-shadow: var(--shadow-line);
     }
 
     .form-input:focus,
     .form-select:focus,
     .form-textarea:focus {
-        border-color: var(--color-brand-500);
-        --tw-ring-color: color-mix(in oklch, var(--color-brand-200) 75%, var(--color-panel-strong));
+        border-color: var(--color-brand-400);
+        --tw-ring-color: color-mix(in oklch, var(--color-brand-200) 65%, var(--color-panel-strong));
     }
 
     .form-textarea {
@@ -159,24 +209,50 @@
     }
 
     .field-label {
-        @apply mb-2 block text-sm font-semibold text-[var(--color-ink-700)];
+        @apply mb-2 block text-sm font-semibold;
+        color: var(--color-ink-700);
     }
 
     .field-help {
-        @apply mt-2 text-xs text-[var(--color-ink-500)];
+        @apply mt-2 text-xs;
+        color: var(--color-ink-500);
+    }
+
+    .section-kicker {
+        @apply text-xs font-semibold uppercase tracking-[0.22em];
+        color: var(--color-brand-700);
+    }
+
+    .stat-tile {
+        @apply rounded-[1.3rem] p-4;
+        border: 1px solid var(--color-border-soft);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 92%, white);
+        box-shadow: var(--shadow-line);
+    }
+
+    .stat-tile__label {
+        @apply text-xs font-semibold uppercase tracking-[0.16em];
+        color: var(--color-ink-500);
+    }
+
+    .stat-tile__value {
+        @apply mt-3 block text-lg font-bold;
+        color: var(--color-ink-900);
+    }
+
+    .ink-panel {
+        @apply rounded-[1.6rem] p-6 lg:p-7;
+        background:
+            linear-gradient(180deg, color-mix(in oklch, var(--color-brand-700) 90%, black), color-mix(in oklch, var(--color-brand-700) 78%, black));
+        box-shadow: 0 22px 60px rgba(7, 10, 19, 0.18);
+        color: white;
     }
 
     .kpi-card {
-        @apply relative overflow-hidden rounded-3xl p-5 lg:p-6;
+        @apply rounded-[1.5rem] p-5 lg:p-6;
         border: 1px solid var(--color-border-soft);
-        background-color: var(--color-panel-bg);
-        box-shadow: var(--shadow-elevated);
-    }
-
-    .kpi-card::after {
-        content: '';
-        @apply absolute left-6 top-6 h-12 w-12 rounded-full;
-        background-color: color-mix(in oklch, var(--color-brand-100) 75%, var(--color-panel-strong));
+        background-color: var(--color-panel-strong);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .admin-metric-grid {
@@ -184,22 +260,20 @@
     }
 
     .admin-metric-card {
-        @apply rounded-[1.9rem] p-5 lg:p-6;
+        @apply rounded-[1.5rem] p-5 lg:p-6;
         border: 1px solid var(--color-border-soft);
-        background:
-            radial-gradient(circle at top right, color-mix(in oklch, var(--color-brand-100) 55%, transparent), transparent 52%),
-            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 92%, white), color-mix(in oklch, var(--color-panel-muted) 88%, white));
-        box-shadow: var(--shadow-soft);
+        background-color: var(--color-panel-strong);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .admin-metric-card__eyebrow {
-        @apply text-xs font-semibold uppercase tracking-[0.18em];
+        @apply text-[0.72rem] font-semibold uppercase tracking-[0.18em];
         color: var(--color-ink-500);
     }
 
     .admin-metric-card__value {
         @apply mt-4 block text-3xl font-bold;
-        color: var(--color-brand-700);
+        color: var(--color-ink-900);
     }
 
     .admin-metric-card__description {
@@ -212,7 +286,7 @@
     }
 
     .admin-mini-list__item {
-        @apply rounded-[1.5rem] px-4 py-4;
+        @apply rounded-[1.2rem] px-4 py-4;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
     }
@@ -223,15 +297,15 @@
     }
 
     .admin-workflow-card {
-        @apply rounded-[1.8rem] p-4;
+        @apply rounded-[1.2rem] p-4;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-muted);
     }
 
     .admin-mobile-nav {
-        @apply overflow-hidden rounded-[2rem];
+        @apply overflow-hidden rounded-[1.6rem];
         border: 1px solid var(--color-border-soft);
-        background-color: color-mix(in oklch, var(--color-panel-bg) 92%, transparent);
+        background-color: var(--color-panel-bg);
         box-shadow: var(--shadow-soft);
     }
 
@@ -251,7 +325,7 @@
 
     .admin-mobile-nav__title {
         @apply text-base font-bold;
-        color: var(--color-brand-700);
+        color: var(--color-ink-900);
     }
 
     .admin-mobile-nav__hint {
@@ -262,11 +336,11 @@
     .admin-mobile-nav__panel {
         @apply grid gap-4 border-t px-4 py-4;
         border-color: var(--color-border-soft);
-        background-color: color-mix(in oklch, var(--color-panel-strong) 84%, transparent);
+        background-color: var(--color-panel-muted);
     }
 
     .admin-mobile-nav__section {
-        @apply rounded-[1.6rem] p-3;
+        @apply rounded-[1.2rem] p-3;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
     }
@@ -277,7 +351,7 @@
     }
 
     .admin-mobile-nav__link {
-        @apply flex items-center justify-between rounded-[1.2rem] px-4 py-3 text-sm font-semibold;
+        @apply flex items-center justify-between rounded-[0.95rem] px-4 py-3 text-sm font-semibold;
         color: var(--color-ink-700);
     }
 
@@ -287,19 +361,81 @@
     }
 
     .admin-mobile-nav__link--active {
-        background-color: color-mix(in oklch, var(--color-brand-50) 74%, white);
+        background-color: color-mix(in oklch, var(--color-brand-100) 55%, var(--color-panel-strong));
         color: var(--color-brand-700);
     }
 
     .status-pill {
         @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+        border: 1px solid color-mix(in oklch, var(--color-border-soft) 80%, transparent);
+    }
+
+    .status-pill--brand {
+        background-color: color-mix(in oklch, var(--color-brand-100) 62%, var(--color-panel-strong));
+        color: var(--color-brand-700);
+    }
+
+    .status-pill--success {
+        background-color: color-mix(in oklch, var(--color-success) 15%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-success) 22%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-success) 72%, var(--color-ink-900));
+    }
+
+    .status-pill--warning {
+        background-color: color-mix(in oklch, var(--color-warning) 16%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-warning) 24%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-warning) 78%, var(--color-ink-900));
+    }
+
+    .status-pill--danger {
+        background-color: color-mix(in oklch, var(--color-danger) 14%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-danger) 20%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-danger) 74%, var(--color-ink-900));
+    }
+
+    .surface-tone {
+        border: 1px solid var(--color-border-soft);
+        box-shadow: var(--shadow-line);
+    }
+
+    .surface-tone--brand {
+        background-color: color-mix(in oklch, var(--color-brand-100) 58%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-brand-200) 64%, var(--color-border-soft));
+        color: var(--color-brand-700);
+    }
+
+    .surface-tone--success {
+        background-color: color-mix(in oklch, var(--color-success) 10%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-success) 22%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-success) 72%, var(--color-ink-900));
+    }
+
+    .surface-tone--warning {
+        background-color: color-mix(in oklch, var(--color-warning) 12%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-warning) 22%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-warning) 80%, var(--color-ink-900));
+    }
+
+    .surface-tone--danger {
+        background-color: color-mix(in oklch, var(--color-danger) 10%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-danger) 20%, var(--color-border-soft));
+        color: color-mix(in oklch, var(--color-danger) 74%, var(--color-ink-900));
+    }
+
+    .surface-outline {
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+    }
+
+    .surface-outline--brand {
+        border-color: color-mix(in oklch, var(--color-brand-100) 74%, var(--color-border-soft));
     }
 
     .table-shell {
-        @apply overflow-hidden rounded-3xl;
+        @apply overflow-hidden rounded-[1.6rem];
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .data-table {
@@ -307,12 +443,14 @@
     }
 
     .data-table thead th {
-        @apply px-4 py-3 text-right font-semibold text-[var(--color-ink-700)];
+        @apply px-4 py-3 text-right font-semibold;
         background-color: var(--color-panel-muted);
+        color: var(--color-ink-700);
     }
 
     .data-table tbody td {
-        @apply px-4 py-4 align-top text-[var(--color-ink-900)];
+        @apply px-4 py-4 align-top;
+        color: var(--color-ink-900);
     }
 
     .data-table tbody tr {
@@ -320,34 +458,35 @@
     }
 
     .sidebar-link {
-        @apply flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-[var(--color-ink-700)] transition hover:text-[var(--color-ink-900)];
+        @apply flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition;
+        color: var(--color-ink-700);
     }
 
     .sidebar-link:hover {
         background-color: var(--color-panel-strong);
+        color: var(--color-ink-900);
     }
 
     .sidebar-link-active {
-        @apply text-[var(--color-brand-700)];
-        background-color: var(--color-panel-strong);
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+        background-color: color-mix(in oklch, var(--color-brand-100) 56%, var(--color-panel-strong));
+        color: var(--color-brand-700);
     }
 
     .surface-card {
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .surface-card-soft {
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-muted);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-line);
     }
 
     .surface-chip {
-        border: 1px solid color-mix(in oklch, var(--color-border-soft) 55%, transparent);
-        background-color: color-mix(in oklch, var(--color-panel-strong) 78%, transparent);
+        border: 1px solid color-mix(in oklch, var(--color-border-soft) 80%, transparent);
+        background-color: color-mix(in oklch, var(--color-panel-muted) 88%, transparent);
     }
 
     .surface-inset {
@@ -356,30 +495,35 @@
     }
 
     .portal-avatar {
-        @apply flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-[1.8rem] text-xl font-bold;
-        background: linear-gradient(160deg, color-mix(in oklch, var(--color-brand-100) 76%, white), color-mix(in oklch, var(--color-violet-100) 44%, white));
+        @apply flex h-[4.25rem] w-[4.25rem] items-center justify-center rounded-[1.4rem] text-xl font-bold;
+        border: 1px solid var(--color-border-soft);
+        background:
+            linear-gradient(180deg, color-mix(in oklch, var(--color-brand-100) 46%, white), var(--color-panel-strong));
         color: var(--color-brand-700);
         box-shadow: var(--shadow-soft);
     }
 
     .portal-shell-meta {
-        @apply rounded-[1.4rem] px-4 py-4;
+        @apply rounded-[1.15rem] px-4 py-4;
         border: 1px solid var(--color-border-soft);
-        background-color: color-mix(in oklch, var(--color-panel-strong) 78%, transparent);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 88%, transparent);
+        box-shadow: var(--shadow-line);
     }
 
     .portal-shell-meta__label {
-        @apply block text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-500)];
+        @apply block text-xs font-semibold uppercase tracking-[0.16em];
+        color: var(--color-ink-500);
     }
 
     .portal-shell-meta__value {
-        @apply mt-2 block text-sm font-semibold text-[var(--color-ink-900)];
+        @apply mt-2 block text-sm font-semibold;
+        color: var(--color-ink-900);
     }
 
     .portal-nav-link {
-        @apply flex items-center justify-between gap-3 rounded-[1.6rem] px-4 py-4 text-sm font-semibold transition;
+        @apply flex items-center justify-between gap-3 rounded-[1.1rem] px-4 py-4 text-sm font-semibold transition;
         border: 1px solid var(--color-border-soft);
-        background-color: color-mix(in oklch, var(--color-panel-strong) 82%, transparent);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 92%, transparent);
         color: var(--color-ink-700);
     }
 
@@ -389,22 +533,23 @@
     }
 
     .portal-nav-link--active {
-        background-color: color-mix(in oklch, var(--color-brand-50) 72%, white);
+        background-color: color-mix(in oklch, var(--color-brand-100) 56%, var(--color-panel-strong));
         color: var(--color-brand-700);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-line);
     }
 
     .portal-nav-link__icon {
         @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-sm;
-        background-color: color-mix(in oklch, var(--color-brand-100) 68%, white);
+        background-color: color-mix(in oklch, var(--color-brand-100) 46%, white);
+        color: var(--color-brand-700);
     }
 
     .portal-nav-utility {
-        @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition;
+        @apply inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition;
         border: 1px solid var(--color-border-strong);
         background-color: var(--color-panel-strong);
         color: var(--color-ink-900);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-line);
     }
 
     .portal-nav-utility:hover {
@@ -415,24 +560,21 @@
         background-color: var(--color-panel-muted);
     }
 
-    .portal-nav-utility--muted {
-        background-color: color-mix(in oklch, var(--color-panel-muted) 78%, transparent);
-        color: var(--color-ink-700);
-    }
-
     summary.portal-nav-utility::-webkit-details-marker {
         display: none;
     }
 
     .portal-menu-panel {
-        @apply rounded-[1.8rem] p-3;
+        @apply rounded-[1.2rem] p-3;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
         box-shadow: var(--shadow-elevated);
+        width: min(18rem, calc(100vw - 2rem));
     }
 
     .portal-menu-link {
-        @apply flex items-center justify-between rounded-[1.2rem] px-4 py-3 text-sm font-semibold text-[var(--color-ink-700)] transition;
+        @apply flex items-center justify-between rounded-[0.95rem] px-4 py-3 text-sm font-semibold transition;
+        color: var(--color-ink-700);
     }
 
     .portal-menu-link:hover {
@@ -441,10 +583,10 @@
     }
 
     .portal-summary-card {
-        @apply rounded-[1.8rem] p-5 lg:p-6;
+        @apply rounded-[1.35rem] p-5 lg:p-6;
         border: 1px solid var(--color-border-soft);
-        background: linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 88%, white), color-mix(in oklch, var(--color-brand-50) 46%, white));
-        box-shadow: var(--shadow-soft);
+        background-color: var(--color-panel-strong);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .portal-summary-card__label {
@@ -454,24 +596,23 @@
 
     .portal-summary-card__value {
         @apply mt-4 block text-2xl font-bold;
-        color: var(--color-brand-700);
+        color: var(--color-ink-900);
     }
 
     .portal-hero-slide {
-        @apply rounded-[2.2rem] p-6 lg:p-7;
+        @apply rounded-[1.7rem] p-6 lg:p-7;
+        border: 1px solid var(--color-border-soft);
         background:
-            radial-gradient(circle at top left, color-mix(in oklch, var(--color-violet-500) 32%, transparent), transparent 42%),
-            linear-gradient(145deg, color-mix(in oklch, var(--color-brand-700) 86%, black), color-mix(in oklch, var(--color-violet-700) 44%, var(--color-brand-700)));
-        box-shadow: 0 26px 60px rgba(42, 20, 38, 0.2);
+            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 96%, white), color-mix(in oklch, var(--color-brand-50) 76%, white));
+        box-shadow: var(--shadow-elevated), var(--shadow-line);
     }
 
     .catalog-thumb {
-        @apply relative overflow-hidden rounded-[1.8rem];
-        border: 1px solid color-mix(in oklch, var(--color-border-soft) 70%, transparent);
-        background:
-            radial-gradient(circle at top, color-mix(in oklch, var(--color-brand-100) 68%, white), transparent 56%),
-            linear-gradient(180deg, color-mix(in oklch, var(--color-brand-50) 82%, white), color-mix(in oklch, var(--color-panel-muted) 88%, white));
+        @apply relative overflow-hidden rounded-[1.35rem];
         min-height: 12rem;
+        border: 1px solid color-mix(in oklch, var(--color-border-soft) 84%, transparent);
+        background:
+            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 94%, white), color-mix(in oklch, var(--color-brand-50) 70%, white));
     }
 
     .catalog-thumb img {
@@ -494,44 +635,32 @@
 
     .catalog-thumb--book {
         background:
-            radial-gradient(circle at top right, color-mix(in oklch, var(--color-violet-100) 48%, transparent), transparent 45%),
-            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 88%, white), color-mix(in oklch, var(--color-brand-100) 42%, white));
+            linear-gradient(180deg, color-mix(in oklch, var(--color-panel-strong) 95%, white), color-mix(in oklch, var(--color-brand-100) 34%, white));
     }
 
     .portal-section-card {
-        @apply flex h-full flex-col justify-between rounded-[1.9rem] p-5 transition;
+        @apply flex h-full flex-col justify-between rounded-[1.45rem] p-5 transition;
         border: 1px solid var(--color-border-soft);
-        box-shadow: var(--shadow-soft);
+        background-color: var(--color-panel-strong);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .portal-section-card:hover {
-        transform: translateY(-2px);
-    }
-
-    .portal-footer-card {
-        @apply rounded-[2.3rem] px-6 py-6 lg:px-8 lg:py-8;
-        background:
-            radial-gradient(circle at top left, color-mix(in oklch, var(--color-violet-500) 26%, transparent), transparent 40%),
-            linear-gradient(160deg, color-mix(in oklch, var(--color-ink-900) 92%, black), color-mix(in oklch, var(--color-brand-700) 82%, black));
-        box-shadow: 0 26px 70px rgba(28, 16, 14, 0.28);
-    }
-
-    .portal-footer-link {
-        @apply text-sm text-white/78 transition hover:text-white;
+        background-color: color-mix(in oklch, var(--color-panel-muted) 76%, white);
     }
 
     .lecture-progress-track {
-        @apply h-3 overflow-hidden rounded-full;
-        background-color: color-mix(in oklch, var(--color-border-soft) 60%, transparent);
+        @apply h-2.5 overflow-hidden rounded-full;
+        background-color: color-mix(in oklch, var(--color-border-soft) 72%, transparent);
     }
 
     .lecture-progress-fill {
         @apply block h-full rounded-full transition-all duration-300;
-        background: linear-gradient(90deg, var(--color-brand-400), var(--color-brand-700));
+        background: linear-gradient(90deg, var(--color-brand-400), color-mix(in oklch, var(--color-brand-700) 88%, black));
     }
 
     .lecture-checkpoint-item {
-        @apply flex w-full items-center justify-between gap-3 rounded-[1.4rem] px-4 py-4 text-right transition;
+        @apply flex w-full items-center justify-between gap-3 rounded-[1.1rem] px-4 py-4 text-right transition;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
     }
@@ -541,22 +670,22 @@
     }
 
     .lecture-checkpoint-item--active {
-        border-color: color-mix(in oklch, var(--color-brand-400) 65%, var(--color-border-soft));
-        background-color: color-mix(in oklch, var(--color-brand-50) 60%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-brand-400) 42%, var(--color-border-soft));
+        background-color: color-mix(in oklch, var(--color-brand-100) 56%, var(--color-panel-strong));
         color: var(--color-brand-700);
     }
 
     .theme-toggle {
-        @apply inline-flex items-center gap-3 rounded-full px-3 py-2 text-right transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-400)] focus:ring-offset-2;
+        @apply inline-flex items-center gap-3 rounded-xl px-3 py-2 text-right transition focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-400)] focus:ring-offset-2;
         --tw-ring-offset-color: var(--color-surface);
         border: 1px solid var(--theme-toggle-border);
         background-color: var(--theme-toggle-bg);
         color: var(--color-ink-900);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-soft), var(--shadow-line);
     }
 
     .theme-toggle:hover {
-        background-color: color-mix(in oklch, var(--theme-toggle-bg) 82%, var(--color-panel-strong));
+        background-color: color-mix(in oklch, var(--theme-toggle-bg) 86%, var(--color-panel-strong));
     }
 
     .theme-toggle__indicator {
@@ -574,7 +703,8 @@
     }
 
     .theme-toggle__eyebrow {
-        @apply text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-500)];
+        @apply text-[0.7rem] font-semibold uppercase tracking-[0.16em];
+        color: var(--color-ink-500);
     }
 
     .theme-toggle__label {
@@ -586,7 +716,7 @@
     }
 
     .theme-toggle[data-active-theme='dark'] {
-        background-color: color-mix(in oklch, var(--color-panel-strong) 82%, black);
+        background-color: color-mix(in oklch, var(--color-panel-strong) 84%, black);
     }
 
     .theme-toggle[data-active-theme='dark'] .theme-toggle__indicator {
@@ -618,7 +748,7 @@
     }
 
     .account-nav__link {
-        @apply rounded-full px-4 py-3 text-sm font-semibold transition;
+        @apply rounded-xl px-4 py-3 text-sm font-semibold transition;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
         color: var(--color-ink-700);
@@ -630,13 +760,13 @@
     }
 
     .account-nav__link--active {
-        background: linear-gradient(135deg, color-mix(in oklch, var(--color-brand-700) 92%, black), color-mix(in oklch, var(--color-violet-600) 42%, var(--color-brand-700)));
-        border-color: transparent;
-        color: white;
+        border-color: color-mix(in oklch, var(--color-brand-400) 32%, var(--color-border-soft));
+        background-color: color-mix(in oklch, var(--color-brand-100) 56%, var(--color-panel-strong));
+        color: var(--color-brand-700);
     }
 
     .mistake-group-link {
-        @apply flex items-center justify-between gap-3 rounded-[1.5rem] px-4 py-4 transition;
+        @apply flex items-center justify-between gap-3 rounded-[1.2rem] px-4 py-4 transition;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
     }
@@ -646,14 +776,14 @@
     }
 
     .mistake-group-link--active {
-        background-color: color-mix(in oklch, var(--color-violet-100) 55%, white);
-        border-color: color-mix(in oklch, var(--color-violet-300) 55%, var(--color-border-soft));
+        background-color: color-mix(in oklch, var(--color-brand-100) 56%, var(--color-panel-strong));
+        border-color: color-mix(in oklch, var(--color-brand-400) 28%, var(--color-border-soft));
     }
 
     .mistake-group-link__count {
         @apply inline-flex min-w-10 items-center justify-center rounded-full px-3 py-2 text-sm font-bold;
-        background-color: color-mix(in oklch, var(--color-danger) 14%, white);
-        color: color-mix(in oklch, var(--color-danger) 74%, black);
+        background-color: color-mix(in oklch, var(--color-danger) 12%, white);
+        color: color-mix(in oklch, var(--color-danger) 72%, black);
     }
 
     .forum-attachments {
@@ -662,7 +792,7 @@
     }
 
     .forum-attachment {
-        @apply overflow-hidden rounded-[1.5rem];
+        @apply overflow-hidden rounded-[1.25rem];
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-muted);
     }
@@ -676,7 +806,7 @@
     }
 
     .exam-question-nav {
-        @apply inline-flex h-12 items-center justify-center rounded-[1rem] text-sm font-bold transition;
+        @apply inline-flex h-11 items-center justify-center rounded-[0.95rem] px-3 text-sm font-bold transition;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
         color: var(--color-ink-700);
@@ -684,28 +814,43 @@
 
     .exam-question-nav--correct {
         background-color: color-mix(in oklch, var(--color-success) 12%, white);
-        color: color-mix(in oklch, var(--color-success) 78%, black);
+        color: color-mix(in oklch, var(--color-success) 76%, black);
     }
 
     .exam-question-nav--wrong {
-        background-color: color-mix(in oklch, var(--color-danger) 10%, white);
-        color: color-mix(in oklch, var(--color-danger) 72%, black);
+        background-color: color-mix(in oklch, var(--color-danger) 12%, white);
+        color: color-mix(in oklch, var(--color-danger) 74%, black);
     }
 
     .exam-choice {
-        @apply flex flex-col gap-3 rounded-[1.5rem] px-4 py-4 lg:flex-row lg:items-center lg:justify-between;
+        @apply flex flex-col gap-3 rounded-[1.1rem] px-4 py-4 lg:flex-row lg:items-center lg:justify-between;
         border: 1px solid var(--color-border-soft);
         background-color: var(--color-panel-strong);
     }
 
     .exam-choice--correct {
         background-color: color-mix(in oklch, var(--color-success) 10%, white);
-        border-color: color-mix(in oklch, var(--color-success) 32%, var(--color-border-soft));
+        border-color: color-mix(in oklch, var(--color-success) 26%, var(--color-border-soft));
     }
 
     .exam-choice--selected {
-        background-color: color-mix(in oklch, var(--color-warning) 10%, white);
-        border-color: color-mix(in oklch, var(--color-warning) 34%, var(--color-border-soft));
+        background-color: color-mix(in oklch, var(--color-warning) 12%, white);
+        border-color: color-mix(in oklch, var(--color-warning) 30%, var(--color-border-soft));
+    }
+
+    .portal-nav-link:focus-visible,
+    .portal-nav-utility:focus-visible,
+    .portal-menu-link:focus-visible,
+    .sidebar-link:focus-visible,
+    .admin-mobile-nav__trigger:focus-visible,
+    .admin-mobile-nav__link:focus-visible,
+    .account-nav__link:focus-visible,
+    .theme-toggle:focus-visible {
+        outline: none;
+        box-shadow:
+            0 0 0 2px var(--color-panel-strong),
+            0 0 0 4px color-mix(in oklch, var(--color-brand-400) 42%, white),
+            var(--shadow-soft);
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -714,6 +859,7 @@
         .btn-danger,
         .portal-nav-utility,
         .portal-nav-link,
+        .portal-section-card,
         .sidebar-link,
         .admin-mobile-nav__trigger,
         .admin-mobile-nav__link {
@@ -721,7 +867,8 @@
                 transform 180ms cubic-bezier(0.25, 1, 0.5, 1),
                 box-shadow 180ms cubic-bezier(0.25, 1, 0.5, 1),
                 background-color 160ms ease,
-                color 160ms ease;
+                color 160ms ease,
+                border-color 160ms ease;
         }
 
         .btn-primary:hover,
@@ -729,6 +876,7 @@
         .btn-danger:hover,
         .portal-nav-utility:hover,
         .portal-nav-link:hover,
+        .portal-section-card:hover,
         .sidebar-link:hover,
         .admin-mobile-nav__trigger:hover,
         .admin-mobile-nav__link:hover {
@@ -762,19 +910,5 @@
             opacity: 1;
             transform: translateY(0);
         }
-    }
-}
-
-@layer utilities {
-    html[data-theme='dark'] .bg-white {
-        background-color: var(--color-panel-strong) !important;
-    }
-
-    html[data-theme='dark'] .bg-white\/70 {
-        background-color: color-mix(in oklch, var(--color-panel-strong) 70%, transparent) !important;
-    }
-
-    html[data-theme='dark'] .bg-white\/90 {
-        background-color: color-mix(in oklch, var(--color-panel-bg) 90%, transparent) !important;
     }
 }

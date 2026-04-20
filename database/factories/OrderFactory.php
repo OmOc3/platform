@@ -27,6 +27,7 @@ class OrderFactory extends Factory
             'total_amount' => 0,
             'currency' => 'EGP',
             'placed_at' => now()->subDays(fake()->numberBetween(1, 40)),
+            'meta' => null,
         ];
     }
 }

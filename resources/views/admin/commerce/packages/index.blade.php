@@ -14,7 +14,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الباقة أو الرابط المختصر">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث باسم الباقة أو الرابط المختصر" aria-label="ابحث في الباقات">
                 <select name="featured" class="form-select">
                     <option value="">كل الباقات</option>
                     <option value="1" @selected(request('featured') === '1')>مميزة فقط</option>
@@ -41,7 +41,7 @@
                             <div class="flex items-start gap-3">
                                 <div class="catalog-thumb !min-h-20 !w-20 shrink-0 rounded-[1.4rem]">
                                     @if ($row->product?->thumbnail_url)
-                                        <img src="{{ $row->product->thumbnail_url }}" alt="{{ $row->product?->name_ar }}">
+                            <img src="{{ $row->product->thumbnail_url }}" alt="{{ $row->product?->name_ar }}" loading="lazy" decoding="async">
                                     @else
                                         <div class="catalog-thumb__fallback !min-h-20 !p-3">
                                             <span>{{ $row->billing_cycle_label ?: 'باقة' }}</span>

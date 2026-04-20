@@ -7,6 +7,9 @@ use App\Modules\Centers\Models\AttendanceRecord;
 use App\Modules\Centers\Models\AttendanceSession;
 use App\Modules\Centers\Models\EducationalCenter;
 use App\Modules\Centers\Models\EducationalGroup;
+use App\Modules\Commerce\Actions\Payments\HandlePaymentWebhookAction;
+use App\Modules\Commerce\Actions\Payments\StartOrderPaymentAction;
+use App\Modules\Commerce\Actions\Shipments\UpdateShipmentStatusAction;
 use App\Modules\Commerce\Models\Cart;
 use App\Modules\Commerce\Models\CartItem;
 use App\Modules\Commerce\Models\Entitlement;
@@ -29,6 +32,8 @@ use App\Shared\Enums\AttendanceStatus;
 use App\Shared\Enums\EntitlementSource;
 use App\Shared\Enums\OrderKind;
 use App\Shared\Enums\OrderStatus;
+use App\Shared\Enums\PaymentStatus;
+use App\Shared\Enums\ShipmentStatus;
 use App\Shared\Enums\StudentStatus;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -127,6 +132,12 @@ class StudentPortalSeeder extends Seeder
         $entitlementGrantor = app(EntitlementGrantor::class);
         /** @var LectureProgressService $lectureProgressService */
         $lectureProgressService = app(LectureProgressService::class);
+        /** @var StartOrderPaymentAction $startOrderPaymentAction */
+        $startOrderPaymentAction = app(StartOrderPaymentAction::class);
+        /** @var HandlePaymentWebhookAction $handlePaymentWebhookAction */
+        $handlePaymentWebhookAction = app(HandlePaymentWebhookAction::class);
+        /** @var UpdateShipmentStatusAction $updateShipmentStatusAction */
+        $updateShipmentStatusAction = app(UpdateShipmentStatusAction::class);
 
         $packageOrder = Order::query()->updateOrCreate(
             ['uuid' => 'digital-order-demo-package-100002'],
@@ -284,6 +295,182 @@ class StudentPortalSeeder extends Seeder
                     'meta' => ['product_kind' => $problemSolvingProduct->kind->value],
                 ],
             );
+        }
+
+        if ($problemSolvingProduct) {
+            $pendingDigitalOrder = Order::query()->firstOrCreate(
+                ['uuid' => 'digital-order-demo-pending-100002'],
+                [
+                    'student_id' => $student->id,
+                    'kind' => OrderKind::Digital,
+                    'status' => OrderStatus::Draft,
+                    'subtotal_amount' => $problemSolvingProduct->price_amount,
+                    'total_amount' => $problemSolvingProduct->price_amount,
+                    'currency' => 'EGP',
+                    'placed_at' => null,
+                    'meta' => null,
+                ],
+            );
+
+            OrderItem::query()->firstOrCreate(
+                [
+                    'order_id' => $pendingDigitalOrder->id,
+                    'product_name_snapshot' => $problemSolvingProduct->name_ar,
+                ],
+                [
+                    'product_id' => $problemSolvingProduct->id,
+                    'product_kind' => $problemSolvingProduct->kind->value,
+                    'quantity' => 1,
+                    'unit_price_amount' => $problemSolvingProduct->price_amount,
+                    'total_price_amount' => $problemSolvingProduct->price_amount,
+                    'meta' => null,
+                ],
+            );
+
+            if (! $pendingDigitalOrder->payments()->exists()) {
+                $startOrderPaymentAction->execute(
+                    $pendingDigitalOrder->fresh(['student', 'items.product.book', 'payments']),
+                    ['provider' => 'fake'],
+                    $owner,
+                );
+            }
+        }
+
+        if ($reviewProduct) {
+            $paidDigitalOrder = Order::query()->firstOrCreate(
+                ['uuid' => 'digital-order-demo-paid-100002'],
+                [
+                    'student_id' => $student->id,
+                    'kind' => OrderKind::Digital,
+                    'status' => OrderStatus::Draft,
+                    'subtotal_amount' => $reviewProduct->price_amount,
+                    'total_amount' => $reviewProduct->price_amount,
+                    'currency' => 'EGP',
+                    'placed_at' => null,
+                    'meta' => null,
+                ],
+            );
+
+            OrderItem::query()->firstOrCreate(
+                [
+                    'order_id' => $paidDigitalOrder->id,
+                    'product_name_snapshot' => $reviewProduct->name_ar,
+                ],
+                [
+                    'product_id' => $reviewProduct->id,
+                    'product_kind' => $reviewProduct->kind->value,
+                    'quantity' => 1,
+                    'unit_price_amount' => $reviewProduct->price_amount,
+                    'total_price_amount' => $reviewProduct->price_amount,
+                    'meta' => null,
+                ],
+            );
+
+            if (! $paidDigitalOrder->payments()->where('status', PaymentStatus::Paid->value)->exists()) {
+                $payment = $startOrderPaymentAction->execute(
+                    $paidDigitalOrder->fresh(['student', 'items.product.book', 'payments']),
+                    ['provider' => 'fake'],
+                    $owner,
+                );
+
+                $handlePaymentWebhookAction->execute('fake', [
+                    'event_key' => 'seed_paid_digital_'.$paidDigitalOrder->id,
+                    'provider_reference' => $payment->provider_reference,
+                    'provider_transaction_reference' => 'txn_seed_digital_'.$paidDigitalOrder->id,
+                    'status' => PaymentStatus::Paid->value,
+                    'meta' => [
+                        'note' => 'Seeded digital payment confirmation.',
+                        'trigger' => 'seeder',
+                    ],
+                    'payload' => [
+                        'source' => 'StudentPortalSeeder',
+                        'order_uuid' => $paidDigitalOrder->uuid,
+                    ],
+                ], $owner);
+            }
+        }
+
+        if ($bookProduct) {
+            $shippingBookOrder = Order::query()->firstOrCreate(
+                ['uuid' => 'book-order-demo-shipping-100002'],
+                [
+                    'student_id' => $student->id,
+                    'kind' => OrderKind::Book,
+                    'status' => OrderStatus::Draft,
+                    'subtotal_amount' => $bookProduct->price_amount,
+                    'total_amount' => $bookProduct->price_amount,
+                    'currency' => 'EGP',
+                    'placed_at' => null,
+                    'meta' => null,
+                ],
+            );
+
+            OrderItem::query()->firstOrCreate(
+                [
+                    'order_id' => $shippingBookOrder->id,
+                    'product_name_snapshot' => $bookProduct->name_ar,
+                ],
+                [
+                    'product_id' => $bookProduct->id,
+                    'product_kind' => $bookProduct->kind->value,
+                    'quantity' => 1,
+                    'unit_price_amount' => $bookProduct->price_amount,
+                    'total_price_amount' => $bookProduct->price_amount,
+                    'meta' => null,
+                ],
+            );
+
+            if (! $shippingBookOrder->payments()->where('status', PaymentStatus::Paid->value)->exists()) {
+                $payment = $startOrderPaymentAction->execute(
+                    $shippingBookOrder->fresh(['student', 'items.product.book', 'payments']),
+                    [
+                        'provider' => 'fake',
+                        'shipping' => [
+                            'recipient_name' => $student->name,
+                            'phone' => $student->phone,
+                            'alternate_phone' => $student->parent_phone,
+                            'governorate' => 'القاهرة',
+                            'city' => 'مدينة نصر',
+                            'address_line1' => 'شارع مصطفى النحاس',
+                            'address_line2' => 'الدور الثاني',
+                            'landmark' => 'بجوار سيتي ستارز',
+                        ],
+                    ],
+                    $owner,
+                );
+
+                $handlePaymentWebhookAction->execute('fake', [
+                    'event_key' => 'seed_paid_book_'.$shippingBookOrder->id,
+                    'provider_reference' => $payment->provider_reference,
+                    'provider_transaction_reference' => 'txn_seed_book_'.$shippingBookOrder->id,
+                    'status' => PaymentStatus::Paid->value,
+                    'meta' => [
+                        'note' => 'Seeded book payment confirmation.',
+                        'trigger' => 'seeder',
+                    ],
+                    'payload' => [
+                        'source' => 'StudentPortalSeeder',
+                        'order_uuid' => $shippingBookOrder->uuid,
+                    ],
+                ], $owner);
+            }
+
+            $shipment = $shippingBookOrder->fresh('shipment')->shipment;
+
+            if ($shipment && $shipment->status === ShipmentStatus::Pending) {
+                $updateShipmentStatusAction->execute($shipment, ShipmentStatus::Prepared, $owner, [
+                    'carrier_name' => 'شحن المنصة',
+                ]);
+            }
+
+            $shipment = $shippingBookOrder->fresh('shipment')->shipment;
+
+            if ($shipment && $shipment->status === ShipmentStatus::Prepared) {
+                $updateShipmentStatusAction->execute($shipment, ShipmentStatus::InTransit, $owner, [
+                    'carrier_name' => 'شحن المنصة',
+                    'carrier_reference' => 'SHIP-DEMO-'.$shippingBookOrder->id,
+                ]);
+            }
         }
 
         $sessions = AttendanceSession::query()->orderBy('starts_at')->get();

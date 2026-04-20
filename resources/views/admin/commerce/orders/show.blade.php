@@ -1,7 +1,7 @@
 <x-layouts.admin
     :title="'الطلب '.$order->uuid"
     heading="تفاصيل الطلب"
-    subheading="مراجعة عناصر الطلب، بيانات الطالب، والحالة الحالية مع تنفيذ الانتقالات المسموحة فقط."
+    subheading="مراجعة عناصر الطلب، بيانات الطالب، الحالة الحالية، والمدفوعات أو الشحنة المرتبطة به مع تنفيذ الانتقالات المسموح بها فقط."
 >
     <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div class="space-y-6">
@@ -14,7 +14,7 @@
                     <x-admin.status-badge :label="$order->status->labelFor($order->kind)" :tone="$order->status->tone()" />
                 </div>
 
-                <div class="grid gap-4 border-t border-[color-mix(in_oklch,var(--color-brand-100)_80%,white)] px-5 py-5 md:grid-cols-2 xl:grid-cols-4">
+                <div class="grid gap-4 border-t border-[var(--color-border-soft)] px-5 py-5 md:grid-cols-2 xl:grid-cols-4">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">الطالب</p>
                         <p class="mt-2 font-semibold">{{ $order->student?->name ?? '—' }}</p>
@@ -35,7 +35,7 @@
                 </div>
 
                 @if ($order->student)
-                    <div class="grid gap-4 border-t border-[color-mix(in_oklch,var(--color-brand-100)_80%,white)] px-5 py-5 md:grid-cols-2 xl:grid-cols-4">
+                    <div class="grid gap-4 border-t border-[var(--color-border-soft)] px-5 py-5 md:grid-cols-2 xl:grid-cols-4">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">الهاتف</p>
                             <p class="mt-2 font-semibold">{{ $order->student->phone ?: '—' }}</p>
@@ -90,6 +90,68 @@
                 </table>
             </x-admin.table-shell>
 
+            @if ($canViewPayments)
+                <x-admin.table-shell title="المدفوعات المرتبطة" description="محاولات الدفع التي تمت على هذا الطلب، مع روابط مباشرة للتفاصيل.">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المحاولة</th>
+                                <th>المزود</th>
+                                <th>المرجع</th>
+                                <th>الحالة</th>
+                                <th>التفاصيل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($order->payments as $payment)
+                                <tr>
+                                    <td>{{ $payment->attempt_number }}</td>
+                                    <td>{{ strtoupper($payment->provider) }}</td>
+                                    <td class="font-mono text-xs">{{ $payment->provider_reference ?? '—' }}</td>
+                                    <td><x-admin.status-badge :label="$payment->status->label()" :tone="$payment->status->tone()" /></td>
+                                    <td><a href="{{ route('admin.payments.show', $payment) }}" class="btn-secondary !px-4 !py-2">عرض المدفوعة</a></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-[var(--color-ink-500)]">لا توجد محاولات دفع مرتبطة بهذا الطلب بعد.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </x-admin.table-shell>
+            @endif
+
+            @if ($canViewShipment && $order->shipment)
+                <section class="table-shell">
+                    <div class="flex items-start justify-between gap-4 px-5 py-5">
+                        <div>
+                            <h2 class="text-lg font-bold">ملخص الشحنة</h2>
+                            <p class="mt-2 text-sm text-[var(--color-ink-700)]">عنوان الشحن والمرحلة اللوجستية الحالية.</p>
+                        </div>
+                        <x-admin.status-badge :label="$order->shipment->status->label()" :tone="$order->shipment->status->tone()" />
+                    </div>
+
+                    <div class="grid gap-4 border-t border-[var(--color-border-soft)] px-5 py-5 md:grid-cols-2 xl:grid-cols-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">المستلم</p>
+                            <p class="mt-2 font-semibold">{{ $order->shipment->recipient_name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">الهاتف</p>
+                            <p class="mt-2 font-semibold">{{ $order->shipment->phone }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">المحافظة / المدينة</p>
+                            <p class="mt-2 font-semibold">{{ $order->shipment->governorate }} / {{ $order->shipment->city }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">تفاصيل</p>
+                            <a href="{{ route('admin.shipments.show', $order->shipment) }}" class="btn-secondary mt-2 !px-4 !py-2">صفحة الشحنة</a>
+                        </div>
+                    </div>
+                </section>
+            @endif
+
             @if ($canViewEntitlements)
                 <x-admin.table-shell title="الاستحقاقات المرتبطة" description="تظهر هنا الاستحقاقات المولدة من هذا الطلب بعد التفعيل.">
                     <table class="data-table">
@@ -107,7 +169,7 @@
                                 <tr>
                                     <td class="font-semibold">{{ $entitlement->item_name_snapshot }}</td>
                                     <td>{{ $entitlement->source->label() }}</td>
-                                    <td><x-admin.status-badge :label="$entitlement->status" tone="success" /></td>
+                                    <td><x-admin.status-badge :label="$entitlement->status" :tone="$entitlement->status === 'active' ? 'success' : 'warning'" /></td>
                                     <td>{{ optional($entitlement->granted_at)->format('Y-m-d H:i') ?: '—' }}</td>
                                     <td>{{ optional($entitlement->ends_at)->format('Y-m-d') ?: 'مفتوح' }}</td>
                                 </tr>
@@ -126,11 +188,7 @@
             <section class="panel p-5">
                 <h2 class="text-lg font-bold">الإجراءات المتاحة</h2>
                 <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">
-                    @if ($order->kind === \App\Shared\Enums\OrderKind::Book)
-                        الطلبات الورقية تمر حاليًا بحالات تأكيد وتسليم مختصرة داخل الدومين الحالي، لذلك لا تظهر مراحل شحن فرعية مستقلة إلا إذا كانت ممثلة في البيانات.
-                    @else
-                        لا تظهر هنا إلا الانتقالات المسموح بها من الحالة الحالية للطلب.
-                    @endif
+                    تظهر هنا فقط الانتقالات المسموح بها من الحالة الحالية. تحديثات الشحن التفصيلية تُدار من شاشة الشحنة، بينما الارتجاع المالي يُدار من شاشة المدفوعة.
                 </p>
 
                 <div class="mt-5 space-y-3">
@@ -139,7 +197,7 @@
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="status" value="{{ $status->value }}">
-                            <button type="submit" class="{{ $status === \App\Shared\Enums\OrderStatus::Cancelled ? 'btn-danger' : 'btn-primary' }} w-full justify-center">
+                            <button type="submit" class="{{ in_array($status, [\App\Shared\Enums\OrderStatus::Cancelled, \App\Shared\Enums\OrderStatus::Refunded], true) ? 'btn-danger' : 'btn-primary' }} w-full justify-center">
                                 {{ $status->labelFor($order->kind) }}
                             </button>
                         </form>
@@ -155,11 +213,11 @@
                 <h2 class="text-lg font-bold">ملاحظات تشغيلية</h2>
                 <ul class="mt-4 space-y-3 text-sm leading-7 text-[var(--color-ink-700)]">
                     @if ($order->kind === \App\Shared\Enums\OrderKind::Book)
-                        <li>بيانات الاستلام الحالية تعتمد على ملف الطالب: الهاتف، ولي الأمر، والمحافظة.</li>
-                        <li>توصيل الطلب يظهر بحالة مختصرة داخل النظام الحالي دون تمثيل لمراحل "جاهزة للشحن" أو "تم شحنها" كحالات مستقلة.</li>
+                        <li>يُحفظ عنوان الشحن كـ snapshot على الطلب لحظة بدء الدفع، ثم تُجهز الشحنة منه بعد تأكيد السداد.</li>
+                        <li>تنتقل الشحنة إلى مساراتها من شاشة الشحن، بينما يظل order status انعكاسًا تجاريًا عامًا للحالة.</li>
                     @else
-                        <li>الطلبات الرقمية تنشئ استحقاقات عند الانتقال إلى حالة "مفعّل".</li>
-                        <li>إعادة إرسال نفس التفعيل لا تضاعف الاستحقاقات المرتبطة بالعناصر.</li>
+                        <li>الطلبات الرقمية تمنح الاستحقاقات تلقائيًا عند الانتقال إلى حالة "مفعّل".</li>
+                        <li>إعادة معالجة نفس السداد أو نفس التفعيل لا تضاعف الاستحقاقات المرتبطة بالعناصر.</li>
                     @endif
                 </ul>
             </section>

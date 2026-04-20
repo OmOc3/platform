@@ -157,7 +157,8 @@ class StudentCatalogAndCommerceTest extends TestCase
 
         $this->get(route('student.checkout.show'))
             ->assertOk()
-            ->assertSeeText('مسودة الطلب الرقمي')
-            ->assertSeeText('مسودة طلب الكتب');
+            ->assertSeeText('الطلب الرقمي')
+            ->assertSeeText('طلب الكتب')
+            ->assertSeeText('ابدأ الدفع التجريبي');
     }
 }

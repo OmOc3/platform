@@ -6,7 +6,7 @@
                 <div class="grid gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
                     <div class="catalog-thumb min-h-[16rem]">
                         @if ($package->product?->thumbnail_url)
-                            <img src="{{ $package->product->thumbnail_url }}" alt="{{ $package->product?->name_ar }}">
+                            <img src="{{ $package->product->thumbnail_url }}" alt="{{ $package->product?->name_ar }}" loading="eager" decoding="async" fetchpriority="high">
                         @else
                             <div class="catalog-thumb__fallback">
                                 <span>{{ $package->billing_cycle_label ?: 'باقة رقمية' }}</span>
@@ -27,15 +27,15 @@
                         <p class="mt-5 text-base leading-9 text-[var(--color-ink-700)]">{{ $package->product?->description }}</p>
 
                         <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                            <div class="stat-tile">
                                 <p class="text-xs text-[var(--color-ink-500)]">السعر</p>
                                 <p class="mt-2 font-semibold">{{ number_format($package->product?->price_amount ?? 0) }} {{ $package->product?->currency }}</p>
                             </div>
-                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                            <div class="stat-tile">
                                 <p class="text-xs text-[var(--color-ink-500)]">عدد المحاضرات</p>
                                 <p class="mt-2 font-semibold">{{ $contentItems->count() }}</p>
                             </div>
-                            <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                            <div class="stat-tile">
                                 <p class="text-xs text-[var(--color-ink-500)]">مدة التفعيل</p>
                                 <p class="mt-2 font-semibold">{{ $package->access_period_days ? $package->access_period_days.' يوم' : 'حسب الباقة' }}</p>
                             </div>
@@ -53,7 +53,7 @@
             <section id="package-content" class="panel-tight">
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">محتوى</p>
+                        <p class="section-kicker">محتوى</p>
                         <p class="mt-2 text-sm leading-8 text-[var(--color-ink-700)]">المحاضرات المدرجة داخل الباقة مع حالة كل عنصر بالنسبة لحسابك الآن.</p>
                     </div>
                     <span class="status-pill bg-[var(--color-brand-50)] text-[var(--color-brand-700)]">{{ $contentItems->count() }} عنصر</span>
@@ -69,7 +69,7 @@
                             <div class="flex flex-col gap-5 lg:flex-row">
                                 <div class="catalog-thumb max-w-[10rem] shrink-0 lg:w-[10rem]">
                                     @if ($lecture->thumbnail_url)
-                                        <img src="{{ $lecture->thumbnail_url }}" alt="{{ $lecture->title }}">
+                                        <img src="{{ $lecture->thumbnail_url }}" alt="{{ $lecture->title }}" loading="lazy" decoding="async">
                                     @else
                                         <div class="catalog-thumb__fallback">
                                             <span>{{ $lecture->lectureSection?->name_ar ?? 'محاضرة' }}</span>
@@ -83,7 +83,7 @@
                                         <x-student.access-state :access="$access" />
                                         <x-admin.status-badge :label="$isOpen ? 'فتح المحاضرة' : 'متاحة بعد التفعيل'" :tone="$isOpen ? 'success' : 'warning'" />
                                         @if ($row['deadline'])
-                                            <span class="status-pill bg-[color-mix(in_oklch,var(--color-danger)_12%,white)] text-[color-mix(in_oklch,var(--color-danger)_75%,black)]">{{ $row['deadline'] }}</span>
+                                            <span class="status-pill status-pill--danger">{{ $row['deadline'] }}</span>
                                         @endif
                                     </div>
 
@@ -114,7 +114,7 @@
             <section id="package-questions" class="panel-tight">
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">الأسئلة والواجبات</p>
+                        <p class="section-kicker">الأسئلة والواجبات</p>
                         <p class="mt-2 text-sm leading-8 text-[var(--color-ink-700)]">اختبارات مرتبطة بالمحاضرات الموجودة داخل الباقة، مع عدد المحاولات المتبقية لكل اختبار.</p>
                     </div>
                     <span class="status-pill bg-[var(--color-brand-50)] text-[var(--color-brand-700)]">{{ $questionItems->count() }} اختبار</span>
@@ -133,11 +133,11 @@
                                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">{{ $row['exam']->short_description }}</p>
 
                                 <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                    <div class="stat-tile">
                                         <p class="text-xs text-[var(--color-ink-500)]">عدد المحاولات</p>
                                         <p class="mt-2 font-semibold">لديك {{ $row['remaining_attempts'] }} محاولات لهذا الاختبار</p>
                                     </div>
-                                    <div class="rounded-[1.4rem] bg-[var(--color-brand-50)] p-4">
+                                    <div class="stat-tile">
                                         <p class="text-xs text-[var(--color-ink-500)]">المدة</p>
                                         <p class="mt-2 font-semibold">{{ $row['exam']->duration_minutes ? $row['exam']->duration_minutes.' دقيقة' : 'بدون حد زمني' }}</p>
                                     </div>
@@ -158,7 +158,7 @@
             <section id="package-files" class="panel-tight">
                 <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">الملفات</p>
+                        <p class="section-kicker">الملفات</p>
                         <p class="mt-2 text-sm leading-8 text-[var(--color-ink-700)]">ملفات وروابط مساندة تم نشرها مع المحاضرات الموجودة داخل الباقة.</p>
                     </div>
                     <span class="status-pill bg-[var(--color-brand-50)] text-[var(--color-brand-700)]">{{ $fileItems->count() }} ملف</span>
@@ -187,14 +187,14 @@
 
         <aside class="space-y-6">
             <section class="panel-tight">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">قرار الشراء</p>
+                <p class="section-kicker">قرار الشراء</p>
                 <h2 class="mt-3 text-2xl font-bold">{{ $package->product?->name_ar }}</h2>
                 <p class="mt-4 text-sm leading-8 text-[var(--color-ink-700)]">{{ $eligibility['message'] }}</p>
 
                 @if ($eligibility['overlaps'] !== [])
                     <div class="mt-4 flex flex-wrap gap-2">
                         @foreach ($eligibility['overlaps'] as $title)
-                            <span class="status-pill bg-[color-mix(in_oklch,var(--color-danger)_10%,white)] text-[color-mix(in_oklch,var(--color-danger)_70%,black)]">{{ $title }}</span>
+                            <span class="status-pill status-pill--danger">{{ $title }}</span>
                         @endforeach
                     </div>
                 @endif
@@ -220,8 +220,8 @@
 
             @if ($isCampOffer)
                 <section class="panel-tight">
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">تنبيهات المعسكر</p>
-                    <div class="mt-4 rounded-[1.6rem] bg-[color-mix(in_oklch,var(--color-violet-100)_64%,white)] p-4 text-[var(--color-violet-700)]">
+                    <p class="section-kicker">تنبيهات المعسكر</p>
+                    <div class="mt-4 rounded-[1.6rem] border border-[var(--color-border-soft)] bg-[var(--color-panel-muted)] p-4 text-[var(--color-brand-700)]">
                         <p class="font-semibold">وضع مراجعة مكثف</p>
                         <p class="mt-2 text-sm leading-8">هذه الباقة تحمل نمط معسكر، لذلك أضفنا اختصارًا مباشرًا لطلب مد الوقت 12 ساعة عند الحاجة عبر بوابة الدعم.</p>
                     </div>
@@ -231,7 +231,7 @@
 
             <section class="panel-tight">
                 <div class="flex items-center justify-between gap-3">
-                    <p class="text-sm font-semibold text-[var(--color-brand-700)]">محاضرات اخرى</p>
+                    <p class="section-kicker">محاضرات اخرى</p>
                     <a href="{{ route('student.lectures.index') }}" class="text-sm font-semibold text-[var(--color-brand-700)]">الكتالوج</a>
                 </div>
 

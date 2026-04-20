@@ -27,7 +27,7 @@
             @foreach ($thread->messages as $message)
                 <article @class([
                     'panel-tight',
-                    'bg-[color-mix(in_oklch,var(--color-success)_7%,white)]' => $message->is_staff_reply,
+                    'surface-tone--success' => $message->is_staff_reply,
                 ])>
                     <div class="flex flex-wrap items-center gap-3">
                         <x-admin.status-badge :label="$message->is_staff_reply ? 'رد إداري' : 'رسالة طالب'" :tone="$message->is_staff_reply ? 'success' : 'neutral'" />
@@ -44,7 +44,7 @@
 
                                 @if ($attachment->type->value === 'image')
                                     <a href="{{ $attachmentUrl }}" target="_blank" rel="noreferrer" class="forum-attachment forum-attachment--image">
-                                        <img src="{{ $attachmentUrl }}" alt="{{ $attachment->original_name }}">
+                                        <img src="{{ $attachmentUrl }}" alt="{{ $attachment->original_name }}" loading="lazy" decoding="async">
                                     </a>
                                 @else
                                     <div class="forum-attachment forum-attachment--audio">

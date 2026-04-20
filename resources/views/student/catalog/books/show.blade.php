@@ -5,7 +5,7 @@
                 <div class="grid gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
                     <div class="catalog-thumb catalog-thumb--book min-h-[18rem]">
                         @if ($book->product?->thumbnail_url)
-                            <img src="{{ $book->product->thumbnail_url }}" alt="{{ $book->product?->name_ar }}">
+                            <img src="{{ $book->product->thumbnail_url }}" alt="{{ $book->product?->name_ar }}" loading="eager" decoding="async" fetchpriority="high">
                         @else
                             <div class="catalog-thumb__fallback">
                                 <span>{{ $book->cover_badge ?: 'كتاب تعليمي' }}</span>
@@ -66,7 +66,7 @@
                         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-500)]">المحافظات المدعومة</p>
                         <div class="mt-4 flex flex-wrap gap-2">
                             @forelse ($supportedGovernorates as $governorate)
-                                <span class="status-pill bg-white text-[var(--color-brand-700)]">{{ $governorate }}</span>
+                                <span class="surface-chip inline-flex rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-brand-700)]">{{ $governorate }}</span>
                             @empty
                                 <span class="text-sm text-[var(--color-ink-700)]">لم يتم تقييد المحافظات لهذا الكتاب بعد.</span>
                             @endforelse

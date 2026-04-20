@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -28,6 +29,7 @@ class Order extends Model
         'total_amount',
         'currency',
         'placed_at',
+        'meta',
     ];
 
     protected function casts(): array
@@ -36,6 +38,7 @@ class Order extends Model
             'kind' => OrderKind::class,
             'status' => OrderStatus::class,
             'placed_at' => 'datetime',
+            'meta' => 'array',
         ];
     }
 
@@ -52,5 +55,15 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class)->latest('created_at');
+    }
+
+    public function shipment(): HasOne
+    {
+        return $this->hasOne(Shipment::class);
     }
 }

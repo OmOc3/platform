@@ -1,11 +1,11 @@
-<x-layouts.student title="مدفوعات الكتب" heading="طلبات الكتب" subheading="متابعة طلبات الكتب وحالتها والعناصر التي تم شحنها أو تأكيدها.">
+<x-layouts.student title="مدفوعات الكتب" heading="طلبات الكتب" subheading="متابعة طلبات الكتب، حالة الدفع، وحالة الشحن لكل طلب تم تسجيله على حسابك.">
     <section class="space-y-6">
         <x-student.account-nav current="book-orders" />
 
         <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <x-student.summary-card label="إجمالي الطلبات" :value="$summary['count']" description="كل طلبات الكتب المسجلة" />
-            <x-student.summary-card label="منفذ" :value="$summary['fulfilled_count']" description="طلبات تم تفعيلها أو تسليمها" />
-            <x-student.summary-card label="قيد المتابعة" :value="$summary['pending_count']" description="طلبات ما زالت في دورة التنفيذ" />
+            <x-student.summary-card label="مكتملة" :value="$summary['fulfilled_count']" description="طلبات تم تسليمها أو إغلاقها بنجاح" />
+            <x-student.summary-card label="قيد المتابعة" :value="$summary['pending_count']" description="طلبات ما زالت في دورة الدفع أو الشحن" />
             <x-student.summary-card label="إجمالي القيمة" :value="number_format($summary['total_amount']).' ج'" description="إجمالي قيمة الطلبات المسجلة" />
         </section>
 
@@ -20,7 +20,7 @@
 
             @if ($orders->isEmpty())
                 <div class="px-5 pb-5">
-                    <x-student.empty-state title="لا توجد طلبات كتب" description="عند تنفيذ أي طلب كتاب سيظهر هنا مع تفاصيل العناصر وحالة الطلب." />
+                    <x-student.empty-state title="لا توجد طلبات كتب" description="عند تنفيذ أي طلب كتب سيظهر هنا مع تفاصيل حالة الدفع والشحن." />
                 </div>
             @else
                 <div class="overflow-x-auto">
@@ -31,11 +31,14 @@
                                 <th>العناصر</th>
                                 <th>التاريخ</th>
                                 <th>الإجمالي</th>
+                                <th>الدفع</th>
+                                <th>الشحن</th>
                                 <th>الحالة</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($orders as $order)
+                                @php($payment = $order->payments->first())
                                 <tr>
                                     <td class="font-semibold">{{ $order->uuid }}</td>
                                     <td>
@@ -52,7 +55,21 @@
                                         </div>
                                     </td>
                                     <td>{{ number_format($order->total_amount) }} {{ $order->currency }}</td>
-                                    <td><x-admin.status-badge :label="$order->status->label()" :tone="$order->status->tone()" /></td>
+                                    <td>
+                                        @if ($payment)
+                                            <x-admin.status-badge :label="$payment->status->label()" :tone="$payment->status->tone()" />
+                                        @else
+                                            <span class="text-sm text-[var(--color-ink-500)]">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($order->shipment)
+                                            <x-admin.status-badge :label="$order->shipment->status->label()" :tone="$order->shipment->status->tone()" />
+                                        @else
+                                            <span class="text-sm text-[var(--color-ink-500)]">لم تُجهز بعد</span>
+                                        @endif
+                                    </td>
+                                    <td><x-admin.status-badge :label="$order->status->labelFor($order->kind)" :tone="$order->status->tone()" /></td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -10,7 +10,7 @@
             </section>
         @else
             @if ($shipping['warning'])
-                <section class="rounded-[2rem] bg-[color-mix(in_oklch,var(--color-violet-100)_60%,white)] px-5 py-4 text-[var(--color-violet-700)] shadow-[0_18px_40px_rgba(71,58,29,0.06)]">
+                <section class="surface-tone surface-tone--warning rounded-[1.4rem] px-5 py-4">
                     <p class="text-sm font-bold">تنبيه الشحن</p>
                     <p class="mt-2 text-sm leading-8">{{ $shipping['warning'] }}</p>
                 </section>
@@ -21,7 +21,7 @@
                     <section class="panel-tight">
                         <div class="flex items-end justify-between gap-4">
                             <div>
-                                <p class="text-sm font-semibold text-[var(--color-brand-700)]">العناصر الرقمية</p>
+                                <p class="section-kicker">العناصر الرقمية</p>
                                 <p class="mt-2 text-sm text-[var(--color-ink-700)]">تشمل المحاضرات والباقات الرقمية وتُجهز كطلب منفصل.</p>
                             </div>
                             <span class="text-sm font-semibold">{{ number_format($digitalTotal) }} {{ $cart->currency }}</span>
@@ -62,7 +62,7 @@
                     <section class="panel-tight">
                         <div class="flex items-end justify-between gap-4">
                             <div>
-                                <p class="text-sm font-semibold text-[var(--color-brand-700)]">الكتب</p>
+                                <p class="section-kicker">الكتب</p>
                                 <p class="mt-2 text-sm text-[var(--color-ink-700)]">يمكن تعديل الكمية هنا قبل تجهيز طلب الكتب والشحن.</p>
                             </div>
                             <span class="text-sm font-semibold">{{ number_format($bookTotal) }} {{ $cart->currency }}</span>
@@ -111,7 +111,7 @@
 
                 <aside class="space-y-6">
                     <section class="panel-tight">
-                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">ملخص الطلب</p>
+                        <p class="section-kicker">ملخص الطلب</p>
                         <div class="mt-5 space-y-4 text-sm">
                             <div class="flex items-center justify-between gap-3">
                                 <span class="text-[var(--color-ink-500)]">الإجمالي الرقمي</span>
@@ -137,7 +137,7 @@
                     </section>
 
                     <section class="panel-tight">
-                        <p class="text-sm font-semibold text-[var(--color-brand-700)]">بيانات الاستلام المحفوظة</p>
+                        <p class="section-kicker">بيانات الاستلام المحفوظة</p>
                         <div class="mt-5 space-y-3 text-sm">
                             <div class="flex items-center justify-between gap-3">
                                 <span class="text-[var(--color-ink-500)]">الاسم</span>

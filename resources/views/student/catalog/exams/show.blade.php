@@ -37,10 +37,10 @@
             </dl>
 
             @if ($latestAttempt)
-                <section class="mt-8 rounded-[1.8rem] border border-[color-mix(in_oklch,var(--color-success)_22%,white)] bg-[color-mix(in_oklch,var(--color-success)_8%,white)] p-5">
+                <section class="surface-tone surface-tone--success mt-8 rounded-[1.8rem] p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <p class="text-sm font-semibold text-[var(--color-success)]">آخر نتيجة مسجلة</p>
+                            <p class="text-sm font-semibold">آخر نتيجة مسجلة</p>
                             <p class="mt-2 text-sm text-[var(--color-ink-600)]">
                                 المحاولة رقم {{ $latestAttempt->attempt_number }} بتاريخ {{ optional($latestAttempt->graded_at)->format('Y/m/d H:i') }}
                             </p>
@@ -49,15 +49,15 @@
                     </div>
 
                     <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                        <div class="rounded-[1.4rem] bg-white/70 p-4">
+                        <div class="stat-tile">
                             <p class="text-xs text-[var(--color-ink-500)]">الدرجة</p>
                             <p class="mt-2 text-xl font-bold">{{ $latestAttempt->total_score }}/{{ $latestAttempt->max_score }}</p>
                         </div>
-                        <div class="rounded-[1.4rem] bg-white/70 p-4">
+                        <div class="stat-tile">
                             <p class="text-xs text-[var(--color-ink-500)]">إجابات صحيحة</p>
                             <p class="mt-2 text-xl font-bold">{{ $latestAttempt->correct_answers_count }}</p>
                         </div>
-                        <div class="rounded-[1.4rem] bg-white/70 p-4">
+                        <div class="stat-tile">
                             <p class="text-xs text-[var(--color-ink-500)]">إجابات متخطاة</p>
                             <p class="mt-2 text-xl font-bold">{{ data_get($latestAttempt->result_meta, 'skipped_count', 0) }}</p>
                         </div>

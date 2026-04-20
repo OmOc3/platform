@@ -7,8 +7,8 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالعنوان أو المفتاح أو القيمة">
-                <input type="search" name="group" value="{{ request('group') }}" class="form-input" placeholder="المجموعة">
+            <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالعنوان أو المفتاح أو القيمة" aria-label="ابحث في الإعدادات">
+            <input type="search" name="group" value="{{ request('group') }}" class="form-input" placeholder="المجموعة" aria-label="ابحث في مجموعة الإعدادات">
                 <button class="btn-secondary">تطبيق</button>
             </form>
         </x-slot:filters>

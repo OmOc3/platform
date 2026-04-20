@@ -9,12 +9,15 @@
 - `students` hold profile, segmentation, ownership, and center hooks.
 - `student_status_histories` capture immutable status transitions over time.
 
-## Academic Catalog
+## Academic Catalog and LMS
 - `grades` have many `tracks`.
 - `curriculum_sections` belong to `grades` and optionally `tracks`.
 - `lecture_sections` belong to `grades`, optionally `tracks`, and optionally `curriculum_sections`.
 - `lectures` belong to `grades`, optionally `tracks`, and may belong to curriculum/lecture sections.
 - `lectures.product_id` links sellable digital content to the commerce root.
+- `lecture_assets` store delivery resources per lecture.
+- `lecture_checkpoints` store ordered learning milestones per lecture.
+- `lecture_progress` stores one row per `student + lecture` for resume/completion state.
 - `exams` belong to `grades`, optionally `tracks`, and may link to a `lecture`.
 
 ## Exam Engine
@@ -28,9 +31,12 @@
 - `products` remain the sellable root entity.
 - `packages` and `books` extend `products`.
 - `package_items` link packages to digital items, currently lectures.
-- `orders` and `order_items` store payment-ready order drafts and fulfilled history.
-- `entitlements` store digital access grants and their sources.
 - `carts` and `cart_items` store the current student cart before checkout preparation.
+- `orders` and `order_items` store draft, paid, shipping, fulfillment, refund, and history state, with `orders.meta` now carrying checkout/shipping snapshots.
+- `payments` store per-order payment attempts, provider references, status, and settlement timestamps.
+- `payment_webhook_receipts` store normalized webhook receipts and idempotency keys per provider event.
+- `shipments` store structured shipping address snapshots, fee amounts, carrier references, and shipment state for book orders.
+- `entitlements` store digital access grants and their sources.
 
 ## Center History
 - `educational_centers` and `educational_groups` model the offline center structure.
@@ -46,4 +52,4 @@
 ## Mistakes Center
 - `mistake_items` belong to a `student` and usually a `lecture`, with optional `exam` linkage.
 - Each mistake stores question snapshot text, model/correct answer snapshots, explanation, score loss, and metadata.
-- Wrong answers from graded exam attempts now sync into `mistake_items` and update existing rows idempotently instead of creating duplicate spam.
+- Wrong answers from graded exam attempts sync into `mistake_items` and update existing rows idempotently instead of creating duplicate spam.

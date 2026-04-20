@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $platformBrand['name'] }} - انطلاقة المنصة</title>
+    <x-font-links />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="surface-shell">
-    <main class="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 py-10 lg:px-10">
+    <a href="#welcome-main" class="skip-link">تخطَّ إلى المحتوى</a>
+    <main id="welcome-main" tabindex="-1" class="mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 py-10 lg:px-10">
         <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div class="space-y-7">
                 <span class="inline-flex rounded-full bg-[var(--color-brand-100)] px-4 py-2 text-sm font-semibold text-[var(--color-brand-700)]">
@@ -35,17 +37,17 @@
                         <p class="mt-3 text-2xl font-bold">الهوية + الأكاديمي</p>
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">إدارة المشرفين، الصلاحيات، الإعدادات، الصفوف، المسارات، وسجل العمليات الحساسة.</p>
                     </article>
-                    <article class="rounded-3xl bg-[color-mix(in_oklch,var(--color-brand-100)_70%,white)] p-5">
+                    <article class="surface-card-soft rounded-3xl p-5">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">الشكل العام</p>
                         <p class="mt-3 text-2xl font-bold">RTL أولاً</p>
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">تصميم دافئ وعملي للإدارة والطالب مع مساحات واضحة ونظام ألوان قابل للتوسع.</p>
                     </article>
-                    <article class="rounded-3xl bg-white p-5 ring-1 ring-[color-mix(in_oklch,var(--color-brand-100)_75%,white)]">
+                    <article class="surface-card rounded-3xl p-5">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">الوثائق</p>
                         <p class="mt-3 text-2xl font-bold">architecture.md</p>
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">توثيق الحدود، العقود، الحراس، وأسلوب التطوير لكل وحدة.</p>
                     </article>
-                    <article class="rounded-3xl bg-white p-5 ring-1 ring-[color-mix(in_oklch,var(--color-brand-100)_75%,white)]">
+                    <article class="surface-card rounded-3xl p-5">
                         <p class="text-sm font-semibold text-[var(--color-brand-700)]">المراحل التالية</p>
                         <p class="mt-3 text-2xl font-bold">الطالب + المحتوى</p>
                         <p class="mt-2 text-sm leading-7 text-[var(--color-ink-700)]">سطح الطالب الكامل، إدارة الطلاب، المحتوى، الامتحانات، المتجر، والدعم.</p>

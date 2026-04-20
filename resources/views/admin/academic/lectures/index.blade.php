@@ -14,7 +14,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_220px_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالعنوان أو الرابط أو الوصف">
+                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالعنوان أو الرابط أو الوصف" aria-label="ابحث في المحاضرات">
                 <select name="grade_id" class="form-select">
                     <option value="">كل الصفوف</option>
                     @foreach ($grades as $grade)
@@ -54,7 +54,7 @@
                             <div class="flex items-start gap-3">
                                 <div class="catalog-thumb !min-h-20 !w-20 shrink-0 rounded-[1.4rem]">
                                     @if ($row->thumbnail_url)
-                                        <img src="{{ $row->thumbnail_url }}" alt="{{ $row->title }}">
+                                <img src="{{ $row->thumbnail_url }}" alt="{{ $row->title }}" loading="lazy" decoding="async">
                                     @else
                                         <div class="catalog-thumb__fallback !min-h-20 !p-3">
                                             <span>{{ $row->type->label() }}</span>

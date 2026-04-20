@@ -3,7 +3,7 @@
         <section class="panel-tight">
             <div class="space-y-4">
                 @foreach ($thread->messages as $message)
-                    <article class="rounded-[1.6rem] border border-[color-mix(in_oklch,var(--color-brand-200)_70%,white)] px-5 py-5">
+                    <article class="surface-outline surface-outline--brand rounded-[1.6rem] px-5 py-5">
                         <div class="flex flex-wrap items-center gap-3">
                             <x-admin.status-badge :label="$message->is_staff_reply ? 'رد إداري' : 'رسالة طالب'" :tone="$message->is_staff_reply ? 'success' : 'neutral'" />
                             <span class="text-xs text-[var(--color-ink-500)]">{{ $message->author?->name ?? 'غير معروف' }}</span>
@@ -13,7 +13,7 @@
                         @if ($message->attachments->isNotEmpty())
                             <div class="mt-4 flex flex-wrap gap-2">
                                 @foreach ($message->attachments as $attachment)
-                                    <span class="status-pill bg-[var(--color-brand-50)] text-[var(--color-brand-700)]">{{ $attachment->original_name }}</span>
+                                    <span class="status-pill status-pill--brand">{{ $attachment->original_name }}</span>
                                 @endforeach
                             </div>
                         @endif

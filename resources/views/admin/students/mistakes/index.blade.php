@@ -2,7 +2,7 @@
     <x-admin.table-shell title="سجل الأخطاء" description="بحث سريع في الأسئلة المسجلة وأسماء الطلاب والمحاضرات المرتبطة بها.">
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بنص السؤال أو الطالب أو المحاضرة">
+    <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بنص السؤال أو الطالب أو المحاضرة" aria-label="ابحث في أخطاء الطلاب">
                 <button class="btn-secondary">بحث</button>
             </form>
         </x-slot:filters>

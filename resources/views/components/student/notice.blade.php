@@ -1,18 +1,22 @@
 @props([
     'title',
-    'body',
+    'body' => null,
+    'description' => null,
     'tone' => 'default',
 ])
 
 @php
     $classes = match ($tone) {
-        'warning' => 'bg-[color-mix(in_oklch,var(--color-warning)_16%,white)] text-[color-mix(in_oklch,var(--color-warning)_85%,black)]',
-        'violet' => 'bg-[color-mix(in_oklch,var(--color-violet-100)_60%,white)] text-[var(--color-violet-700)]',
-        default => 'bg-[var(--color-brand-50)] text-[var(--color-brand-700)]',
+        'warning' => 'surface-tone surface-tone--warning',
+        'violet' => 'surface-tone surface-tone--brand',
+        'danger' => 'surface-tone surface-tone--danger',
+        default => 'surface-tone bg-[var(--color-panel-strong)] text-[var(--color-ink-900)] border-[var(--color-border-soft)]',
     };
+    $content = $body ?? $description;
 @endphp
 
-<article class="rounded-[2rem] px-5 py-4 shadow-[0_18px_40px_rgba(71,58,29,0.06)] {{ $classes }}">
-    <h3 class="text-sm font-bold">{{ $title }}</h3>
-    <p class="mt-2 text-sm leading-8">{{ $body }}</p>
+<article class="rounded-[1.4rem] px-5 py-4 {{ $classes }}">
+    <p class="text-[0.72rem] font-semibold uppercase tracking-[0.18em] opacity-70">تنبيه</p>
+    <h3 class="mt-2 text-sm font-bold">{{ $title }}</h3>
+    <p class="mt-2 text-sm leading-8">{{ $content }}</p>
 </article>

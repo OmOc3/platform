@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? 'بوابة الطالب').' - '.$platformBrand['name'] }}</title>
+    <x-font-links />
     <x-theme.init-script />
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="surface-shell">
+    <a href="#student-main" class="skip-link">تخطَّ إلى المحتوى</a>
     @php($student = auth('student')->user())
     @php($items = app(\App\Shared\Support\Navigation\StudentNavigation::class)->items())
     @php($cartCount = $student?->cart()->withCount('items')->first()?->items_count ?? 0)
@@ -32,7 +34,7 @@
     @php($teacherParts = collect(preg_split('/\s+/u', trim($platformBrand['teacher_name'])))->filter()->values())
     @php($teacherInitials = $teacherParts->take(2)->map(fn ($part) => mb_substr($part, 0, 1))->join(''))
 
-    <div class="mx-auto max-w-7xl px-4 pb-10 pt-4 lg:px-6">
+    <div class="mx-auto max-w-[96rem] px-4 pb-12 pt-4 lg:px-6">
         <header class="panel mb-6 overflow-hidden">
             <div class="px-4 py-4 lg:px-6 lg:py-6">
                 <div class="flex flex-col gap-6">
@@ -46,7 +48,7 @@
                             </div>
                         </div>
 
-                        <div class="grid gap-3 sm:grid-cols-3 xl:min-w-[30rem]">
+                        <div class="grid gap-3 sm:grid-cols-2 xl:w-full xl:max-w-[28rem] xl:grid-cols-3">
                             <div class="portal-shell-meta">
                                 <span class="portal-shell-meta__label">الطالب</span>
                                 <strong class="portal-shell-meta__value">{{ $student?->name }}</strong>
@@ -62,9 +64,9 @@
                         </div>
                     </div>
 
-                    <div class="grid gap-4 rounded-[2rem] bg-[var(--color-panel-muted)] p-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+                    <div class="surface-inset grid gap-4 rounded-[1.5rem] p-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-brand-700)]">بوابة الطالب</p>
+                            <p class="section-kicker">بوابة الطالب</p>
                             <h1 class="mt-3 text-2xl font-bold lg:text-3xl">{{ $heading ?? 'الرئيسية' }}</h1>
                             @isset($subheading)
                                 <p class="mt-3 max-w-3xl text-sm leading-8 text-[var(--color-ink-700)]">{{ $subheading }}</p>
@@ -82,8 +84,8 @@
                             </a>
 
                             <details class="relative">
-                                <summary class="portal-nav-utility list-none cursor-pointer" aria-label="روابط الطالب الإضافية">المزيد</summary>
-                                <div class="portal-menu-panel absolute right-0 top-full z-30 mt-3 w-72">
+                                <summary class="portal-nav-utility list-none cursor-pointer" aria-label="روابط الحساب الإضافية">روابط الحساب</summary>
+                                <div class="portal-menu-panel absolute right-0 top-full z-30 mt-3">
                                     <div class="grid gap-2">
                                         @foreach ($moreLinks as $link)
                                             <a href="{{ $link['href'] }}" class="portal-menu-link">{{ $link['label'] }}</a>
@@ -92,9 +94,8 @@
                                 </div>
                             </details>
 
-                            <span class="portal-nav-utility portal-nav-utility--muted" title="الواجهة الإنجليزية قريبًا">
-                                <span aria-hidden="true">EN</span>
-                                <span class="sr-only">الواجهة الإنجليزية قريبًا</span>
+                            <span class="text-xs font-semibold text-[var(--color-ink-500)]" title="نسخة إنجليزية ستتوفر لاحقًا">
+                                English قريبًا
                             </span>
 
                             <form method="POST" action="{{ route('student.logout') }}">
@@ -110,7 +111,7 @@
                                 'portal-nav-link',
                                 'portal-nav-link--active' => $item['active'],
                             ])>
-                                <span class="portal-nav-link__icon">{{ $navIcons[$item['label']] ?? '•' }}</span>
+                                <span class="portal-nav-link__icon" aria-hidden="true">{{ $navIcons[$item['label']] ?? '•' }}</span>
                                 <span>{{ $item['label'] }}</span>
                             </a>
                         @endforeach
@@ -121,7 +122,7 @@
 
         <x-flash />
 
-        <main id="student-main" class="space-y-6" aria-label="محتوى الصفحة">
+        <main id="student-main" tabindex="-1" class="space-y-6" aria-label="محتوى الصفحة">
             {{ $slot }}
         </main>
     </div>

@@ -1,6 +1,6 @@
 <x-layouts.guest title="دخول الإدارة">
     <div class="grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_460px]">
-        <section class="hidden rounded-[2rem] bg-[var(--color-brand-700)] p-10 text-white lg:block">
+        <section class="hidden ink-panel lg:block">
             <p class="font-display text-4xl">بوابة الإدارة</p>
             <h1 class="mt-6 text-4xl font-bold leading-tight">إدارة الأكاديمية من لوحة واحدة تجمع التشغيل والأكاديمي والحوكمة.</h1>
             <p class="mt-6 max-w-md text-base leading-8 text-white/80">
@@ -10,7 +10,7 @@
 
         <section class="panel p-6 lg:p-8">
             <div class="mb-8">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">تسجيل دخول الإدارة</p>
+                <p class="section-kicker">تسجيل دخول الإدارة</p>
                 <h2 class="mt-3 text-3xl font-bold">مرحبًا بعودتك</h2>
             </div>
 

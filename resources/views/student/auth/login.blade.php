@@ -1,6 +1,6 @@
 <x-layouts.guest title="دخول الطالب">
     <div class="grid w-full max-w-6xl gap-8 lg:grid-cols-[1fr_460px]">
-        <section class="hidden rounded-[2rem] bg-[var(--color-brand-700)] p-10 text-white lg:block">
+        <section class="hidden ink-panel lg:block">
             <p class="font-display text-4xl">بوابة الطالب</p>
             <h1 class="mt-6 text-4xl font-bold leading-tight">سجّل دخولك للوصول إلى حالة حسابك وسجل الطلبات والحضور والدعم.</h1>
             <p class="mt-6 max-w-md text-base leading-8 text-white/80">حتى في حالة المراجعة، تظل البوابة متاحة لمتابعة الطلب والحساب والبيانات الأساسية إلى حين اعتماد الاشتراك.</p>
@@ -8,7 +8,7 @@
 
         <section class="panel p-6 lg:p-8">
             <div class="mb-8">
-                <p class="text-sm font-semibold text-[var(--color-brand-700)]">تسجيل دخول الطالب</p>
+                <p class="section-kicker">تسجيل دخول الطالب</p>
                 <h2 class="mt-3 text-3xl font-bold">مرحبًا بعودتك</h2>
                 <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">يمكنك أيضًا <a href="{{ route('student.register') }}" class="font-semibold text-[var(--color-brand-700)]">إنشاء حساب جديد</a>.</p>
             </div>

@@ -74,18 +74,18 @@
             </form>
         </section>
 
-        <section class="hidden rounded-[2rem] bg-[color-mix(in_oklch,var(--color-brand-100)_72%,white)] p-8 lg:block">
+        <section class="hidden surface-card-soft rounded-[2rem] p-8 lg:block">
             <p class="font-display text-4xl text-[var(--color-brand-700)]">قبل أن تبدأ</p>
             <div class="mt-8 space-y-4">
-                <article class="rounded-[1.8rem] bg-white p-5">
+                <article class="surface-card rounded-[1.8rem] p-5">
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">١. أنشئ الحساب</p>
                     <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">أدخل بياناتك الأساسية وحدد الصف والمسار المناسبين.</p>
                 </article>
-                <article class="rounded-[1.8rem] bg-white p-5">
+                <article class="surface-card rounded-[1.8rem] p-5">
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">٢. تابع حالة الطلب</p>
                     <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">بعد التسجيل، تستطيع دخول البوابة ومتابعة حالة المراجعة بدون انتظار الدعم يدويًا.</p>
                 </article>
-                <article class="rounded-[1.8rem] bg-white p-5">
+                <article class="surface-card rounded-[1.8rem] p-5">
                     <p class="text-sm font-semibold text-[var(--color-brand-700)]">٣. استخدم البوابة</p>
                     <p class="mt-3 text-sm leading-8 text-[var(--color-ink-700)]">ستظهر لك بيانات الحساب، المدفوعات، الحضور، وسجل الشكاوى في مكان واحد.</p>
                 </article>

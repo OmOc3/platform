@@ -7,7 +7,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1.4fr_1fr_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالاسم أو البريد أو المنصب">
+            <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالاسم أو البريد أو المنصب" aria-label="ابحث في المشرفين">
                 <select name="role" class="form-select">
                     <option value="">كل الأدوار</option>
                     @foreach ($roles as $role)

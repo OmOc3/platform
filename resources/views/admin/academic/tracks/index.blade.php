@@ -7,7 +7,7 @@
 
         <x-slot:filters>
             <form method="GET" class="grid gap-3 md:grid-cols-[1fr_220px_220px_auto]">
-                <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالاسم أو الكود">
+            <input type="search" name="search" value="{{ request('search') }}" class="form-input" placeholder="ابحث بالاسم أو الكود" aria-label="ابحث في المسارات">
                 <select name="grade_id" class="form-select">
                     <option value="">كل الصفوف</option>
                     @foreach ($grades as $grade)

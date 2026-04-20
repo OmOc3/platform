@@ -54,6 +54,12 @@
 - السلة وتجهيز draft orders
 - إدارة الطلبات من لوحة الإدارة مع انتقالات حالة آمنة
 - تفعيل الطلبات الرقمية ومنح الاستحقاقات تلقائيًا للشراء المباشر والباقات
+- دورة التجارة المكتملة v1:
+  - بدء الدفع لكل طلب على حدة
+  - محاولات دفع وحالات دفع موحدة
+  - webhooks idempotent لتأكيد السداد
+  - تجهيز تلقائي للطلبات الرقمية
+  - تأسيس الشحن لطلبات الكتب مع تتبع حالتها
 - ملتقى الأسئلة
 - مركز الأخطاء
 - إدارة أقسام المنهج وأقسام المحاضرات والمحتوى والاختبارات
@@ -73,8 +79,8 @@
 - essay/manual-review workflows
 - delayed/manual result release
 - advanced exam analytics
-- payment gateway integration
-- shipping execution
+- real payment gateway integration
+- carrier/provider shipping execution
 - ticketing/support backend completion
 - payroll/operations completion
 
@@ -138,6 +144,14 @@ cp .env.example .env
 - التطبيق محليًا يعمل على قاعدة `platform`.
 - الاختبارات تعمل على قاعدة `testing`.
 - `.env.example` هو المصدر الرسمي للإعدادات المحلية.
+
+## متغيرات التجارة الجديدة
+
+- `COMMERCE_PAYMENT_PROVIDER`
+- `COMMERCE_FAKE_PAYMENT_EXPIRES_MINUTES`
+- `COMMERCE_SHIPPING_FEE_CAIRO`
+- `COMMERCE_SHIPPING_FEE_ALEXANDRIA`
+- `COMMERCE_SHIPPING_FEE_DEFAULT`
 
 ## ملفات التوثيق
 
