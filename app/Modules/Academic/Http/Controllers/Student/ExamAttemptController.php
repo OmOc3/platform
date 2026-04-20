@@ -123,21 +123,64 @@ class ExamAttemptController extends Controller
         $answers = $examAttempt->answers->keyBy('question_id');
 
         return $examAttempt->exam->examQuestions
-            ->map(function ($examQuestion) use ($answers): array {
+            ->map(function ($examQuestion, $index) use ($answers): array {
                 $question = $examQuestion->question;
                 $answer = $answers->get($examQuestion->question_id);
+                $questionMeta = (array) ($question?->metadata ?? []);
+                $answerMeta = (array) ($answer?->answer_meta ?? []);
 
                 return [
+                    'number' => $index + 1,
                     'question' => $question,
                     'answer' => $answer,
                     'selected_choice' => $answer?->answer_meta['selected_choice_content'] ?? 'لم تتم الإجابة',
                     'correct_choice' => $answer?->answer_meta['correct_choice_content'] ?? null,
                     'explanation' => $answer?->answer_meta['explanation'] ?? $question?->explanation,
+                    'important_note' => $answerMeta['important_note'] ?? $questionMeta['important_note'] ?? null,
+                    'question_image' => $this->resolveImagePath($questionMeta, [
+                        'question_image_path',
+                        'image_path',
+                        'question_image',
+                        'image',
+                    ]),
+                    'solution_image' => $this->resolveImagePath(array_merge($questionMeta, $answerMeta), [
+                        'solution_image_path',
+                        'answer_image_path',
+                        'explanation_image_path',
+                        'solution_image',
+                        'answer_image',
+                        'explanation_image',
+                    ]),
+                    'choices' => $question?->choices
+                        ?->map(fn ($choice): array => [
+                            'content' => $choice->content,
+                            'is_correct' => (bool) $choice->is_correct,
+                            'is_selected' => (int) ($answer?->selected_answer ?? 0) === $choice->id,
+                        ])
+                        ->values()
+                        ->all() ?? [],
                     'is_correct' => (bool) ($answer?->is_correct ?? false),
                     'awarded_score' => (int) ($answer?->awarded_score ?? 0),
                     'max_score' => (int) $examQuestion->max_score,
                 ];
             })
             ->all();
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @param  array<int, string>  $keys
+     */
+    private function resolveImagePath(array $payload, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            $value = data_get($payload, $key);
+
+            if (is_string($value) && $value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 }

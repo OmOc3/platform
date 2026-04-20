@@ -29,6 +29,7 @@ class MistakeGroupsQuery
                     'score_lost' => $items->sum('score_lost'),
                 ];
             })
+            ->sortByDesc('latest_at')
             ->values();
     }
 }

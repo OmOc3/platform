@@ -21,7 +21,7 @@ class ProfileController extends Controller
         $this->authorize('viewProfile', $student);
 
         return view('student.profile.show', [
-            'student' => $student->load(['grade', 'track', 'group']),
+            'student' => $student->load(['grade', 'track', 'center', 'group.center']),
         ]);
     }
 

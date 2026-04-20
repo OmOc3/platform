@@ -15,9 +15,17 @@ class BookOrderHistoryController extends Controller
     public function __invoke(): View
     {
         $student = auth('student')->user();
+        $builder = $this->studentBookOrdersQuery->builder($student);
+        $summary = [
+            'count' => (clone $builder)->count(),
+            'fulfilled_count' => (clone $builder)->where('status', 'fulfilled')->count(),
+            'pending_count' => (clone $builder)->whereIn('status', ['draft', 'pending_payment', 'paid'])->count(),
+            'total_amount' => (clone $builder)->sum('total_amount'),
+        ];
 
         return view('student.history.book-orders', [
-            'orders' => $this->studentBookOrdersQuery->builder($student)->paginate(12),
+            'orders' => $builder->paginate(12),
+            'summary' => $summary,
         ]);
     }
 }

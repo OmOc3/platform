@@ -14,7 +14,17 @@ class ForumThreadsQuery
         $search = $request->string('search')->toString();
 
         return ForumThread::query()
-            ->with(['student', 'firstMessage.attachments', 'latestMessage', 'messages'])
+            ->with([
+                'student',
+                'firstMessage.attachments',
+                'latestMessage.author',
+                'latestStaffReply.author',
+                'latestStaffReply.attachments',
+            ])
+            ->withCount('messages')
+            ->withCount([
+                'messages as staff_replies_count' => fn ($query) => $query->where('is_staff_reply', true),
+            ])
             ->when($onlyMine, fn ($query) => $query->where('student_id', $student->id))
             ->unless($onlyMine, fn ($query) => $query->where('visibility', 'public'))
             ->when($search !== '', function ($query) use ($search): void {

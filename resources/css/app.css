@@ -328,6 +328,16 @@
         box-shadow: var(--shadow-soft);
     }
 
+    .portal-summary-card__label {
+        @apply text-xs font-semibold uppercase tracking-[0.18em];
+        color: var(--color-ink-500);
+    }
+
+    .portal-summary-card__value {
+        @apply mt-4 block text-2xl font-bold;
+        color: var(--color-brand-700);
+    }
+
     .portal-hero-slide {
         @apply rounded-[2.2rem] p-6 lg:p-7;
         background:
@@ -474,6 +484,101 @@
 
     .theme-toggle--floating {
         @apply backdrop-blur-sm;
+    }
+
+    .account-nav {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .account-nav__link {
+        @apply rounded-full px-4 py-3 text-sm font-semibold transition;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+        color: var(--color-ink-700);
+    }
+
+    .account-nav__link:hover {
+        background-color: var(--color-panel-muted);
+        color: var(--color-ink-900);
+    }
+
+    .account-nav__link--active {
+        background: linear-gradient(135deg, color-mix(in oklch, var(--color-brand-700) 92%, black), color-mix(in oklch, var(--color-violet-600) 42%, var(--color-brand-700)));
+        border-color: transparent;
+        color: white;
+    }
+
+    .mistake-group-link {
+        @apply flex items-center justify-between gap-3 rounded-[1.5rem] px-4 py-4 transition;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+    }
+
+    .mistake-group-link:hover {
+        background-color: var(--color-panel-muted);
+    }
+
+    .mistake-group-link--active {
+        background-color: color-mix(in oklch, var(--color-violet-100) 55%, white);
+        border-color: color-mix(in oklch, var(--color-violet-300) 55%, var(--color-border-soft));
+    }
+
+    .mistake-group-link__count {
+        @apply inline-flex min-w-10 items-center justify-center rounded-full px-3 py-2 text-sm font-bold;
+        background-color: color-mix(in oklch, var(--color-danger) 14%, white);
+        color: color-mix(in oklch, var(--color-danger) 74%, black);
+    }
+
+    .forum-attachments {
+        @apply grid gap-3;
+        grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    }
+
+    .forum-attachment {
+        @apply overflow-hidden rounded-[1.5rem];
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-muted);
+    }
+
+    .forum-attachment--image img {
+        @apply h-44 w-full object-cover;
+    }
+
+    .forum-attachment--audio {
+        @apply p-4;
+    }
+
+    .exam-question-nav {
+        @apply inline-flex h-12 items-center justify-center rounded-[1rem] text-sm font-bold transition;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+        color: var(--color-ink-700);
+    }
+
+    .exam-question-nav--correct {
+        background-color: color-mix(in oklch, var(--color-success) 12%, white);
+        color: color-mix(in oklch, var(--color-success) 78%, black);
+    }
+
+    .exam-question-nav--wrong {
+        background-color: color-mix(in oklch, var(--color-danger) 10%, white);
+        color: color-mix(in oklch, var(--color-danger) 72%, black);
+    }
+
+    .exam-choice {
+        @apply flex flex-col gap-3 rounded-[1.5rem] px-4 py-4 lg:flex-row lg:items-center lg:justify-between;
+        border: 1px solid var(--color-border-soft);
+        background-color: var(--color-panel-strong);
+    }
+
+    .exam-choice--correct {
+        background-color: color-mix(in oklch, var(--color-success) 10%, white);
+        border-color: color-mix(in oklch, var(--color-success) 32%, var(--color-border-soft));
+    }
+
+    .exam-choice--selected {
+        background-color: color-mix(in oklch, var(--color-warning) 10%, white);
+        border-color: color-mix(in oklch, var(--color-warning) 34%, var(--color-border-soft));
     }
 }
 

@@ -15,9 +15,17 @@ class PaymentHistoryController extends Controller
     public function __invoke(): View
     {
         $student = auth('student')->user();
+        $builder = $this->studentEntitlementHistoryQuery->builder($student);
+        $summary = [
+            'count' => (clone $builder)->count(),
+            'active_count' => (clone $builder)->where('status', 'active')->count(),
+            'paid_count' => (clone $builder)->where('price_amount', '>', 0)->count(),
+            'spent_total' => (clone $builder)->sum('price_amount'),
+        ];
 
         return view('student.history.payments', [
-            'entitlements' => $this->studentEntitlementHistoryQuery->builder($student)->paginate(12),
+            'entitlements' => $builder->paginate(12),
+            'summary' => $summary,
         ]);
     }
 }

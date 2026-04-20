@@ -64,6 +64,8 @@
                     @php($access = $item['access'])
                     @php($progress = $item['progress'] ?? null)
                     @php($isExam = $resource instanceof \App\Modules\Academic\Models\Exam)
+                    @php($currentAttempt = $item['current_attempt'] ?? null)
+                    @php($latestAttempt = $item['latest_attempt'] ?? null)
                     @php($isOpen = in_array($access['state']->value, ['open', 'free', 'owned_via_entitlement'], true))
                     @php($resourceTypeLabel = $isExam ? 'اختبار' : ($resource->type->value === 'review' ? 'مراجعة' : 'محاضرة'))
 
@@ -85,6 +87,9 @@
                                     <x-student.access-state :access="$access" />
                                     @if ($resource->is_featured)
                                         <x-admin.status-badge label="مميز" />
+                                    @endif
+                                    @if ($isExam && $latestAttempt)
+                                        <x-admin.status-badge :label="$latestAttempt->total_score.'/'.$latestAttempt->max_score" tone="success" />
                                     @endif
                                     @if (! $isExam && $progress)
                                         <x-admin.status-badge
@@ -122,6 +127,18 @@
                                     <p class="mt-4 text-sm leading-7 text-[var(--color-ink-500)]">{{ $access['reason'] }}</p>
                                 @endif
 
+                                @if ($isExam && $latestAttempt)
+                                    <div class="mt-4 rounded-[1.6rem] bg-[color-mix(in_oklch,var(--color-success)_8%,white)] p-4">
+                                        <div class="flex flex-wrap items-center justify-between gap-3">
+                                            <div>
+                                                <p class="text-sm font-semibold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">آخر نتيجة مسجلة</p>
+                                                <p class="mt-2 text-xs text-[var(--color-ink-500)]">{{ optional($latestAttempt->graded_at)->format('Y/m/d') ?: '—' }} · {{ optional($latestAttempt->graded_at)->format('H:i') ?: '—' }}</p>
+                                            </div>
+                                            <span class="text-xl font-bold text-[color-mix(in_oklch,var(--color-success)_70%,black)]">{{ $latestAttempt->total_score }}/{{ $latestAttempt->max_score }}</span>
+                                        </div>
+                                    </div>
+                                @endif
+
                                 @if (! $isExam && $progress)
                                     <div class="mt-4 space-y-2">
                                         <div class="flex items-center justify-between text-xs font-semibold text-[var(--color-ink-500)]">
@@ -137,7 +154,13 @@
                         </div>
 
                         <div class="mt-6 flex flex-wrap gap-3">
-                            @if ($isOpen)
+                            @if ($isExam && $currentAttempt)
+                                <a href="{{ route('student.exam-attempts.show', $currentAttempt) }}" class="btn-primary">استكمال الاختبار</a>
+                                <a href="{{ route('student.lectures.exams.show', $resource) }}" class="btn-secondary">تفاصيل الاختبار</a>
+                            @elseif ($isExam && $latestAttempt)
+                                <a href="{{ route('student.exam-attempts.result', $latestAttempt) }}" class="btn-primary">عرض النتائج</a>
+                                <a href="{{ route('student.lectures.exams.show', $resource) }}" class="btn-secondary">تفاصيل الاختبار</a>
+                            @elseif ($isOpen)
                                 <a href="{{ $isExam ? route('student.lectures.exams.show', $resource) : route('student.lectures.show', $resource) }}" class="btn-primary">
                                     {{ $isExam ? 'افتح الاختبار' : 'فتح المحاضرة' }}
                                 </a>

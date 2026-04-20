@@ -23,9 +23,11 @@ class MistakeController extends Controller
 
     public function show(Lecture $lecture): View
     {
+        $student = auth('student')->user();
+
         $items = MistakeItem::query()
             ->with(['lecture', 'exam'])
-            ->where('student_id', auth('student')->id())
+            ->where('student_id', $student->id)
             ->where('lecture_id', $lecture->id)
             ->latest('created_at')
             ->get();
@@ -35,6 +37,12 @@ class MistakeController extends Controller
         return view('student.mistakes.show', [
             'lecture' => $lecture,
             'items' => $items,
+            'groups' => $this->mistakeGroupsQuery->forStudent($student),
+            'summary' => [
+                'count' => $items->count(),
+                'score_lost' => $items->sum('score_lost'),
+                'latest_at' => $items->max('created_at'),
+            ],
         ]);
     }
 }

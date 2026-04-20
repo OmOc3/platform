@@ -52,7 +52,15 @@ class StudentLectureCatalogQuery
 
         if ($tab === 'exam') {
             $items = $this->examBaseQuery($student)
-                ->with(['lecture', 'grade', 'track'])
+                ->with([
+                    'lecture',
+                    'grade',
+                    'track',
+                    'attempts' => fn ($query) => $query
+                        ->where('student_id', $student->id)
+                        ->latest('graded_at')
+                        ->latest('started_at'),
+                ])
                 ->when($lectureSection > 0, fn ($query) => $query->whereHas('lecture', fn ($builder) => $builder->where('lecture_section_id', $lectureSection)))
                 ->where('is_active', true)
                 ->when($request->boolean('featured'), fn ($query) => $query->where('is_featured', true))
@@ -64,6 +72,8 @@ class StudentLectureCatalogQuery
                 ->through(fn (Exam $exam): array => [
                     'resource' => $exam,
                     'access' => $this->accessResolver->resolveState($student, $exam),
+                    'current_attempt' => $exam->attempts->first(fn ($attempt) => $attempt->status->value === 'in_progress'),
+                    'latest_attempt' => $exam->attempts->first(fn ($attempt) => $attempt->status->value === 'graded'),
                 ]);
         } else {
             $type = $tab === 'review' ? ContentKind::Review : ContentKind::Lecture;

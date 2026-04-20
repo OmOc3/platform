@@ -67,4 +67,11 @@ class ForumThread extends Model
     {
         return $this->hasOne(ForumMessage::class)->latestOfMany();
     }
+
+    public function latestStaffReply(): HasOne
+    {
+        return $this->hasOne(ForumMessage::class)
+            ->where('is_staff_reply', true)
+            ->latestOfMany();
+    }
 }
