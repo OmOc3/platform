@@ -3,24 +3,33 @@
 namespace App\Modules\Centers\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Centers\Http\Requests\Admin\RecordAttendanceRequest;
+use App\Modules\Centers\Models\AttendanceRecord;
 use App\Modules\Centers\Models\AttendanceSession;
 use App\Modules\Centers\Models\EducationalCenter;
 use App\Modules\Centers\Models\EducationalGroup;
+use App\Modules\Centers\Queries\AdminAttendanceSessionRosterQuery;
 use App\Modules\Centers\Queries\AdminAttendanceSessionsQuery;
+use App\Shared\Contracts\AttendanceRecorder;
+use App\Shared\Enums\AttendanceStatus;
 use App\Shared\Support\Exports\CsvExporter;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AttendanceReportController extends Controller
 {
-    public function __construct(private readonly AdminAttendanceSessionsQuery $adminAttendanceSessionsQuery)
-    {
+    public function __construct(
+        private readonly AdminAttendanceSessionsQuery $adminAttendanceSessionsQuery,
+        private readonly AdminAttendanceSessionRosterQuery $adminAttendanceSessionRosterQuery,
+        private readonly AttendanceRecorder $attendanceRecorder,
+    ) {
     }
 
     public function index(Request $request): View|StreamedResponse
     {
-        abort_unless(auth('admin')->user()?->can('attendance.view'), 403);
+        $this->authorize('viewAny', AttendanceSession::class);
 
         $query = $this->adminAttendanceSessionsQuery->builder($request);
 
@@ -50,8 +59,48 @@ class AttendanceReportController extends Controller
                 'total' => AttendanceSession::query()->count(),
                 'lectures' => AttendanceSession::query()->where('session_type', 'lecture')->count(),
                 'exams' => AttendanceSession::query()->where('session_type', 'exam')->count(),
-                'records' => \App\Modules\Centers\Models\AttendanceRecord::query()->count(),
+                'records' => AttendanceRecord::query()->count(),
             ],
         ]);
+    }
+
+    public function show(AttendanceSession $attendanceSession): View
+    {
+        $this->authorize('view', $attendanceSession);
+
+        $attendanceSession->load([
+            'group.center',
+            'group.students',
+            'records.student',
+        ]);
+
+        $roster = $this->adminAttendanceSessionRosterQuery->items($attendanceSession);
+
+        return view('admin.centers.attendance.show', [
+            'attendanceSession' => $attendanceSession,
+            'roster' => $roster,
+            'statuses' => AttendanceStatus::cases(),
+            'summary' => [
+                'students' => $roster->count(),
+                'present' => $attendanceSession->records->where('attendance_status', AttendanceStatus::Present)->count(),
+                'late' => $attendanceSession->records->where('attendance_status', AttendanceStatus::Late)->count(),
+                'absent' => $attendanceSession->records->where('attendance_status', AttendanceStatus::Absent)->count(),
+            ],
+        ]);
+    }
+
+    public function update(RecordAttendanceRequest $request, AttendanceSession $attendanceSession): RedirectResponse
+    {
+        $this->authorize('update', $attendanceSession);
+
+        $this->attendanceRecorder->record([
+            'session' => $attendanceSession,
+            'records' => $request->validated('records'),
+            'actor' => auth('admin')->user(),
+        ]);
+
+        return redirect()
+            ->route('admin.attendance.show', $attendanceSession)
+            ->with('status', 'تم تحديث سجلات الحضور لهذه الجلسة.');
     }
 }

@@ -51,10 +51,13 @@
   - payment attempts pending
   - digital paid/fulfilled flows
   - book shipment flows
+  - attendance sessions قابلة للتحديث من الإدارة مع أمثلة درجات وحضور
+- `AttendanceRecorder` أصبح مسؤولًا عن upsert سجلات الحضور والدرجات مع audit logging على تغييرات الإدارة.
 
 ## Deferred Decisions
 - real payment gateway integration لم يُحسم بعد.
 - shipping fulfillment عبر carrier خارجي لم يُنفذ بعد.
+- bulk attendance import/export workflows لم تُنفذ بعد.
 - advanced proctoring مؤجل.
 - essay/manual review workflows مؤجلة.
 - advanced exam analytics مؤجلة.

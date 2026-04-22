@@ -1,4 +1,4 @@
-<x-layouts.admin title="تقارير الحضور" heading="تقارير الحضور" subheading="قراءة جلسات السنتر، توزيع الحضور، والتأخير والغياب حسب السنتر والمجموعة.">
+<x-layouts.admin title="تقارير الحضور" heading="تقارير الحضور" subheading="قراءة جلسات السنتر، توزيع الحضور، ثم فتح كل جلسة لتسجيل الروستر وتحديث الدرجات المرتبطة بها.">
     <section class="admin-metric-grid">
         <x-admin.metric-card label="كل الجلسات" :value="$overview['total']" description="إجمالي الجلسات المرتبطة بالمجموعات." />
         <x-admin.metric-card label="جلسات محاضرات" :value="$overview['lectures']" description="الجلسات التعليمية العادية." />
@@ -6,7 +6,7 @@
         <x-admin.metric-card label="سجلات الحضور" :value="$overview['records']" description="كل حالات الحضور المسجلة على الجلسات." />
     </section>
 
-    <x-admin.table-shell title="تقرير الحضور" description="فلترة حسب السنتر أو المجموعة أو نوع الجلسة ثم مراجعة توزيع الحضور داخل كل جلسة.">
+    <x-admin.table-shell title="تقرير الحضور" description="فلترة حسب السنتر أو المجموعة أو نوع الجلسة ثم فتح كل جلسة لإدارة الروستر وتحديث الحضور.">
         <x-slot:actions>
             <a href="{{ route('admin.attendance.index', array_merge(request()->query(), ['export' => 'csv'])) }}" class="btn-secondary">تصدير CSV</a>
         </x-slot:actions>
@@ -43,6 +43,7 @@
                     <th>النوع</th>
                     <th>الحضور</th>
                     <th>التاريخ</th>
+                    <th>إجراءات</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,9 +62,14 @@
                             <p class="mt-1 text-xs text-[var(--color-ink-500)]">تأخير {{ $session->late_records_count }} / غياب {{ $session->absent_records_count }}</p>
                         </td>
                         <td>{{ optional($session->starts_at)->format('Y-m-d H:i') ?: '—' }}</td>
+                        <td>
+                            <a href="{{ route('admin.attendance.show', $session) }}" class="btn-secondary !px-4 !py-2">تفاصيل الجلسة</a>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="text-center text-[var(--color-ink-500)]">لا توجد جلسات مطابقة للفلاتر الحالية.</td></tr>
+                    <tr>
+                        <td colspan="6" class="text-center text-[var(--color-ink-500)]">لا توجد جلسات مطابقة للفلاتر الحالية.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

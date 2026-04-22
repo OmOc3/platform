@@ -72,6 +72,11 @@
   - صفحة نتيجة فورية
   - مزامنة الأخطاء تلقائيًا مع مركز الأخطاء
   - شاشة قراءة لمحاولات الاختبارات داخل الإدارة
+- تشغيل السنتر v1:
+  - فتح تفاصيل جلسة الحضور من لوحة الإدارة
+  - تسجيل الروستر والدرجات لكل جلسة
+  - تحديث idempotent لسجلات الحضور والاختبارات
+  - ربط مباشر مع سجل حضور الطالب
 
 ### مؤجل لاحقًا
 
@@ -81,6 +86,7 @@
 - advanced exam analytics
 - real payment gateway integration
 - carrier/provider shipping execution
+- advanced center analytics and bulk attendance workflows
 - ticketing/support backend completion
 - payroll/operations completion
 

@@ -233,6 +233,7 @@ return [
                 ['label' => 'الطلبات', 'route' => 'admin.orders.index', 'permission' => 'orders.view'],
                 ['label' => 'المدفوعات', 'route' => 'admin.payments.index', 'permission' => 'transactions.view'],
                 ['label' => 'الشحن', 'route' => 'admin.shipments.index', 'permission' => 'shipping.view'],
+                ['label' => 'تذاكر الدعم', 'route' => 'admin.tickets.index', 'permission' => 'tickets.view'],
                 ['label' => 'ملتقى الأسئلة', 'route' => 'admin.forum-threads.index', 'permission' => 'forum.view'],
             ],
         ],

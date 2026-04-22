@@ -15,7 +15,7 @@
                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $brand['support_whatsapp']) }}" target="_blank" rel="noreferrer" class="btn-primary !px-4 !py-2">واتساب</a>
                 <a href="tel:{{ $brand['support_phone'] }}" class="btn-secondary !px-4 !py-2">اتصال</a>
                 @if ($student)
-                    <a href="{{ route('student.complaints.index') }}" class="btn-secondary !px-4 !py-2">بوابة الدعم</a>
+                    <a href="{{ route('student.tickets.index') }}" class="btn-secondary !px-4 !py-2">بوابة التذاكر</a>
                 @endif
             </div>
         @endif

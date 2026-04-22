@@ -70,6 +70,15 @@ Status: complete
 
 Status: complete
 
+## Milestone 7
+- Attendance recording workflow for center sessions
+- Admin session detail page with roster-based updates
+- Exam score recording inside attendance sessions
+- Policy-protected attendance read/write flow
+- Student attendance history backed by the same operational records
+
+Status: complete
+
 ## Runtime and Verification Baseline
 - المسار المحلي الرسمي للتشغيل والتحقق هو Sail + MySQL.
 - التطبيق يستخدم قاعدة `platform`.
@@ -81,6 +90,5 @@ Status: complete
 - Carrier integration and physical shipping execution
 - Essay/manual review and delayed result release
 - Advanced exam analytics and richer student performance reporting
-- Center operations expansion
 - Ticketing and support backend completion
 - Payroll and operations domains

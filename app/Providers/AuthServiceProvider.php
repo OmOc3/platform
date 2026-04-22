@@ -16,6 +16,8 @@ use App\Modules\Academic\Policies\GradePolicy;
 use App\Modules\Academic\Policies\LecturePolicy;
 use App\Modules\Academic\Policies\LectureSectionPolicy;
 use App\Modules\Academic\Policies\TrackPolicy;
+use App\Modules\Centers\Models\AttendanceSession;
+use App\Modules\Centers\Policies\AttendanceSessionPolicy;
 use App\Modules\Commerce\Models\Book;
 use App\Modules\Commerce\Models\Entitlement;
 use App\Modules\Commerce\Models\Order;
@@ -30,8 +32,10 @@ use App\Modules\Commerce\Policies\PackagePolicy;
 use App\Modules\Commerce\Policies\ShipmentPolicy;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
+use App\Modules\Support\Models\SupportTicket;
 use App\Modules\Support\Policies\ComplaintPolicy;
 use App\Modules\Support\Policies\ForumThreadPolicy;
+use App\Modules\Support\Policies\SupportTicketPolicy;
 use App\Modules\Identity\Models\Admin;
 use App\Modules\Identity\Models\AuditLog;
 use App\Modules\Identity\Models\Setting;
@@ -66,6 +70,7 @@ class AuthServiceProvider extends ServiceProvider
         Grade::class => GradePolicy::class,
         Lecture::class => LecturePolicy::class,
         LectureSection::class => LectureSectionPolicy::class,
+        AttendanceSession::class => AttendanceSessionPolicy::class,
         MistakeItem::class => MistakeItemPolicy::class,
         Package::class => PackagePolicy::class,
         Shipment::class => ShipmentPolicy::class,
@@ -73,6 +78,7 @@ class AuthServiceProvider extends ServiceProvider
         Track::class => TrackPolicy::class,
         Student::class => StudentPolicy::class,
         Complaint::class => ComplaintPolicy::class,
+        SupportTicket::class => SupportTicketPolicy::class,
     ];
 
     /**

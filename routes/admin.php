@@ -24,6 +24,7 @@ use App\Modules\Students\Http\Controllers\Admin\MistakeController;
 use App\Modules\Students\Http\Controllers\Admin\StudentController;
 use App\Modules\Support\Http\Controllers\Admin\ComplaintController;
 use App\Modules\Support\Http\Controllers\Admin\ForumThreadController;
+use App\Modules\Support\Http\Controllers\Admin\SupportTicketController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function (): void {
@@ -59,6 +60,8 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/centers', [CenterController::class, 'index'])->name('centers.index');
         Route::get('/centers/{center}', [CenterController::class, 'show'])->name('centers.show');
         Route::get('/attendance', [AttendanceReportController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance/{attendanceSession}', [AttendanceReportController::class, 'show'])->name('attendance.show');
+        Route::put('/attendance/{attendanceSession}', [AttendanceReportController::class, 'update'])->name('attendance.update');
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::resource('students', StudentController::class)->only(['index', 'edit', 'update']);
         Route::get('/mistakes', [MistakeController::class, 'index'])->name('mistakes.index');
@@ -67,6 +70,12 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/forum-threads/{forumThread}', [ForumThreadController::class, 'show'])->name('forum-threads.show');
         Route::put('/forum-threads/{forumThread}', [ForumThreadController::class, 'update'])->name('forum-threads.update');
         Route::post('/forum-threads/{forumThread}/reply', [ForumThreadController::class, 'reply'])->name('forum-threads.reply');
+        Route::get('/tickets', [SupportTicketController::class, 'index'])->name('tickets.index');
+        Route::get('/tickets/{supportTicket}', [SupportTicketController::class, 'show'])->name('tickets.show');
+        Route::put('/tickets/{supportTicket}/status', [SupportTicketController::class, 'updateStatus'])->name('tickets.status.update');
+        Route::put('/tickets/{supportTicket}/assignment', [SupportTicketController::class, 'assign'])->name('tickets.assignment.update');
+        Route::post('/tickets/{supportTicket}/assignment/auto', [SupportTicketController::class, 'autoAssign'])->name('tickets.assignment.auto');
+        Route::post('/tickets/{supportTicket}/reply', [SupportTicketController::class, 'reply'])->name('tickets.reply');
         Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
         Route::get('/complaints/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
         Route::put('/complaints/{complaint}', [ComplaintController::class, 'update'])->name('complaints.update');

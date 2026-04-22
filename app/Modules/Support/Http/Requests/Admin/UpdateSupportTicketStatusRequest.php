@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Modules\Support\Http\Requests\Admin;
+
+use App\Shared\Enums\TicketStatus;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
+
+class UpdateSupportTicketStatusRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'status' => ['required', new Enum(TicketStatus::class)],
+        ];
+    }
+}

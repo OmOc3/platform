@@ -17,6 +17,8 @@ use App\Modules\Students\Enums\StudentSourceType;
 use App\Modules\Support\Models\ForumMessage;
 use App\Modules\Support\Models\ForumThread;
 use App\Modules\Support\Models\Complaint;
+use App\Modules\Support\Models\SupportTicket;
+use App\Modules\Support\Models\SupportTicketReply;
 use App\Modules\Students\Notifications\StudentResetPasswordNotification;
 use App\Shared\Enums\StudentStatus;
 use Database\Factories\StudentFactory;
@@ -152,6 +154,17 @@ class Student extends Authenticatable
     public function forumMessages(): HasMany
     {
         return $this->hasMany(ForumMessage::class, 'author_id')
+            ->where('author_type', $this->getMorphClass());
+    }
+
+    public function supportTickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class)->latest('last_activity_at');
+    }
+
+    public function supportTicketReplies(): HasMany
+    {
+        return $this->hasMany(SupportTicketReply::class, 'author_id')
             ->where('author_type', $this->getMorphClass());
     }
 

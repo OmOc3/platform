@@ -41,7 +41,7 @@
 ## Center History
 - `educational_centers` and `educational_groups` model the offline center structure.
 - `attendance_sessions` represent publishable center lessons or exams.
-- `attendance_records` represent per-student attendance and score history.
+- `attendance_records` represent per-student attendance and score history, and are now the operational source for both admin session recording and student attendance history.
 
 ## Support and Forum
 - `complaints` unify complaint/suggestion intake using a typed field.

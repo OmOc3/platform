@@ -41,5 +41,19 @@ class AdminSeeder extends Seeder
         ]);
 
         $academicManager->syncRoles(['Academic Manager']);
+
+        $supportAgent = Admin::query()->firstOrCreate([
+            'email' => 'support.agent@example.edu',
+        ], [
+            'uuid' => (string) Str::uuid(),
+            'name' => 'مسؤول دعم',
+            'phone' => '01000000002',
+            'job_title' => 'Support Agent',
+            'locale' => 'ar',
+            'is_active' => true,
+            'password' => 'password',
+        ]);
+
+        $supportAgent->syncRoles(['Support Agent']);
     }
 }

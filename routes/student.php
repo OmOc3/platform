@@ -20,6 +20,7 @@ use App\Modules\Students\Http\Controllers\Student\PaymentHistoryController;
 use App\Modules\Students\Http\Controllers\Student\ProfileController;
 use App\Modules\Support\Http\Controllers\Student\ComplaintController;
 use App\Modules\Support\Http\Controllers\Student\ForumThreadController;
+use App\Modules\Support\Http\Controllers\Student\SupportTicketController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('student')->name('student.')->group(function (): void {
@@ -47,6 +48,10 @@ Route::prefix('student')->name('student.')->group(function (): void {
 
         Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
         Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
+        Route::get('/tickets', [SupportTicketController::class, 'index'])->name('tickets.index');
+        Route::post('/tickets', [SupportTicketController::class, 'store'])->name('tickets.store');
+        Route::get('/tickets/{supportTicket}', [SupportTicketController::class, 'show'])->name('tickets.show');
+        Route::post('/tickets/{supportTicket}/replies', [SupportTicketController::class, 'reply'])->name('tickets.reply.store');
 
         Route::get('/lectures', [LectureCatalogController::class, 'index'])->name('lectures.index');
         Route::get('/lectures/content/{lecture:slug}', [LectureCatalogController::class, 'showLecture'])->name('lectures.show');

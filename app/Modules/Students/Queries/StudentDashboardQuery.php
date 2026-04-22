@@ -84,6 +84,7 @@ class StudentDashboardQuery
                 ['label' => 'المحاضرات', 'href' => route('student.lectures.index')],
                 ['label' => 'الامتحانات', 'href' => route('student.lectures.index', ['tab' => 'exam'])],
                 ['label' => 'كتب', 'href' => route('student.books.index')],
+                ['label' => 'تذاكر الدعم', 'href' => route('student.tickets.index')],
                 ['label' => 'الشكاوي والاقتراحات', 'href' => route('student.complaints.index')],
                 ['label' => 'أسئلة وأجوبة', 'href' => route('student.forum.index')],
                 ['label' => 'حضور السنتر', 'href' => route('student.attendance.index')],
