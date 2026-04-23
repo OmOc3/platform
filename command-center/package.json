@@ -1,0 +1,16 @@
+{
+  "name": "command-center-workspace",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @command-center/tracker-core && npm run build --workspace @command-center/mcp && npm run build --workspace @command-center/desktop",
+    "typecheck": "npm run typecheck --workspace @command-center/tracker-core && npm run typecheck --workspace @command-center/mcp && npm run typecheck --workspace @command-center/desktop",
+    "dev:desktop": "npm run dev --workspace @command-center/desktop",
+    "dev:mcp": "npm run dev --workspace @command-center/mcp",
+    "dist:desktop": "npm run dist --workspace @command-center/desktop"
+  }
+}

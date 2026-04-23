@@ -16,6 +16,8 @@ use App\Modules\Academic\Policies\GradePolicy;
 use App\Modules\Academic\Policies\LecturePolicy;
 use App\Modules\Academic\Policies\LectureSectionPolicy;
 use App\Modules\Academic\Policies\TrackPolicy;
+use App\Modules\Centers\Models\AttendanceSession;
+use App\Modules\Centers\Policies\AttendanceSessionPolicy;
 use App\Modules\Commerce\Models\Book;
 use App\Modules\Commerce\Models\Entitlement;
 use App\Modules\Commerce\Models\Order;
@@ -66,6 +68,7 @@ class AuthServiceProvider extends ServiceProvider
         Grade::class => GradePolicy::class,
         Lecture::class => LecturePolicy::class,
         LectureSection::class => LectureSectionPolicy::class,
+        AttendanceSession::class => AttendanceSessionPolicy::class,
         MistakeItem::class => MistakeItemPolicy::class,
         Package::class => PackagePolicy::class,
         Shipment::class => ShipmentPolicy::class,

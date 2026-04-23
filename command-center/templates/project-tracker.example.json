@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "schema_version": 1,
+    "version": 0,
+    "last_updated_at": "2026-01-01T00:00:00.000Z"
+  },
+  "project": {
+    "name": "Example Program",
+    "start_date": "2026-01-05",
+    "target_date": "2026-06-30",
+    "current_week": 1,
+    "schedule_status": "on_track",
+    "overall_progress": 0
+  },
+  "milestones": [],
+  "agents": [],
+  "agent_log": [],
+  "domains": [
+    {
+      "id": "product",
+      "label": "Product",
+      "color": "#87A9FF"
+    },
+    {
+      "id": "platform",
+      "label": "Platform",
+      "color": "#4DD18E"
+    },
+    {
+      "id": "operations",
+      "label": "Operations",
+      "color": "#F4C56F"
+    }
+  ],
+  "schedule": {
+    "phases": [
+      {
+        "id": "phase-1",
+        "title": "Foundation",
+        "start_week": 1,
+        "end_week": 4
+      },
+      {
+        "id": "phase-2",
+        "title": "Execution",
+        "start_week": 5,
+        "end_week": 10
+      }
+    ]
+  }
+}

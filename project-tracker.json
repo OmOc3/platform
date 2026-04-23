@@ -1,0 +1,376 @@
+{
+  "meta": {
+    "schema_version": 1,
+    "version": 0,
+    "last_updated_at": "2026-04-21T00:00:00.000Z"
+  },
+  "project": {
+    "name": "PLATFORM Command Center",
+    "start_date": "2026-01-01",
+    "target_date": "2026-06-30",
+    "current_week": 16,
+    "schedule_status": "on_track",
+    "overall_progress": 0.6667
+  },
+  "milestones": [
+    {
+      "id": "ms-foundation",
+      "title": "Foundation and Shell",
+      "domain": "product",
+      "week": 15,
+      "phase": "phase-1",
+      "planned_start": "2026-04-08",
+      "planned_end": "2026-04-14",
+      "actual_start": "2026-04-08",
+      "actual_end": "2026-04-13",
+      "drift_days": -1,
+      "is_key_milestone": true,
+      "key_milestone_label": "Core shell ready",
+      "subtasks": [
+        {
+          "id": "ms-foundation_001",
+          "label": "Finalize layout tokens",
+          "status": "done",
+          "done": true,
+          "assignee": "operator",
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": "2026-04-13T10:30:00.000Z",
+          "completed_by": "operator",
+          "priority": "P1",
+          "notes": "Token set is stable across student and admin shells.",
+          "prompt": null,
+          "context_files": [
+            "resources/css/app.css",
+            "resources/views/components/layouts/student.blade.php"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Light-first palette is consistent",
+            "Focus states are visible",
+            "Dark mode remains secondary"
+          ],
+          "constraints": [],
+          "agent_target": "operator",
+          "execution_mode": "human",
+          "depends_on": [],
+          "last_run_id": "run-20260413-01",
+          "builder_prompt": null
+        },
+        {
+          "id": "ms-foundation_002",
+          "label": "Add skip links and main landmarks",
+          "status": "done",
+          "done": true,
+          "assignee": "operator",
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": "2026-04-13T15:10:00.000Z",
+          "completed_by": "operator",
+          "priority": "P2",
+          "notes": "Keyboard navigation is now easier to bypass heavy shells.",
+          "prompt": null,
+          "context_files": [
+            "resources/views/components/layouts/public.blade.php",
+            "resources/views/components/layouts/admin.blade.php"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Skip links exist on all shells",
+            "Main landmark wraps page content"
+          ],
+          "constraints": [],
+          "agent_target": "operator",
+          "execution_mode": "human",
+          "depends_on": [
+            "ms-foundation_001"
+          ],
+          "last_run_id": "run-20260413-02",
+          "builder_prompt": null
+        }
+      ],
+      "dependencies": [],
+      "notes": [
+        "Core visual language established",
+        "Keyboard bypass and landmark support completed"
+      ]
+    },
+    {
+      "id": "ms-catalog",
+      "title": "Catalog and Student Experience",
+      "domain": "product",
+      "week": 16,
+      "phase": "phase-2",
+      "planned_start": "2026-04-15",
+      "planned_end": "2026-04-21",
+      "actual_start": "2026-04-15",
+      "actual_end": null,
+      "drift_days": 0,
+      "is_key_milestone": true,
+      "key_milestone_label": "Student UX pass",
+      "subtasks": [
+        {
+          "id": "ms-catalog_001",
+          "label": "Polish package cards",
+          "status": "done",
+          "done": true,
+          "assignee": "operator",
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": "2026-04-18T11:15:00.000Z",
+          "completed_by": "operator",
+          "priority": "P1",
+          "notes": "Package grouping and pricing are legible.",
+          "prompt": null,
+          "context_files": [
+            "resources/views/student/catalog/packages/index.blade.php",
+            "resources/views/student/catalog/packages/show.blade.php"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Packages display images, title, price",
+            "Monthly and 3-month groups are separated"
+          ],
+          "constraints": [],
+          "agent_target": "operator",
+          "execution_mode": "pair",
+          "depends_on": [],
+          "last_run_id": "run-20260418-01",
+          "builder_prompt": null
+        },
+        {
+          "id": "ms-catalog_002",
+          "label": "Wire books search labels",
+          "status": "in_progress",
+          "done": false,
+          "assignee": "builder",
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": null,
+          "completed_by": null,
+          "priority": "P2",
+          "notes": "Search control still needs a clearer name for screen readers.",
+          "prompt": null,
+          "context_files": [
+            "resources/views/student/catalog/books/index.blade.php"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Search has a visible label",
+            "Catalog cards lazy-load non-critical images"
+          ],
+          "constraints": [],
+          "agent_target": "builder",
+          "execution_mode": "agent",
+          "depends_on": [
+            "ms-catalog_001"
+          ],
+          "last_run_id": "run-20260421-01",
+          "builder_prompt": "Improve the student books catalog search semantics and keep the layout calm."
+        }
+      ],
+      "dependencies": [
+        "ms-foundation"
+      ],
+      "notes": [
+        "Student-facing catalog is already visually stable",
+        "A11y refinements remain on the books search"
+      ]
+    },
+    {
+      "id": "ms-release",
+      "title": "Release and Packaging",
+      "domain": "operations",
+      "week": 17,
+      "phase": "phase-3",
+      "planned_start": "2026-04-22",
+      "planned_end": "2026-04-28",
+      "actual_start": null,
+      "actual_end": null,
+      "drift_days": 0,
+      "is_key_milestone": false,
+      "key_milestone_label": null,
+      "subtasks": [
+        {
+          "id": "ms-release_001",
+          "label": "Brand app icon and installer",
+          "status": "review",
+          "done": false,
+          "assignee": "operator",
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": null,
+          "completed_by": null,
+          "priority": "P1",
+          "notes": "Installer assets are ready for final QA.",
+          "prompt": null,
+          "context_files": [
+            "apps/desktop/package.json",
+            "apps/desktop/src/main/index.ts"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Installer and portable builds are generated",
+            "App has a branded icon"
+          ],
+          "constraints": [],
+          "agent_target": "operator",
+          "execution_mode": "human",
+          "depends_on": [
+            "ms-catalog_002"
+          ],
+          "last_run_id": "run-20260421-02",
+          "builder_prompt": null
+        },
+        {
+          "id": "ms-release_002",
+          "label": "Prepare update flow",
+          "status": "todo",
+          "done": false,
+          "assignee": null,
+          "blocked_by": null,
+          "blocked_reason": null,
+          "completed_at": null,
+          "completed_by": null,
+          "priority": "P2",
+          "notes": null,
+          "prompt": null,
+          "context_files": [
+            "apps/desktop/src/main/index.ts"
+          ],
+          "reference_docs": [],
+          "acceptance_criteria": [
+            "Desktop app can receive future updates cleanly"
+          ],
+          "constraints": [],
+          "agent_target": null,
+          "execution_mode": "agent",
+          "depends_on": [
+            "ms-release_001"
+          ],
+          "last_run_id": null,
+          "builder_prompt": null
+        }
+      ],
+      "dependencies": [
+        "ms-catalog"
+      ],
+      "notes": [
+        "Packaging pipeline is working",
+        "Update distribution remains the next follow-up"
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "operator",
+      "name": "Operator",
+      "type": "human",
+      "color": "#87A9FF",
+      "status": "ready",
+      "permissions": [
+        "approve",
+        "reject",
+        "reset",
+        "configure"
+      ],
+      "last_action_at": "2026-04-21T00:00:00.000Z",
+      "session_action_count": 12
+    },
+    {
+      "id": "builder",
+      "name": "Builder Agent",
+      "type": "sub-agent",
+      "parent_id": "operator",
+      "color": "#4DD18E",
+      "status": "active",
+      "permissions": [
+        "update",
+        "log",
+        "enrich"
+      ],
+      "last_action_at": "2026-04-21T00:00:00.000Z",
+      "session_action_count": 5
+    }
+  ],
+  "agent_log": [
+    {
+      "id": "log-001",
+      "agent_id": "operator",
+      "action": "approve",
+      "target_type": "milestone",
+      "target_id": "ms-foundation",
+      "description": "Approved the core shell and accessibility foundation.",
+      "timestamp": "2026-04-13T15:10:00.000Z",
+      "tags": [
+        "foundation",
+        "accessibility"
+      ]
+    },
+    {
+      "id": "log-002",
+      "agent_id": "builder",
+      "action": "update",
+      "target_type": "task",
+      "target_id": "ms-catalog_002",
+      "description": "Started the books search label and image loading cleanup.",
+      "timestamp": "2026-04-21T08:15:00.000Z",
+      "tags": [
+        "catalog",
+        "a11y"
+      ]
+    },
+    {
+      "id": "log-003",
+      "agent_id": "operator",
+      "action": "review",
+      "target_type": "release",
+      "target_id": "ms-release_001",
+      "description": "Packaging artifacts built successfully and are ready for QA.",
+      "timestamp": "2026-04-21T18:30:00.000Z",
+      "tags": [
+        "release",
+        "packaging"
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "id": "product",
+      "label": "Product",
+      "color": "#87A9FF"
+    },
+    {
+      "id": "platform",
+      "label": "Platform",
+      "color": "#4DD18E"
+    },
+    {
+      "id": "operations",
+      "label": "Operations",
+      "color": "#F4C56F"
+    }
+  ],
+  "schedule": {
+    "phases": [
+      {
+        "id": "phase-1",
+        "title": "Foundation",
+        "start_week": 15,
+        "end_week": 15
+      },
+      {
+        "id": "phase-2",
+        "title": "Execution",
+        "start_week": 16,
+        "end_week": 16
+      },
+      {
+        "id": "phase-3",
+        "title": "Release",
+        "start_week": 17,
+        "end_week": 18
+      }
+    ]
+  }
+}

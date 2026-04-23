@@ -26,6 +26,7 @@ use App\Modules\Support\Enums\ForumThreadStatus;
 use App\Modules\Support\Enums\ForumVisibility;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
+use App\Shared\Contracts\AttendanceRecorder;
 use App\Shared\Contracts\EntitlementGrantor;
 use App\Shared\Contracts\LectureProgressService;
 use App\Shared\Enums\AttendanceStatus;
@@ -130,6 +131,8 @@ class StudentPortalSeeder extends Seeder
         $reviewLecture = Lecture::query()->where('slug', 'electricity-review-essentials')->first();
         /** @var EntitlementGrantor $entitlementGrantor */
         $entitlementGrantor = app(EntitlementGrantor::class);
+        /** @var AttendanceRecorder $attendanceRecorder */
+        $attendanceRecorder = app(AttendanceRecorder::class);
         /** @var LectureProgressService $lectureProgressService */
         $lectureProgressService = app(LectureProgressService::class);
         /** @var StartOrderPaymentAction $startOrderPaymentAction */
@@ -476,20 +479,23 @@ class StudentPortalSeeder extends Seeder
         $sessions = AttendanceSession::query()->orderBy('starts_at')->get();
 
         foreach ($sessions as $index => $session) {
-            AttendanceRecord::query()->updateOrCreate(
-                [
-                    'attendance_session_id' => $session->id,
+            $attendanceRecorder->record([
+                'session' => $session,
+                'actor' => $owner,
+                'records' => [[
                     'student_id' => $student->id,
-                ],
-                [
-                    'attendance_status' => $index === 0 ? AttendanceStatus::Present : AttendanceStatus::Late,
-                    'exam_status_label' => $session->session_type === 'exam' ? 'تم الاختبار' : 'لم يختبر بعد',
+                    'attendance_status' => ($index === 0 ? AttendanceStatus::Present : AttendanceStatus::Late)->value,
+                    'exam_status_label' => $session->session_type === 'exam' ? 'تم الاختبار' : null,
                     'score' => $session->session_type === 'exam' ? 17 : null,
                     'max_score' => $session->session_type === 'exam' ? 20 : null,
                     'notes' => null,
-                    'recorded_at' => $session->starts_at,
-                ],
-            );
+                ]],
+            ]);
+
+            AttendanceRecord::query()
+                ->where('attendance_session_id', $session->id)
+                ->where('student_id', $student->id)
+                ->update(['recorded_at' => $session->starts_at]);
         }
 
         foreach ([

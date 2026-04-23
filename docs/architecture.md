@@ -32,6 +32,7 @@
 - Query/list pages use dedicated `Queries` plus shared table UI primitives.
 - Domain services are exposed through contracts such as `AccessResolver`, `CheckoutService`, `EntitlementGrantor`, `ExamAttemptService`, `LectureProgressService`, `PaymentProviderRegistry`, `ShippingFeeCalculator`, `AttendanceRecorder`, `TicketAssignmentService`, and `AuditLogger`.
 - All business statuses are enum/config driven; no raw status strings in views.
+- Center session attendance is now recorded through `AttendanceRecorder` rather than ad hoc controller writes, so student history and admin operations share the same write path.
 
 ## UI Composition Rules
 - Public site: authoritative warm branding, full-bleed hero, proof-first sections, restrained accent color use.

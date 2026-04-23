@@ -59,6 +59,8 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/centers', [CenterController::class, 'index'])->name('centers.index');
         Route::get('/centers/{center}', [CenterController::class, 'show'])->name('centers.show');
         Route::get('/attendance', [AttendanceReportController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance/{attendanceSession}', [AttendanceReportController::class, 'show'])->name('attendance.show');
+        Route::put('/attendance/{attendanceSession}', [AttendanceReportController::class, 'update'])->name('attendance.update');
         Route::resource('admins', AdminController::class)->except(['show']);
         Route::resource('students', StudentController::class)->only(['index', 'edit', 'update']);
         Route::get('/mistakes', [MistakeController::class, 'index'])->name('mistakes.index');

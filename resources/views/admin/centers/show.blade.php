@@ -52,7 +52,14 @@
                                     <p class="font-semibold">{{ $session->title }}</p>
                                     <p class="admin-mini-list__meta">{{ $session->group?->name_ar ?? '—' }} / {{ optional($session->starts_at)->format('Y-m-d H:i') }}</p>
                                 </div>
-                                <x-admin.status-badge :label="$session->session_type === 'exam' ? 'اختبار' : 'محاضرة'" :tone="$session->session_type === 'exam' ? 'warning' : 'neutral'" />
+                                <div class="flex flex-col items-end gap-2">
+                                    <x-admin.status-badge :label="$session->session_type === 'exam' ? 'اختبار' : 'محاضرة'" :tone="$session->session_type === 'exam' ? 'warning' : 'neutral'" />
+                                    @can('view', $session)
+                                        <a href="{{ route('admin.attendance.show', $session) }}" class="text-xs font-semibold text-[var(--color-brand-700)]">
+                                            تفاصيل الجلسة
+                                        </a>
+                                    @endcan
+                                </div>
                             </div>
                             <p class="mt-3 text-xs text-[var(--color-ink-500)]">حضور: {{ $session->present_records_count }} / تأخير: {{ $session->late_records_count }} / غياب: {{ $session->absent_records_count }}</p>
                         </article>
