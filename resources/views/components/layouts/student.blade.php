@@ -20,6 +20,7 @@
         ['label' => 'مدفوعات المحاضرات', 'href' => route('student.payments.index')],
         ['label' => 'طلبات الكتب', 'href' => route('student.book-orders.index')],
         ['label' => 'حضور السنتر', 'href' => route('student.attendance.index')],
+        ['label' => 'تذاكر الدعم', 'href' => route('student.tickets.index')],
         ['label' => 'الشكاوى والاقتراحات', 'href' => route('student.complaints.index')],
     ])
     @php($navIcons = [

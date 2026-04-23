@@ -2,8 +2,12 @@
 
 namespace App\Modules\Identity\Models;
 
+use App\Modules\Support\Models\SupportTeam;
+use App\Modules\Support\Models\SupportTicket;
+use App\Modules\Support\Models\SupportTicketReply;
 use Database\Factories\AdminFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -66,6 +70,23 @@ class Admin extends Authenticatable
     public function forumMessages(): HasMany
     {
         return $this->hasMany(\App\Modules\Support\Models\ForumMessage::class, 'author_id')
+            ->where('author_type', $this->getMorphClass());
+    }
+
+    public function supportTeams(): BelongsToMany
+    {
+        return $this->belongsToMany(SupportTeam::class, 'admin_support_team')
+            ->withTimestamps();
+    }
+
+    public function assignedSupportTickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class, 'assigned_admin_id');
+    }
+
+    public function supportTicketReplies(): HasMany
+    {
+        return $this->hasMany(SupportTicketReply::class, 'author_id')
             ->where('author_type', $this->getMorphClass());
     }
 }

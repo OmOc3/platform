@@ -26,7 +26,6 @@ use App\Modules\Support\Enums\ForumThreadStatus;
 use App\Modules\Support\Enums\ForumVisibility;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
-use App\Shared\Contracts\AttendanceRecorder;
 use App\Shared\Contracts\EntitlementGrantor;
 use App\Shared\Contracts\LectureProgressService;
 use App\Shared\Enums\AttendanceStatus;
@@ -36,6 +35,7 @@ use App\Shared\Enums\OrderStatus;
 use App\Shared\Enums\PaymentStatus;
 use App\Shared\Enums\ShipmentStatus;
 use App\Shared\Enums\StudentStatus;
+use App\Shared\Enums\TicketStatus;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -44,6 +44,7 @@ class StudentPortalSeeder extends Seeder
     public function run(): void
     {
         $owner = Admin::query()->first();
+        $supportAgent = Admin::query()->firstWhere('email', 'support.agent@example.edu') ?? $owner;
         $grade = \App\Modules\Academic\Models\Grade::query()->where('code', 'grade-1-secondary')->first();
         $track = \App\Modules\Academic\Models\Track::query()->where('code', 'foundation-track')->first();
         $center = EducationalCenter::query()->first();
@@ -583,6 +584,121 @@ class StudentPortalSeeder extends Seeder
             ],
             [
                 'is_staff_reply' => false,
+            ],
+        );
+
+        $technicalSupportTeam = SupportTeam::query()->updateOrCreate(
+            ['name' => 'الدعم التقني'],
+            [
+                'description' => 'فريق متابعة مشاكل الدخول، التشغيل، وتفعيل المحتوى.',
+                'is_active' => true,
+            ],
+        );
+
+        $studentCareTeam = SupportTeam::query()->updateOrCreate(
+            ['name' => 'متابعة شؤون الطلاب'],
+            [
+                'description' => 'فريق متابعة الاستفسارات التنظيمية وتنسيق الخدمة للطلاب.',
+                'is_active' => true,
+            ],
+        );
+
+        if ($owner) {
+            $technicalSupportTeam->admins()->syncWithoutDetaching([$owner->id]);
+            $studentCareTeam->admins()->syncWithoutDetaching([$owner->id]);
+        }
+
+        if ($supportAgent) {
+            $technicalSupportTeam->admins()->syncWithoutDetaching([$supportAgent->id]);
+            $studentCareTeam->admins()->syncWithoutDetaching([$supportAgent->id]);
+        }
+
+        $technicalIssueType = SupportTicketType::query()->updateOrCreate(
+            ['name' => 'مشكلة تقنية'],
+            [
+                'default_team_id' => $technicalSupportTeam->id,
+                'description' => 'مشكلات فتح المحاضرات أو الوصول أو أخطاء النظام.',
+                'is_active' => true,
+            ],
+        );
+
+        $accountFollowupType = SupportTicketType::query()->updateOrCreate(
+            ['name' => 'استفسار حسابي أو تنظيمي'],
+            [
+                'default_team_id' => $studentCareTeam->id,
+                'description' => 'استفسارات التفعيل، المتابعة، أو الترتيبات الإدارية.',
+                'is_active' => true,
+            ],
+        );
+
+        $technicalTicket = SupportTicket::query()->updateOrCreate(
+            [
+                'student_id' => $student->id,
+                'support_ticket_type_id' => $technicalIssueType->id,
+                'subject' => 'تعذر فتح المحاضرة المفعلة من الحساب',
+            ],
+            [
+                'support_team_id' => $technicalSupportTeam->id,
+                'assigned_admin_id' => $supportAgent?->id ?? $owner?->id,
+                'status' => TicketStatus::WaitingCustomer,
+                'last_activity_at' => now()->subHours(5),
+                'resolved_at' => null,
+                'closed_at' => null,
+            ],
+        );
+
+        $technicalTicket->replies()->firstOrCreate(
+            [
+                'author_type' => $student->getMorphClass(),
+                'author_id' => $student->id,
+                'body' => 'لا تظهر لي المحاضرة بعد الدفع رغم أن الطلب مكتمل داخل الحساب.',
+            ],
+            [
+                'is_staff_reply' => false,
+                'created_at' => now()->subHours(9),
+                'updated_at' => now()->subHours(9),
+            ],
+        );
+
+        $technicalTicket->replies()->firstOrCreate(
+            [
+                'author_type' => ($supportAgent ?? $owner)?->getMorphClass(),
+                'author_id' => ($supportAgent ?? $owner)?->id,
+                'body' => 'راجعنا التفعيل وجرى تحديث الصلاحية. جرّب تسجيل الخروج ثم الدخول مجددًا وأخبرنا بالنتيجة.',
+            ],
+            [
+                'is_staff_reply' => true,
+                'created_at' => now()->subHours(5),
+                'updated_at' => now()->subHours(5),
+            ],
+        );
+
+        $followupTicket = SupportTicket::query()->updateOrCreate(
+            [
+                'student_id' => $pendingStudent->id,
+                'support_ticket_type_id' => $accountFollowupType->id,
+                'subject' => 'متى يتم مراجعة طلبي بعد التسجيل؟',
+            ],
+            [
+                'support_team_id' => $studentCareTeam->id,
+                'assigned_admin_id' => null,
+                'status' => TicketStatus::Open,
+                'last_activity_at' => now()->subHours(2),
+                'resolved_at' => null,
+                'closed_at' => null,
+            ],
+        );
+
+        $followupTicket->replies()->firstOrCreate(
+            [
+                'author_type' => $pendingStudent->getMorphClass(),
+                'author_id' => $pendingStudent->id,
+                'body' => 'أحتاج معرفة المدة المتوقعة لمراجعة الحساب وتفعيل الوصول الأولي.',
+            ],
+            [
+                'is_staff_reply' => false,
+                'created_at' => now()->subHours(2),
+                'updated_at' => now()->subHours(2),
             ],
         );
 

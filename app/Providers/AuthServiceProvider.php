@@ -32,8 +32,10 @@ use App\Modules\Commerce\Policies\PackagePolicy;
 use App\Modules\Commerce\Policies\ShipmentPolicy;
 use App\Modules\Support\Models\Complaint;
 use App\Modules\Support\Models\ForumThread;
+use App\Modules\Support\Models\SupportTicket;
 use App\Modules\Support\Policies\ComplaintPolicy;
 use App\Modules\Support\Policies\ForumThreadPolicy;
+use App\Modules\Support\Policies\SupportTicketPolicy;
 use App\Modules\Identity\Models\Admin;
 use App\Modules\Identity\Models\AuditLog;
 use App\Modules\Identity\Models\Setting;
@@ -76,6 +78,7 @@ class AuthServiceProvider extends ServiceProvider
         Track::class => TrackPolicy::class,
         Student::class => StudentPolicy::class,
         Complaint::class => ComplaintPolicy::class,
+        SupportTicket::class => SupportTicketPolicy::class,
     ];
 
     /**
